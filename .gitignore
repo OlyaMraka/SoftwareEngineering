@@ -1,0 +1,34 @@
+# Visual Studio / .NET
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+bin/
+obj/
+TestResults/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+.nuget/
+
+# Rider
+.idea/
+*.iml
+indexLayout.vcs.xml
+vcs.xml
+
+# Windows
+Thumbs.db
+Desktop.ini
+*.log
+
+# Others
+*.swp
