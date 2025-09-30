@@ -1,0 +1,40 @@
+  language: "en-US"
+  early_access: false
+  
+  reviews:
+    profile: "chill" 
+    request_changes_workflow: false
+    high_level_summary: true
+    poem: false
+    review_status: true
+    collapse_walkthrough: false
+    auto_review:
+      enabled: true 
+      drafts: false
+  
+  chat:
+    auto_reply: true
+  
+  tools:
+    semgrep:
+      enabled: true 
+    gitleaks:
+      enabled: true  
+  
+  ignored_branch: "dev,test"
+  ignored_titles: "WIP"
+  
+  path_filters: "!bin/**,!obj/**,!Migrations/**"
+  
+  file_path_instructions:
+    - path: "**/*.cs"
+      instructions: |
+        - Ensure C# naming conventions are followed (PascalCase for classes, methods, properties; camelCase for locals and parameters).
+        - Check that async methods use the Async suffix and properly handle cancellation tokens.
+        - Verify nullability annotations and guard clauses are applied where needed.
+        - Review LINQ queries for readability and performance.
+        - Ensure dependency injection is used instead of manual instantiation where applicable.
+    - path: "**/*.csproj"
+      instructions: |
+        - Verify that only required NuGet packages are included.
+        - Ensure package versions are consistent and up to date.
