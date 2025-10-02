@@ -4,5 +4,5 @@ public enum CommunityRole
 {
     Owner,
     Admin,
-    Member
+    Member,
 }

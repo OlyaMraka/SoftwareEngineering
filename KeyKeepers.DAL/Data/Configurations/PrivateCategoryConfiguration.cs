@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using KeyKeepers.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace KeyKeepers.DAL.Data.Configurations;

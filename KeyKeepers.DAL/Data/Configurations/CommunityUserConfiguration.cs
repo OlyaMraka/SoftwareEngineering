@@ -1,5 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using KeyKeepers.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace KeyKeepers.DAL.Data.Configurations;
@@ -15,10 +15,10 @@ public class CommunityUserConfiguration : IEntityTypeConfiguration<CommunityUser
 
         builder.Property(x => x.UserName)
             .IsRequired();
-        
+
         builder.HasIndex(x => x.UserName)
             .IsUnique();
-        
+
         builder.Property(x => x.PasswordHash)
             .IsRequired();
 
@@ -27,7 +27,7 @@ public class CommunityUserConfiguration : IEntityTypeConfiguration<CommunityUser
 
         builder.Property(x => x.UserId)
             .IsRequired();
-        
+
         builder.HasOne(x => x.User)
             .WithMany(x => x.CommunityUsers)
             .HasForeignKey(x => x.UserId)

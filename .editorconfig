@@ -1,0 +1,31 @@
+# -------------------------------
+# Загальні правила StyleCop
+# -------------------------------
+[*.cs]
+# Можна змінити рівень суворості під свої потреби
+dotnet_diagnostic.SA0001.severity = none
+dotnet_diagnostic.SA1200.severity = warning   # using directives placement
+dotnet_diagnostic.SA1600.severity = none   # Elements must be documented
+dotnet_diagnostic.SA1601.severity = none   # Partial elements must be documented
+dotnet_diagnostic.SA1602.severity = none   # Enumeration items must be documented
+dotnet_diagnostic.SA1604.severity = none   # Element documentation must have summary
+dotnet_diagnostic.SA1606.severity = none   # Element documentation must have <summary> text
+dotnet_diagnostic.SA1607.severity = none   # Partial element documentation must have summary
+dotnet_diagnostic.SA1609.severity = none   # <summary> text must begin with a capital letter
+dotnet_diagnostic.SA1611.severity = none   # Parameter documentation must exist
+dotnet_diagnostic.SA1615.severity = none   # Return value documentation must exist
+dotnet_diagnostic.SA1618.severity = none   # Parameter documentation text must exist
+dotnet_diagnostic.SA1623.severity = none   # Property summary documentation must match accessors
+dotnet_diagnostic.SA1626.severity = none   # Single-line summary must end with punctuation
+dotnet_diagnostic.SA1633.severity = none   # File must have header
+
+# -------------------------------
+# Вимикаємо аналізатор у папці Migrations
+# -------------------------------
+[**/Migrations/*.cs]
+# Позначаємо файли як "згенерований код"
+generated_code = true
+
+# Додатково вимикаємо конкретні правила (на всяк випадок)
+dotnet_diagnostic.SA1200.severity = none
+dotnet_diagnostic.SA1600.severity = none

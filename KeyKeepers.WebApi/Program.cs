@@ -1,13 +1,13 @@
 using KeyKeepers.DAL.Data;
 using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<KeyKeepersDbContext>(options =>
 {
-    options.UseNpgsql(connectionString,
-        npgsqlOptions =>
+    options.UseNpgsql(connectionString, npgsqlOptions =>
         {
             // Це може допомогти, якщо ваш DAL і API знаходяться в різних проектах
             npgsqlOptions.MigrationsAssembly(typeof(KeyKeepersDbContext).Assembly.FullName);
@@ -28,28 +28,4 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
-
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

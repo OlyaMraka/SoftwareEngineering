@@ -1,0 +1,16 @@
+{
+  "settings": {
+    "documentationRules": {
+      "companyName": "MyCompany",
+      "documentExposedElements": true,
+      "documentInternalElements": false
+    },
+    "orderingRules": {
+      "usingDirectivesPlacement": "outsideNamespace",
+      "systemUsingDirectivesFirst": true
+    },
+    "layoutRules": {
+      "newlineAtEndOfFile": "require"
+    }
+  }
+}
