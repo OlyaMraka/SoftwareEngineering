@@ -1,7 +1,15 @@
 using KeyKeepers.DAL.Data;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, loggerConfig) =>
+{
+    loggerConfig.ReadFrom.Configuration(context.Configuration);
+});
+
+
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
