@@ -18,5 +18,9 @@ public class User
 
     public ICollection<CommunityUser> CommunityUsers { get; set; } = new List<CommunityUser>();
 
+    public long TokenId { get; set; }
+
+    public RefreshToken RefreshToken { get; set; } = new RefreshToken();
+
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 }
