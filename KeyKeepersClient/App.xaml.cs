@@ -29,8 +29,8 @@ public partial class App : Application
 
         ServiceProvider = services.BuildServiceProvider();
 
-        var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-        mainWindow.Show();
+        var firstWindow = new FirstWindow();
+        firstWindow.Show();
 
         base.OnStartup(e);
     }
@@ -47,7 +47,5 @@ public partial class App : Application
         services.AddRepositoriesFromAssembly(typeof(RepositoryWrapper).Assembly);
         services.AddServicesFromAssembly(typeof(TokenService).Assembly);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateUserCommand).Assembly));
-
-        services.AddSingleton<MainWindow>();
     }
 }
