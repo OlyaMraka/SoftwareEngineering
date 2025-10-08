@@ -1,14 +1,30 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using KeyKeepers.BLL.Commands.Users.Create;
+using KeyKeepers.BLL.DTOs.Users;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyKeepersClient;
 
 public partial class SignUpWindow : Window
 {
+    private readonly IMediator? mediator;
+
     public SignUpWindow()
     {
         this.InitializeComponent();
+
+        try
+        {
+            this.mediator = App.ServiceProvider?.GetService<IMediator>();
+        }
+        catch
+        {
+            this.mediator = null;
+        }
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -60,7 +76,6 @@ public partial class SignUpWindow : Window
                 ? Visibility.Visible
                 : Visibility.Hidden;
 
-            // Валідація email в реальному часі
             this.ValidateEmailRealTime(textBox.Text);
         }
     }
@@ -74,7 +89,6 @@ public partial class SignUpWindow : Window
                 ? Visibility.Visible
                 : Visibility.Hidden;
 
-            // Валідація в реальному часі
             this.ValidateUsernameRealTime(textBox.Text);
         }
     }
@@ -94,14 +108,13 @@ public partial class SignUpWindow : Window
 
     private void ValidateUsernameRealTime(string username)
     {
-        // Базова валідація для візуальної індикації
         if (!string.IsNullOrWhiteSpace(username))
         {
             string trimmedUsername = username.Trim();
             if (trimmedUsername.Length >= 3 &&
                 System.Text.RegularExpressions.Regex.IsMatch(trimmedUsername, @"^[a-zA-Z][a-zA-Z0-9_.-]*$"))
             {
-                // Username виглядає добре - можна додати зелений border
+                this.UsernameBorder.BorderBrush = Brushes.Green;
             }
         }
     }
@@ -117,7 +130,7 @@ public partial class SignUpWindow : Window
         }
     }
 
-    private void PersonalButton_Click(object sender, RoutedEventArgs e)
+    private async void PersonalButton_Click(object sender, RoutedEventArgs e)
     {
         if (!this.ValidateRegistrationData(out string errorMessage))
         {
@@ -129,13 +142,55 @@ public partial class SignUpWindow : Window
         string lastName = this.LastNameTextBox.Text.Trim();
         string email = this.EmailTextBox.Text.Trim();
         string username = this.UsernameTextBox.Text.Trim();
+        string password = this.PasswordTextBox.Password;
 
-        // TODO: Implement actual personal account registration logic
-        string message = $"Реєстрація особистого акаунта успішна!\n\nІм'я: {firstName}\nПрізвище: {lastName}\nEmail: {email}\nІм'я користувача: {username}\nТип акаунта: Особистий";
-        MessageBox.Show(message, "Успішна реєстрація", MessageBoxButton.OK, MessageBoxImage.Information);
+        try
+        {
+            // Перевірка чи налаштований mediator (база даних та DI)
+            if (this.mediator == null)
+            {
+                MessageBox.Show("База даних не налаштована. Реєстрація тимчасово недоступна.",
+                              "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // Створюємо DTO для реєстрації користувача
+            var registerDto = new UserRegisterDto
+            {
+                Name = firstName,
+                Surname = lastName,
+                Email = email,
+                UserName = username,
+                Password = password
+            };
+
+            // Створюємо команду для реєстрації користувача
+            var createUserCommand = new CreateUserCommand(registerDto);
+
+            // Виконуємо команду через mediator
+            var result = await this.mediator.Send(createUserCommand);
+
+            if (result.IsSuccess)
+            {
+                string message = $"Реєстрація особистого акаунта успішна!\n\nІм'я: {firstName}\nПрізвище: {lastName}\nEmail: {email}\nІм'я користувача: {username}\nТип акаунта: Особистий\n\nКористувач збережений у базі даних!";
+                MessageBox.Show(message, "Успішна реєстрація", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Очищуємо форму після успішної реєстрації
+                this.ClearForm();
+            }
+            else
+            {
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Помилка при створенні користувача";
+                MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
-    private void TeamButton_Click(object sender, RoutedEventArgs e)
+    private async void TeamButton_Click(object sender, RoutedEventArgs e)
     {
         if (!this.ValidateRegistrationData(out string errorMessage))
         {
@@ -147,10 +202,52 @@ public partial class SignUpWindow : Window
         string lastName = this.LastNameTextBox.Text.Trim();
         string email = this.EmailTextBox.Text.Trim();
         string username = this.UsernameTextBox.Text.Trim();
+        string password = this.PasswordTextBox.Password;
 
-        // TODO: Implement actual team account registration logic
-        string message = $"Реєстрація командного акаунта успішна!\n\nІм'я: {firstName}\nПрізвище: {lastName}\nEmail: {email}\nІм'я користувача: {username}\nТип акаунта: Командний";
-        MessageBox.Show(message, "Успішна реєстрація", MessageBoxButton.OK, MessageBoxImage.Information);
+        try
+        {
+            // Перевірка чи налаштований mediator (база даних та DI)
+            if (this.mediator == null)
+            {
+                MessageBox.Show("База даних не налаштована. Реєстрація тимчасово недоступна.",
+                              "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            // Створюємо DTO для реєстрації користувача
+            var registerDto = new UserRegisterDto
+            {
+                Name = firstName,
+                Surname = lastName,
+                Email = email,
+                UserName = username,
+                Password = password
+            };
+
+            // Створюємо команду для реєстрації користувача
+            var createUserCommand = new CreateUserCommand(registerDto);
+
+            // Виконуємо команду через mediator
+            var result = await this.mediator.Send(createUserCommand);
+
+            if (result.IsSuccess)
+            {
+                string message = $"Реєстрація командного акаунта успішна!\n\nІм'я: {firstName}\nПрізвище: {lastName}\nEmail: {email}\nІм'я користувача: {username}\nТип акаунта: Командний\n\nКористувач збережений у базі даних!";
+                MessageBox.Show(message, "Успішна реєстрація", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Очищуємо форму після успішної реєстрації
+                this.ClearForm();
+            }
+            else
+            {
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Помилка при створенні користувача";
+                MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private bool ValidateRegistrationData(out string errorMessage)
@@ -323,6 +420,26 @@ public partial class SignUpWindow : Window
         }
 
         return true;
+    }
+
+    private void ClearForm()
+    {
+        // Очищуємо всі поля форми
+        this.FirstNameTextBox.Text = string.Empty;
+        this.LastNameTextBox.Text = string.Empty;
+        this.EmailTextBox.Text = string.Empty;
+        this.UsernameTextBox.Text = string.Empty;
+        this.PasswordTextBox.Password = string.Empty;
+
+        // Показуємо placeholder'и знову
+        this.FirstNamePlaceholder.Visibility = Visibility.Visible;
+        this.LastNamePlaceholder.Visibility = Visibility.Visible;
+        this.EmailPlaceholder.Visibility = Visibility.Visible;
+        this.UsernamePlaceholder.Visibility = Visibility.Visible;
+        this.PasswordPlaceholder.Visibility = Visibility.Visible;
+
+        // Встановлюємо фокус на перше поле
+        this.FirstNameTextBox.Focus();
     }
 
     private void Window_KeyDown(object sender, KeyEventArgs e)

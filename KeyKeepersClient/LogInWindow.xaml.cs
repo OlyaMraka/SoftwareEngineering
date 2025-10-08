@@ -34,18 +34,15 @@ public partial class LogInWindow : Window
         {
             this.UsernamePlaceholder.Visibility = string.IsNullOrEmpty(textBox.Text) ? Visibility.Visible : Visibility.Hidden;
 
-            // Валідація в реальному часі
             this.ValidateUsernameRealTime(textBox.Text);
         }
     }
 
     private void ValidateUsernameRealTime(string username)
     {
-        // Візуальна індикація валідації (можна додати border color зміни)
-        // Зараз просто базова перевірка довжини
         if (!string.IsNullOrWhiteSpace(username) && username.Trim().Length >= 3)
         {
-            // Username виглядає добре - можна додати зелений border
+            this.UsernameBorder.BorderBrush = Brushes.Green;
         }
     }
 
@@ -59,7 +56,6 @@ public partial class LogInWindow : Window
 
     private void AcceptButton_Click(object sender, RoutedEventArgs e)
     {
-        // Перевірка цілісності даних
         if (!this.ValidateLoginData(out string errorMessage))
         {
             MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -69,7 +65,6 @@ public partial class LogInWindow : Window
         string username = this.UsernameTextBox.Text.Trim();
         string password = this.PasswordTextBox.Password;
 
-        // TODO: Implement actual login logic with server communication
         MessageBox.Show($"Login successful for: {username}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
