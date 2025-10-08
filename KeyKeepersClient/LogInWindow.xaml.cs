@@ -58,4 +58,16 @@ public partial class LogInWindow : Window
 
         MessageBox.Show($"Login attempt for: {username}");
     }
+
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            var firstWindow = new FirstWindow();
+            firstWindow.Left = this.Left;
+            firstWindow.Top = this.Top;
+            firstWindow.Show();
+            this.Close();
+        }
+    }
 }

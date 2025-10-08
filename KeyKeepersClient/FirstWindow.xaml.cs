@@ -31,6 +31,8 @@ public partial class FirstWindow : Window
     private void LoginButton_Click(object sender, RoutedEventArgs e)
     {
         var loginWindow = new LogInWindow();
+        loginWindow.Left = this.Left;
+        loginWindow.Top = this.Top;
         loginWindow.Show();
         this.Close();
     }
@@ -38,6 +40,8 @@ public partial class FirstWindow : Window
     private void SignUpButton_Click(object sender, RoutedEventArgs e)
     {
         var signUpWindow = new SignUpWindow();
+        signUpWindow.Left = this.Left;
+        signUpWindow.Top = this.Top;
         signUpWindow.Show();
         this.Close();
     }

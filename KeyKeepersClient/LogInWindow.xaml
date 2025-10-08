@@ -10,10 +10,11 @@
         Height="700"
         Width="400"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
         WindowStyle="None"
         AllowsTransparency="False"
-        Background="#171C26">
+        Background="#171C26"
+        KeyDown="Window_KeyDown">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -92,11 +93,12 @@
         <Grid Grid.Row="1"
               Margin="40">
             <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
+                <RowDefinition Height="60"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="40"/>
@@ -107,8 +109,8 @@
             <!-- User Avatar -->
             <Image Grid.Row="1"
                    Source="Images/SignIn_LogUp/user.png"
-                   Width="120"
-                   Height="120"
+                   Width="160"
+                   Height="160"
                    Stretch="Uniform"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
@@ -117,7 +119,7 @@
             <TextBlock Grid.Row="3"
                        Text="Username"
                        FontFamily="Bahnschrift"
-                       FontSize="16"
+                       FontSize="22"
                        FontWeight="SemiBold"
                        Foreground="White"
                        HorizontalAlignment="Left"
@@ -153,17 +155,17 @@
             </Border>
 
             <!-- Password Label -->
-            <TextBlock Grid.Row="5"
+            <TextBlock Grid.Row="6"
                        Text="Password"
                        FontFamily="Bahnschrift"
-                       FontSize="16"
+                       FontSize="22"
                        FontWeight="SemiBold"
                        Foreground="White"
                        HorizontalAlignment="Left"
                        Margin="0,5,0,5"/>
 
             <!-- Password TextBox -->
-            <Border Grid.Row="6"
+            <Border Grid.Row="7"
                     Height="50"
                     Background="#2A2F3A"
                     CornerRadius="25"
@@ -192,24 +194,25 @@
             </Border>
 
             <!-- Accept Button -->
-            <Border Grid.Row="8"
-                    Height="55"
+            <Border Grid.Row="9"
+                    Height="50"
                     CornerRadius="27"
-                    HorizontalAlignment="Stretch">
+                    HorizontalAlignment="Stretch"
+                    Margin="20,0,20,0">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0"
-                            EndPoint="1,0">
+                                         EndPoint="1,0">
                         <GradientStop Color="#815A11"
-                                Offset="0"/>
+                                      Offset="0"/>
                         <GradientStop Color="#FDE053"
-                                Offset="1"/>
+                                      Offset="1"/>
                     </LinearGradientBrush>
                 </Border.Background>
                 <Button Background="Transparent"
                         BorderThickness="0"
                         Foreground="Black"
                         FontFamily="Bahnschrift"
-                        FontSize="18"
+                        FontSize="20"
                         FontWeight="SemiBold"
                         Content="accept"
                         HorizontalAlignment="Stretch"

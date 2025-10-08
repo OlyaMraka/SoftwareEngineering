@@ -68,4 +68,16 @@ public partial class SignUpWindow : Window
         string message = $"Team account registration:\nUsername: {username}\nPassword: {password}";
         MessageBox.Show(message, "Team Registration");
     }
+
+    private void Window_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            var firstWindow = new FirstWindow();
+            firstWindow.Left = this.Left;
+            firstWindow.Top = this.Top;
+            firstWindow.Show();
+            this.Close();
+        }
+    }
 }

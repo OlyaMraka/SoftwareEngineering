@@ -10,10 +10,11 @@
         Height="700"
         Width="400"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="Manual"
         WindowStyle="None"
         AllowsTransparency="False"
-        Background="#171C26">
+        Background="#171C26"
+        KeyDown="Window_KeyDown">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -108,8 +109,8 @@
             <!-- User Avatar -->
             <Image Grid.Row="1"
                    Source="Images/SignIn_LogUp/user.png"
-                   Width="120"
-                   Height="120"
+                   Width="160"
+                   Height="160"
                    Stretch="Uniform"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
@@ -118,69 +119,79 @@
             <TextBlock Grid.Row="3"
                        Text="Username"
                        FontFamily="Bahnschrift"
-                       FontSize="16"
+                       FontSize="22"
                        FontWeight="SemiBold"
                        Foreground="White"
                        HorizontalAlignment="Left"
-                       Margin="0,0,0,8"/>
+                       Margin="0,0,0,5"/>
 
-            <!-- Username Input with Placeholder -->
-            <Grid Grid.Row="4">
-                <TextBox x:Name="UsernameTextBox"
-                         Height="45"
-                         Background="#0E121B"
-                         BorderBrush="#222A39"
-                         BorderThickness="2"
-                         Foreground="White"
-                         FontFamily="Bahnschrift"
-                         FontSize="14"
-                         Padding="15,0"
-                         VerticalContentAlignment="Center"
-                         TextChanged="UsernameTextBox_TextChanged"/>
-                <TextBlock x:Name="UsernamePlaceholder"
-                           Text="username"
-                           FontFamily="Bahnschrift"
-                           FontSize="14"
-                           Foreground="#666666"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="15,0"
-                           IsHitTestVisible="False"/>
-            </Grid>
+            <!-- Username TextBox -->
+            <Border Grid.Row="4"
+                    Height="50"
+                    Background="#2A2F3A"
+                    CornerRadius="25"
+                    BorderThickness="0">
+                <Grid>
+                    <TextBox x:Name="UsernameTextBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="White"
+                             FontFamily="Bahnschrift"
+                             FontSize="16"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch"
+                             Margin="20,0"
+                             TextChanged="UsernameTextBox_TextChanged"/>
+                    <TextBlock x:Name="UsernamePlaceholder"
+                               Text="username"
+                               Foreground="#808080"
+                               FontFamily="Bahnschrift"
+                               FontSize="16"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="20,0"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </Border>
 
             <!-- Password Label -->
             <TextBlock Grid.Row="6"
                        Text="Password"
                        FontFamily="Bahnschrift"
-                       FontSize="16"
+                       FontSize="22"
                        FontWeight="SemiBold"
                        Foreground="White"
                        HorizontalAlignment="Left"
-                       Margin="0,0,0,8"/>
+                       Margin="0,5,0,5"/>
 
-            <!-- Password Input with Placeholder -->
-            <Grid Grid.Row="7">
-                <PasswordBox x:Name="PasswordTextBox"
-                             Height="45"
-                             Background="#0E121B"
-                             BorderBrush="#222A39"
-                             BorderThickness="2"
-                             Foreground="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="14"
-                             Padding="15,0"
-                             VerticalContentAlignment="Center"
-                             PasswordChanged="PasswordTextBox_PasswordChanged"/>
-                <TextBlock x:Name="PasswordPlaceholder"
-                           Text="password"
-                           FontFamily="Bahnschrift"
-                           FontSize="14"
-                           Foreground="#666666"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="15,0"
-                           IsHitTestVisible="False"/>
-            </Grid>
+            <!-- Password TextBox -->
+            <Border Grid.Row="7"
+                    Height="50"
+                    Background="#2A2F3A"
+                    CornerRadius="25"
+                    BorderThickness="0">
+                <Grid>
+                    <PasswordBox x:Name="PasswordTextBox"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 FontFamily="Bahnschrift"
+                                 FontSize="16"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Stretch"
+                                 Margin="20,0"
+                                 PasswordChanged="PasswordTextBox_PasswordChanged"/>
+                    <TextBlock x:Name="PasswordPlaceholder"
+                               Text="password"
+                               Foreground="#808080"
+                               FontFamily="Bahnschrift"
+                               FontSize="16"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="20,0"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </Border>
 
             <!-- Buttons Container -->
             <Grid Grid.Row="9">
@@ -192,23 +203,23 @@
 
                 <!-- Personal Button -->
                 <Border Grid.Column="0"
-                        Height="55"
-                        CornerRadius="27"
+                        Height="50"
+                        CornerRadius="24"
                         HorizontalAlignment="Stretch">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0"
-                                EndPoint="1,0">
+                                             EndPoint="1,0">
                             <GradientStop Color="#815A11"
-                                    Offset="0"/>
+                                          Offset="0"/>
                             <GradientStop Color="#FDE053"
-                                    Offset="1"/>
+                                          Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                     <Button Background="Transparent"
                             BorderThickness="0"
                             Foreground="Black"
                             FontFamily="Bahnschrift"
-                            FontSize="16"
+                            FontSize="20"
                             FontWeight="SemiBold"
                             Content="personal"
                             HorizontalAlignment="Stretch"
@@ -226,23 +237,23 @@
 
                 <!-- Team Button -->
                 <Border Grid.Column="2"
-                        Height="55"
-                        CornerRadius="27"
+                        Height="50"
+                        CornerRadius="24"
                         HorizontalAlignment="Stretch">
                     <Border.Background>
                         <LinearGradientBrush StartPoint="0,0"
-                                EndPoint="1,0">
+                                             EndPoint="1,0">
                             <GradientStop Color="#815A11"
-                                    Offset="0"/>
+                                          Offset="0"/>
                             <GradientStop Color="#FDE053"
-                                    Offset="1"/>
+                                          Offset="1"/>
                         </LinearGradientBrush>
                     </Border.Background>
                     <Button Background="Transparent"
                             BorderThickness="0"
                             Foreground="Black"
                             FontFamily="Bahnschrift"
-                            FontSize="16"
+                            FontSize="20"
                             FontWeight="SemiBold"
                             Content="team"
                             HorizontalAlignment="Stretch"
