@@ -37,5 +37,12 @@ public class UserConfig : IEntityTypeConfiguration<User>
         builder.Property(x => x.CreatedAt)
             .IsRequired()
             .ValueGeneratedOnAdd();
+
+        builder.Property(x => x.TokenId)
+            .IsRequired();
+
+        builder.HasOne(x => x.RefreshToken)
+            .WithOne(x => x.User)
+            .HasForeignKey<RefreshToken>(x => x.UserId);
     }
 }

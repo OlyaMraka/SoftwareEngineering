@@ -3,6 +3,8 @@
 # -------------------------------
 [*.cs]
 # Можна змінити рівень суворості під свої потреби
+dotnet_diagnostic.SA1101.severity = none
+dotnet_diagnostic.SA1208.severity = none
 dotnet_diagnostic.SA0001.severity = none
 dotnet_diagnostic.SA1200.severity = warning   # using directives placement
 dotnet_diagnostic.SA1600.severity = none   # Elements must be documented
