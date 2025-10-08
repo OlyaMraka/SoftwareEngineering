@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch KeyKeepers Client",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "Build KeyKeepers Client",
+            "program": "${workspaceFolder}/KeyKeepersClient/bin/Debug/net9.0-windows/KeyKeepersClient.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/KeyKeepersClient",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "requireExactSource": false
+        }
+    ]
+}
