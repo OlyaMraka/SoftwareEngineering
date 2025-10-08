@@ -136,6 +136,7 @@
                              Background="Transparent"
                              BorderThickness="0"
                              Foreground="White"
+                             CaretBrush="White"
                              FontFamily="Bahnschrift"
                              FontSize="16"
                              VerticalAlignment="Center"
@@ -175,6 +176,7 @@
                                  Background="Transparent"
                                  BorderThickness="0"
                                  Foreground="White"
+                                 CaretBrush="White"
                                  FontFamily="Bahnschrift"
                                  FontSize="16"
                                  VerticalAlignment="Center"
@@ -221,8 +223,12 @@
                         Click="AcceptButton_Click">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
                         </ControlTemplate>
                     </Button.Template>
                 </Button>

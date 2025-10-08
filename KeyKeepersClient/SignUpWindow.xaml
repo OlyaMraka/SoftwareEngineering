@@ -93,15 +93,24 @@
         <Grid Grid.Row="1"
               Margin="40">
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="15"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="15"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="15"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="15"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="25"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -109,92 +118,214 @@
             <!-- User Avatar -->
             <Image Grid.Row="1"
                    Source="Images/SignIn_LogUp/user.png"
-                   Width="160"
-                   Height="160"
+                   Width="80"
+                   Height="80"
                    Stretch="Uniform"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
 
-            <!-- Username Label -->
+            <!-- First Name Label -->
             <TextBlock Grid.Row="3"
+                       Text="First Name"
+                       FontFamily="Bahnschrift"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,0,5"/>
+
+            <!-- First Name TextBox -->
+            <Border Grid.Row="4"
+                    Height="40"
+                    Background="#2A2F3A"
+                    CornerRadius="20"
+                    BorderThickness="0">
+                <Grid>
+                    <TextBox x:Name="FirstNameTextBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="White"
+                             CaretBrush="White"
+                             FontFamily="Bahnschrift"
+                             FontSize="14"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch"
+                             Margin="15,0"
+                             TextChanged="FirstNameTextBox_TextChanged"/>
+                    <TextBlock x:Name="FirstNamePlaceholder"
+                               Text="Enter your first name"
+                               Foreground="#808080"
+                               FontFamily="Bahnschrift"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="15,0"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </Border>
+
+            <!-- Last Name Label -->
+            <TextBlock Grid.Row="6"
+                       Text="Last Name"
+                       FontFamily="Bahnschrift"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,0,5"/>
+
+            <!-- Last Name TextBox -->
+            <Border Grid.Row="7"
+                    Height="40"
+                    Background="#2A2F3A"
+                    CornerRadius="20"
+                    BorderThickness="0">
+                <Grid>
+                    <TextBox x:Name="LastNameTextBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="White"
+                             CaretBrush="White"
+                             FontFamily="Bahnschrift"
+                             FontSize="14"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch"
+                             Margin="15,0"
+                             TextChanged="LastNameTextBox_TextChanged"/>
+                    <TextBlock x:Name="LastNamePlaceholder"
+                               Text="Enter your last name"
+                               Foreground="#808080"
+                               FontFamily="Bahnschrift"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="15,0"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </Border>
+
+            <!-- Email Label -->
+            <TextBlock Grid.Row="9"
+                       Text="Email"
+                       FontFamily="Bahnschrift"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,0,5"/>
+
+            <!-- Email TextBox -->
+            <Border Grid.Row="10"
+                    Height="40"
+                    Background="#2A2F3A"
+                    CornerRadius="20"
+                    BorderThickness="0">
+                <Grid>
+                    <TextBox x:Name="EmailTextBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="White"
+                             CaretBrush="White"
+                             FontFamily="Bahnschrift"
+                             FontSize="14"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch"
+                             Margin="15,0"
+                             TextChanged="EmailTextBox_TextChanged"/>
+                    <TextBlock x:Name="EmailPlaceholder"
+                               Text="Enter your email"
+                               Foreground="#808080"
+                               FontFamily="Bahnschrift"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="15,0"
+                               IsHitTestVisible="False"/>
+                </Grid>
+            </Border>
+
+            <!-- Username Label -->
+            <TextBlock Grid.Row="12"
                        Text="Username"
                        FontFamily="Bahnschrift"
-                       FontSize="22"
+                       FontSize="16"
                        FontWeight="SemiBold"
                        Foreground="White"
                        HorizontalAlignment="Left"
                        Margin="0,0,0,5"/>
 
             <!-- Username TextBox -->
-            <Border Grid.Row="4"
-                    Height="50"
+            <Border Grid.Row="13"
+                    Height="40"
                     Background="#2A2F3A"
-                    CornerRadius="25"
+                    CornerRadius="20"
                     BorderThickness="0">
                 <Grid>
                     <TextBox x:Name="UsernameTextBox"
                              Background="Transparent"
                              BorderThickness="0"
                              Foreground="White"
+                             CaretBrush="White"
                              FontFamily="Bahnschrift"
-                             FontSize="16"
+                             FontSize="14"
                              VerticalAlignment="Center"
                              HorizontalAlignment="Stretch"
-                             Margin="20,0"
+                             Margin="15,0"
                              TextChanged="UsernameTextBox_TextChanged"/>
                     <TextBlock x:Name="UsernamePlaceholder"
-                               Text="username"
+                               Text="Choose a username"
                                Foreground="#808080"
                                FontFamily="Bahnschrift"
-                               FontSize="16"
+                               FontSize="14"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
-                               Margin="20,0"
+                               Margin="15,0"
                                IsHitTestVisible="False"/>
                 </Grid>
             </Border>
 
             <!-- Password Label -->
-            <TextBlock Grid.Row="6"
+            <TextBlock Grid.Row="15"
                        Text="Password"
                        FontFamily="Bahnschrift"
-                       FontSize="22"
+                       FontSize="16"
                        FontWeight="SemiBold"
                        Foreground="White"
                        HorizontalAlignment="Left"
-                       Margin="0,5,0,5"/>
+                       Margin="0,0,0,5"/>
 
             <!-- Password TextBox -->
-            <Border Grid.Row="7"
-                    Height="50"
+            <Border Grid.Row="16"
+                    Height="40"
                     Background="#2A2F3A"
-                    CornerRadius="25"
+                    CornerRadius="20"
                     BorderThickness="0">
                 <Grid>
                     <PasswordBox x:Name="PasswordTextBox"
                                  Background="Transparent"
                                  BorderThickness="0"
                                  Foreground="White"
+                                 CaretBrush="White"
                                  FontFamily="Bahnschrift"
-                                 FontSize="16"
+                                 FontSize="14"
                                  VerticalAlignment="Center"
                                  HorizontalAlignment="Stretch"
-                                 Margin="20,0"
+                                 Margin="15,0"
                                  PasswordChanged="PasswordTextBox_PasswordChanged"/>
                     <TextBlock x:Name="PasswordPlaceholder"
-                               Text="password"
+                               Text="Create a strong password"
                                Foreground="#808080"
                                FontFamily="Bahnschrift"
-                               FontSize="16"
+                               FontSize="14"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"
-                               Margin="20,0"
+                               Margin="15,0"
                                IsHitTestVisible="False"/>
                 </Grid>
             </Border>
 
             <!-- Buttons Container -->
-            <Grid Grid.Row="9">
+            <Grid Grid.Row="18">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
@@ -228,8 +359,12 @@
                             Click="PersonalButton_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
@@ -262,8 +397,12 @@
                             Click="TeamButton_Click">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
