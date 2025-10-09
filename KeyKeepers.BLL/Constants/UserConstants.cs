@@ -42,4 +42,6 @@ public static class UserConstants
         "Password must contain at least one special character";
 
     public static readonly string UserCreationError = "User already exists";
+    public static readonly string UserLogInError = "Invalid credentials!";
+    public static readonly string UserLogOutError = "Invalid Token! Log out failed!";
 }
