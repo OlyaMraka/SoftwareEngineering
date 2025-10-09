@@ -126,7 +126,8 @@
                        Margin="0,0,0,5"/>
 
             <!-- Username TextBox -->
-            <Border Grid.Row="4"
+            <Border x:Name="UsernameBorder"
+                    Grid.Row="4"
                     Height="50"
                     Background="#2A2F3A"
                     CornerRadius="25"

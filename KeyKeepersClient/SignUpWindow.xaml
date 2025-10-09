@@ -255,11 +255,12 @@
                        Margin="0,0,0,5"/>
 
             <!-- Username TextBox -->
-            <Border Grid.Row="13"
+            <Border x:Name="UsernameBorder"
+                    Grid.Row="13"
                     Height="40"
                     Background="#2A2F3A"
                     CornerRadius="20"
-                    BorderThickness="0">
+                    BorderThickness="1"> <!-- краще 1, щоб колір був видимий -->
                 <Grid>
                     <TextBox x:Name="UsernameTextBox"
                              Background="Transparent"
@@ -283,6 +284,7 @@
                                IsHitTestVisible="False"/>
                 </Grid>
             </Border>
+
 
             <!-- Password Label -->
             <TextBlock Grid.Row="15"

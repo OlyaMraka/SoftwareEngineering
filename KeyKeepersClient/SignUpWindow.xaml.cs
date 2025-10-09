@@ -5,6 +5,7 @@ using System.Windows.Input;
 using KeyKeepers.BLL.Commands.Users.Create;
 using KeyKeepers.BLL.DTOs.Users;
 using MediatR;
+using System.Windows.Media;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyKeepersClient;
@@ -17,14 +18,7 @@ public partial class SignUpWindow : Window
     {
         this.InitializeComponent();
 
-        try
-        {
-            this.mediator = App.ServiceProvider?.GetService<IMediator>();
-        }
-        catch
-        {
-            this.mediator = null;
-        }
+        mediator = App.ServiceProvider.GetRequiredService<IMediator>();
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -149,8 +143,8 @@ public partial class SignUpWindow : Window
             // Перевірка чи налаштований mediator (база даних та DI)
             if (this.mediator == null)
             {
-                MessageBox.Show("База даних не налаштована. Реєстрація тимчасово недоступна.",
-                              "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -161,7 +155,7 @@ public partial class SignUpWindow : Window
                 Surname = lastName,
                 Email = email,
                 UserName = username,
-                Password = password
+                Password = password,
             };
 
             // Створюємо команду для реєстрації користувача
@@ -209,8 +203,8 @@ public partial class SignUpWindow : Window
             // Перевірка чи налаштований mediator (база даних та DI)
             if (this.mediator == null)
             {
-                MessageBox.Show("База даних не налаштована. Реєстрація тимчасово недоступна.",
-                              "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.",  "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -221,7 +215,7 @@ public partial class SignUpWindow : Window
                 Surname = lastName,
                 Email = email,
                 UserName = username,
-                Password = password
+                Password = password,
             };
 
             // Створюємо команду для реєстрації користувача
