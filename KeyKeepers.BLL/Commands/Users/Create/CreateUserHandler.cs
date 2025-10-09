@@ -48,7 +48,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<AuthR
 
             if (existingUser != null)
             {
-                return Result.Fail<AuthResponseDto>(UserConstants.UserCreationError);
+                return Result.Fail<AuthResponseDto>("Exists");
             }
 
             User user = mapper.Map<User>(request.RegisterDto);
@@ -57,7 +57,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<AuthR
 
             if (await repositoryWrapper.SaveChangesAsync() <= 0)
             {
-                return Result.Fail<AuthResponseDto>(UserConstants.UserCreationError);
+                return Result.Fail<AuthResponseDto>("Saveeroor");
             }
 
             RefreshToken refreshToken = tokenService.GenerateRefreshToken(user);
@@ -83,7 +83,7 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<AuthR
         }
         catch
         {
-            return Result.Fail<AuthResponseDto>(UserConstants.UserCreationError);
+            return Result.Fail<AuthResponseDto>("huyna");
         }
     }
 }
