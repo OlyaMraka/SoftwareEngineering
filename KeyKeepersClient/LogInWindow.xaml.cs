@@ -1,14 +1,22 @@
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using KeyKeepers.BLL.Commands.Users.LogIn;
+using KeyKeepers.BLL.DTOs.Users;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyKeepersClient;
 
 public partial class LogInWindow : Window
 {
+    private readonly IMediator? mediator;
+
     public LogInWindow()
     {
         this.InitializeComponent();
+        mediator = App.ServiceProvider.GetRequiredService<IMediator>();
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -41,7 +49,7 @@ public partial class LogInWindow : Window
 
     private void ValidateUsernameRealTime(string username)
     {
-        if (!string.IsNullOrWhiteSpace(username) && username.Trim().Length >= 3)
+        if (!string.IsNullOrWhiteSpace(username) && username.Trim().Length >= 4)
         {
             this.UsernameBorder.BorderBrush = Brushes.Green;
         }
@@ -55,7 +63,7 @@ public partial class LogInWindow : Window
         }
     }
 
-    private void AcceptButton_Click(object sender, RoutedEventArgs e)
+    private async void AcceptButton_Click(object sender, RoutedEventArgs e)
     {
         if (!this.ValidateLoginData(out string errorMessage))
         {
@@ -66,7 +74,43 @@ public partial class LogInWindow : Window
         string username = this.UsernameTextBox.Text.Trim();
         string password = this.PasswordTextBox.Password;
 
-        MessageBox.Show($"Login successful for: {username}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        try
+        {
+            var logInDto = new UserLogInDto
+            {
+                Username = username,
+                Password = password,
+            };
+
+            var command = new UserLogInCommand(logInDto);
+            var result = await mediator!.Send(command);
+
+            if (result.IsSuccess)
+            {
+                // Успішний логін - переходимо до головного вікна
+                var mainWindow = new MainWindow();
+                mainWindow.Left = this.Left;
+                mainWindow.Top = this.Top;
+                mainWindow.Show();
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Invalid username or password. Please try again.",
+                    "Login Failed",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"An error occurred during login: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private bool ValidateLoginData(out string errorMessage)
@@ -83,16 +127,16 @@ public partial class LogInWindow : Window
 
         // Перевірка довжини username
         string username = this.UsernameTextBox.Text.Trim();
-        if (username.Length < 3)
+        if (username.Length < 4)
         {
-            errorMessage = "Username must be at least 3 characters long.";
+            errorMessage = "Username must be at least 4 characters long.";
             this.UsernameTextBox.Focus();
             return false;
         }
 
-        if (username.Length > 50)
+        if (username.Length > 40)
         {
-            errorMessage = "Username cannot be longer than 50 characters.";
+            errorMessage = "Username cannot be longer than 40 characters.";
             this.UsernameTextBox.Focus();
             return false;
         }

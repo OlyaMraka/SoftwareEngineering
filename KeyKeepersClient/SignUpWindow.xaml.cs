@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -105,7 +106,7 @@ public partial class SignUpWindow : Window
         if (!string.IsNullOrWhiteSpace(username))
         {
             string trimmedUsername = username.Trim();
-            if (trimmedUsername.Length >= 3 &&
+            if (trimmedUsername.Length >= 4 &&
                 System.Text.RegularExpressions.Regex.IsMatch(trimmedUsername, @"^[a-zA-Z][a-zA-Z0-9_.-]*$"))
             {
                 this.UsernameBorder.BorderBrush = Brushes.Green;
@@ -204,7 +205,7 @@ public partial class SignUpWindow : Window
             if (this.mediator == null)
             {
                 MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.",  "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -257,9 +258,16 @@ public partial class SignUpWindow : Window
         }
 
         string firstName = this.FirstNameTextBox.Text.Trim();
-        if (firstName.Length < 2)
+        if (firstName.Length < 3)
         {
-            errorMessage = "Ім'я повинно містити мінімум 2 символи.";
+            errorMessage = "Ім'я повинно містити мінімум 3 символи.";
+            this.FirstNameTextBox.Focus();
+            return false;
+        }
+
+        if (firstName.Length > 30)
+        {
+            errorMessage = "Ім'я не може бути довше 30 символів.";
             this.FirstNameTextBox.Focus();
             return false;
         }
@@ -280,9 +288,16 @@ public partial class SignUpWindow : Window
         }
 
         string lastName = this.LastNameTextBox.Text.Trim();
-        if (lastName.Length < 2)
+        if (lastName.Length < 3)
         {
-            errorMessage = "Прізвище повинно містити мінімум 2 символи.";
+            errorMessage = "Прізвище повинно містити мінімум 3 символи.";
+            this.LastNameTextBox.Focus();
+            return false;
+        }
+
+        if (lastName.Length > 30)
+        {
+            errorMessage = "Прізвище не може бути довше 30 символів.";
             this.LastNameTextBox.Focus();
             return false;
         }
@@ -303,17 +318,24 @@ public partial class SignUpWindow : Window
         }
 
         string email = this.EmailTextBox.Text.Trim();
-        string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-        if (!System.Text.RegularExpressions.Regex.IsMatch(email, emailPattern))
+        if (email.Length < 4)
         {
-            errorMessage = "Введіть правильну email адресу.";
+            errorMessage = "Email повинен містити мінімум 4 символи.";
             this.EmailTextBox.Focus();
             return false;
         }
 
-        if (email.Length > 254)
+        if (email.Length > 40)
         {
-            errorMessage = "Email адреса занадто довга.";
+            errorMessage = "Email не може бути довше 40 символів.";
+            this.EmailTextBox.Focus();
+            return false;
+        }
+
+        string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        if (!System.Text.RegularExpressions.Regex.IsMatch(email, emailPattern))
+        {
+            errorMessage = "Введіть правильну email адресу.";
             this.EmailTextBox.Focus();
             return false;
         }
@@ -327,16 +349,16 @@ public partial class SignUpWindow : Window
         }
 
         string username = this.UsernameTextBox.Text.Trim();
-        if (username.Length < 3)
+        if (username.Length < 4)
         {
-            errorMessage = "Ім'я користувача повинно містити мінімум 3 символи.";
+            errorMessage = "Ім'я користувача повинно містити мінімум 4 символи.";
             this.UsernameTextBox.Focus();
             return false;
         }
 
-        if (username.Length > 50)
+        if (username.Length > 40)
         {
-            errorMessage = "Ім'я користувача не може бути довше 50 символів.";
+            errorMessage = "Ім'я користувача не може бути довше 40 символів.";
             this.UsernameTextBox.Focus();
             return false;
         }
@@ -364,29 +386,14 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-        if (password.Length > 128)
-        {
-            errorMessage = "Пароль не може бути довше 128 символів.";
-            this.PasswordTextBox.Focus();
-            return false;
-        }
-
-        // Перевірка складності password
+        // Перевірка обов'язкових елементів паролю згідно з бекенд валідатором
         bool hasUpper = System.Text.RegularExpressions.Regex.IsMatch(password, @"[A-Z]");
-        bool hasLower = System.Text.RegularExpressions.Regex.IsMatch(password, @"[a-z]");
-        bool hasDigit = System.Text.RegularExpressions.Regex.IsMatch(password, @"\d");
-        bool hasSpecial = System.Text.RegularExpressions.Regex.IsMatch(password, @"[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]");
+        bool hasDigit = System.Text.RegularExpressions.Regex.IsMatch(password, @"[0-9]");
+        bool hasSpecial = System.Text.RegularExpressions.Regex.IsMatch(password, @"[^a-zA-Z0-9]");
 
         if (!hasUpper)
         {
             errorMessage = "Пароль має містити хоча б одну велику літеру.";
-            this.PasswordTextBox.Focus();
-            return false;
-        }
-
-        if (!hasLower)
-        {
-            errorMessage = "Пароль має містити хоча б одну малу літеру.";
             this.PasswordTextBox.Focus();
             return false;
         }
@@ -400,15 +407,7 @@ public partial class SignUpWindow : Window
 
         if (!hasSpecial)
         {
-            errorMessage = "Пароль має містити хоча б один спеціальний символ (!@#$%^&*()_+-=[]{}|;:,.<>?).";
-            this.PasswordTextBox.Focus();
-            return false;
-        }
-
-        // Перевірка що password не містить username
-        if (password.ToLower().Contains(username.ToLower()))
-        {
-            errorMessage = "Пароль не може містити ім'я користувача.";
+            errorMessage = "Пароль має містити хоча б один спеціальний символ.";
             this.PasswordTextBox.Focus();
             return false;
         }
