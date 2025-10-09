@@ -45,11 +45,6 @@ public partial class App : Application
 
     private void ConfigureServices(IServiceCollection services)
     {
-        var connectionString = Configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<KeyKeepersDbContext>(options =>
-            options.UseNpgsql(connectionString, npgsqlOptions =>
-                npgsqlOptions.MigrationsAssembly(typeof(KeyKeepersDbContext).Assembly.FullName)));
-
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.AddRepositoriesFromAssembly(typeof(RepositoryWrapper).Assembly);
