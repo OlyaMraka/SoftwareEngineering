@@ -1,5 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyKeepersClient", "KeyKeepersClient\KeyKeepersClient.csproj", "{FA55B984-B4C7-4243-9526-9B43EDB328A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyKeepers.WebApi", "KeyKeepers.WebApi\KeyKeepers.WebApi.csproj", "{4B582206-ED52-4F53-AFEF-5EF4635B66F0}"
@@ -7,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyKeepers.BLL", "KeyKeepers.BLL\KeyKeepers.BLL.csproj", "{F856E9CF-FFBF-4481-B34B-202D22B6865C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyKeepers.DAL", "KeyKeepers.DAL\KeyKeepers.DAL.csproj", "{CAA111D2-7F83-4909-B2B3-3ED7C26CAF97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeyKeepers.UnitTests", "KeyKeepers.UnitTests\KeyKeepers.UnitTests.csproj", "{E04CA117-6E00-4FE5-B937-4150F762BAB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +35,15 @@ Global
 		{CAA111D2-7F83-4909-B2B3-3ED7C26CAF97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAA111D2-7F83-4909-B2B3-3ED7C26CAF97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAA111D2-7F83-4909-B2B3-3ED7C26CAF97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04CA117-6E00-4FE5-B937-4150F762BAB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04CA117-6E00-4FE5-B937-4150F762BAB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04CA117-6E00-4FE5-B937-4150F762BAB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04CA117-6E00-4FE5-B937-4150F762BAB0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE4101E0-BEA4-4EE2-A617-6701C633D27A}
 	EndGlobalSection
 EndGlobal
