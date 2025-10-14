@@ -49,6 +49,7 @@ public partial class MainWindow : Window
         if (sender is Button clickedButton)
         {
             SetActiveCategory(clickedButton);
+
             // TODO: Load content for the selected category
         }
     }
@@ -70,6 +71,7 @@ public partial class MainWindow : Window
     {
         // TODO: Implement search functionality
         string searchText = SearchTextBox.Text.ToLower();
+
         // Filter categories based on search text
     }
 
@@ -375,11 +377,4 @@ public partial class MainWindow : Window
     private void ClearStoredTokens()
     {
     }
-}
-
-public class CategoryItem
-{
-    public string Name { get; set; } = string.Empty;
-
-    public string Icon { get; set; } = "📁";
 }
