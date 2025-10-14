@@ -2,10 +2,12 @@ using KeyKeepers.DAL.Data;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Interfaces.Communities;
 using KeyKeepers.DAL.Repositories.Interfaces.CommunityUsers;
+using KeyKeepers.DAL.Repositories.Interfaces.PasswordCategories;
 using KeyKeepers.DAL.Repositories.Interfaces.RefreshTokens;
 using KeyKeepers.DAL.Repositories.Interfaces.Users;
 using KeyKeepers.DAL.Repositories.Realizations.Communities;
 using KeyKeepers.DAL.Repositories.Realizations.CommunityUsers;
+using KeyKeepers.DAL.Repositories.Realizations.PasswordCategories;
 using KeyKeepers.DAL.Repositories.Realizations.RefreshTokens;
 using KeyKeepers.DAL.Repositories.Realizations.Users;
 
@@ -19,6 +21,7 @@ public class RepositoryWrapper : IRepositoryWrapper
     private IUserRepository? userRepository;
     private IRefreshTokenRepository? refreshTokenRepository;
     private ICommunityUserRepository? communityUserRepository;
+    private IPasswordCategoryRepository? passwordCategoryRepository;
 
     public RepositoryWrapper(KeyKeepersDbContext context)
     {
@@ -34,6 +37,9 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     public ICommunityUserRepository CommunityUserRepository => communityUserRepository
         ??= new CommunityUserRepository(dbContext);
+
+    public IPasswordCategoryRepository PrivatePasswordCategoryRepository => passwordCategoryRepository
+        ??= new PasswordCategoryRepository(dbContext);
 
     public int SaveChanges()
     {
