@@ -5,6 +5,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using KeyKeepers.BLL.Commands.Users.LogOut;
 using KeyKeepers.BLL.DTOs.Users;
+using KeyKeepers.DAL.Repositories.Interfaces.Base;
+using KeyKeepers.DAL.Repositories.Options;
+using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,17 +16,147 @@ namespace KeyKeepersClient;
 public partial class MainWindow : Window
 {
     private readonly IMediator mediator;
+    private readonly IRepositoryWrapper repositoryWrapper;
+    private readonly long userId;
+    private long? communityUserId;
+    private long? communityId;
     private Button? currentActiveButton;
     private ObservableCollection<CategoryItem> customCategories;
+    private bool isEditMode = false;
+    private CategoryItem? currentEditingCategory = null;
 
-    public MainWindow()
+    public MainWindow(long userId)
     {
         InitializeComponent();
+        this.userId = userId;
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
+        repositoryWrapper = App.ServiceProvider.GetRequiredService<IRepositoryWrapper>();
         customCategories = new ObservableCollection<CategoryItem>();
+
+        // Load categories from database
+        LoadCategoriesAsync();
 
         // Set the first button as active by default
         SetActiveCategory((Button)CategoriesPanel.Children[0]);
+    }
+
+    private async void LoadCategoriesAsync()
+    {
+        try
+        {
+            var queryOptions = new QueryOptions<KeyKeepers.DAL.Entities.PrivateCategory>
+            {
+                Filter = c => c.CommunityUser.UserId == userId,
+                AsNoTracking = true, // Don't track to avoid issues with User/RefreshToken
+            };
+
+            var categories = await repositoryWrapper.PrivatePasswordCategoryRepository.GetAllAsync(queryOptions);
+
+            foreach (var category in categories)
+            {
+                // Store communityUserId and communityId from the first category
+                if (!communityUserId.HasValue && category.CommunityUserId > 0)
+                {
+                    communityUserId = category.CommunityUserId;
+                    var categoryItem = new CategoryItem
+                    {
+                        Id = category.Id,
+                        Name = category.Name,
+                    };
+
+                    customCategories.Add(categoryItem);
+                    var button = CreateCategoryButton(categoryItem);
+                    CategoriesPanel.Children.Add(button);
+                }
+
+                // Don't create Community/CommunityUser here - do it only when user creates first category
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Error loading categories: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private async Task EnsureCommunityUserExistsAsync()
+    {
+        try
+        {
+            // Try to find existing CommunityUser
+            var communityUserOptions = new QueryOptions<KeyKeepers.DAL.Entities.CommunityUser>
+            {
+                Filter = cu => cu.UserId == userId,
+                AsNoTracking = true, // Don't track to avoid issues with User/RefreshToken
+            };
+
+            var communityUser = await repositoryWrapper.CommunityUserRepository.GetFirstOrDefaultAsync(communityUserOptions);
+
+            if (communityUser != null)
+            {
+                communityUserId = communityUser.Id;
+                communityId = communityUser.CommunityId;
+            }
+            else
+            {
+                // Clear any tracked entities from previous operations (especially User with RefreshToken)
+                repositoryWrapper.ClearChangeTracker();
+
+                // Create default community for user WITHOUT loading User entity to avoid RefreshToken DateTime issues
+                var defaultCommunity = new KeyKeepers.DAL.Entities.Community
+                {
+                    Name = "Personal",
+                    CreatedAt = DateTime.UtcNow,
+                };
+
+                await repositoryWrapper.CommunityRepository.CreateAsync(defaultCommunity);
+                await repositoryWrapper.SaveChangesAsync();
+
+                // Store the communityId right after creation
+                communityId = defaultCommunity.Id;
+
+                // Clear change tracker to ensure User/RefreshToken are not tracked
+                repositoryWrapper.ClearChangeTracker();
+
+                // Create CommunityUser with completely unique UserName
+                var timestamp = DateTime.UtcNow.Ticks;
+                var newCommunityUser = new KeyKeepers.DAL.Entities.CommunityUser
+                {
+                    UserId = userId,
+                    UserName = $"cu_{userId}_{timestamp}",
+                    PasswordHash = $"placeholder_{timestamp}",
+                    CommunityId = defaultCommunity.Id,
+                    Role = KeyKeepers.DAL.Enums.CommunityRole.Owner,
+                    CreatedAt = DateTime.UtcNow,
+                };
+
+                await repositoryWrapper.CommunityUserRepository.CreateAsync(newCommunityUser);
+                await repositoryWrapper.SaveChangesAsync();
+
+                communityUserId = newCommunityUser.Id;
+            }
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = $"Error creating user community:\n{ex.Message}";
+            if (ex.InnerException != null)
+            {
+                errorMessage += $"\n\nInner Exception: {ex.InnerException.Message}";
+                if (ex.InnerException.InnerException != null)
+                {
+                    errorMessage += $"\n\nInner Inner Exception: {ex.InnerException.InnerException.Message}";
+                }
+            }
+
+            MessageBox.Show(
+                errorMessage,
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -49,8 +182,6 @@ public partial class MainWindow : Window
         if (sender is Button clickedButton)
         {
             SetActiveCategory(clickedButton);
-
-            // TODO: Load content for the selected category
         }
     }
 
@@ -69,10 +200,29 @@ public partial class MainWindow : Window
 
     private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        // TODO: Implement search functionality
         string searchText = SearchTextBox.Text.ToLower();
+    }
 
-        // Filter categories based on search text
+    private void CategoryNameTextBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        // Allow scrolling in the TextBox without showing scrollbar
+        var textBox = sender as TextBox;
+        if (textBox != null)
+        {
+            // Scroll the text horizontally
+            if (e.Delta > 0)
+            {
+                // Scroll left
+                textBox.ScrollToHorizontalOffset(textBox.HorizontalOffset - 20);
+            }
+            else
+            {
+                // Scroll right
+                textBox.ScrollToHorizontalOffset(textBox.HorizontalOffset + 20);
+            }
+
+            e.Handled = true;
+        }
     }
 
     private void AddPasswordButton_Click(object sender, RoutedEventArgs e)
@@ -87,213 +237,219 @@ public partial class MainWindow : Window
 
     private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
     {
-        // Show input dialog for category name
-        var inputDialog = new Window
-        {
-            Title = "Add New Category",
-            Width = 400,
-            Height = 200,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-            Owner = this,
-            Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#171C26")),
-            WindowStyle = WindowStyle.ToolWindow,
-        };
+        // Enter edit mode for creating new category
+        isEditMode = true;
+        currentEditingCategory = null;
+        CategoryNameTextBox.Text = string.Empty;
+        CategoryEditPanel.Visibility = Visibility.Visible;
+        NormalButtonsPanel.Visibility = Visibility.Collapsed;
+        EditButtonsPanel.Visibility = Visibility.Visible;
+        AddCategoryButton.Visibility = Visibility.Collapsed;
+        UpdateAllCategoryButtonsVisibility();
+        CategoryNameTextBox.Focus();
+    }
 
-        var grid = new Grid { Margin = new Thickness(20) };
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+    private async void SaveCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!isEditMode)
+        {
+            return;
+        }
 
-        var label = new TextBlock
+        if (!string.IsNullOrWhiteSpace(CategoryNameTextBox.Text))
         {
-            Text = "Category Name:",
-            Foreground = Brushes.White,
-            FontFamily = new FontFamily("Bahnschrift"),
-            FontSize = 14,
-            Margin = new Thickness(0, 0, 0, 10),
-        };
-        Grid.SetRow(label, 0);
-
-        var textBox = new TextBox
-        {
-            Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0E121B")),
-            Foreground = Brushes.White,
-            FontFamily = new FontFamily("Bahnschrift"),
-            FontSize = 14,
-            Padding = new Thickness(10),
-            BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39")),
-            BorderThickness = new Thickness(1),
-        };
-        Grid.SetRow(textBox, 1);
-
-        var buttonPanel = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            Margin = new Thickness(0, 20, 0, 0),
-        };
-        Grid.SetRow(buttonPanel, 3);
-
-        var okButton = new Button
-        {
-            Content = "Add",
-            Width = 80,
-            Height = 30,
-            Margin = new Thickness(0, 0, 10, 0),
-            Background = new LinearGradientBrush(
-                (Color)ColorConverter.ConvertFromString("#815A11"),
-                (Color)ColorConverter.ConvertFromString("#FDE053"),
-                0),
-            Foreground = Brushes.Black,
-            FontFamily = new FontFamily("Bahnschrift"),
-            FontWeight = FontWeights.SemiBold,
-            BorderThickness = new Thickness(0),
-            Cursor = Cursors.Hand,
-        };
-        okButton.Click += (s, args) =>
-        {
-            if (!string.IsNullOrWhiteSpace(textBox.Text))
+            if (currentEditingCategory == null)
             {
-                AddCustomCategory(textBox.Text.Trim());
-                inputDialog.DialogResult = true;
-                inputDialog.Close();
+                // Create new category
+                await AddCustomCategoryAsync(CategoryNameTextBox.Text.Trim());
             }
             else
             {
-                MessageBox.Show(
-                    "Please enter a category name.",
-                    "Invalid Input",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                // Update existing category
+                await UpdateCategoryAsync(currentEditingCategory, CategoryNameTextBox.Text.Trim());
             }
-        };
 
-        var cancelButton = new Button
+            // Clear the textbox and reset currentEditingCategory, but stay in edit mode
+            CategoryNameTextBox.Text = string.Empty;
+            currentEditingCategory = null;
+            CategoryNameTextBox.Focus();
+        }
+        else
         {
-            Content = "Cancel",
-            Width = 80,
-            Height = 30,
-            Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39")),
-            Foreground = Brushes.White,
-            FontFamily = new FontFamily("Bahnschrift"),
-            FontWeight = FontWeights.SemiBold,
-            BorderThickness = new Thickness(0),
-            Cursor = Cursors.Hand,
-        };
-        cancelButton.Click += (s, args) =>
-        {
-            inputDialog.DialogResult = false;
-            inputDialog.Close();
-        };
-
-        buttonPanel.Children.Add(okButton);
-        buttonPanel.Children.Add(cancelButton);
-
-        grid.Children.Add(label);
-        grid.Children.Add(textBox);
-        grid.Children.Add(buttonPanel);
-
-        inputDialog.Content = grid;
-        inputDialog.ShowDialog();
+            MessageBox.Show(
+                "Please enter a category name.",
+                "Invalid Input",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
     }
 
-    private void AddCustomCategory(string categoryName)
+    private async void SaveEditButton_Click(object sender, RoutedEventArgs e)
     {
-        var categoryItem = new CategoryItem
+        if (!isEditMode)
         {
-            Name = categoryName,
-            Icon = "📁", // Default icon
-        };
+            return;
+        }
 
-        customCategories.Add(categoryItem);
+        // If there's text in the textbox, save it
+        if (!string.IsNullOrWhiteSpace(CategoryNameTextBox.Text))
+        {
+            if (currentEditingCategory == null)
+            {
+                // Create new category
+                await AddCustomCategoryAsync(CategoryNameTextBox.Text.Trim());
+            }
+            else
+            {
+                // Update existing category
+                await UpdateCategoryAsync(currentEditingCategory, CategoryNameTextBox.Text.Trim());
+            }
+        }
 
-        // Create button for the new category
-        var button = CreateCategoryButton(categoryItem);
-        CategoriesPanel.Children.Add(button);
+        // Always exit edit mode when Save is clicked
+        ExitEditMode();
     }
 
-    private Button CreateCategoryButton(CategoryItem category)
+    private async void DeleteEditButton_Click(object sender, RoutedEventArgs e)
     {
-        var button = new Button
-        {
-            Style = (Style)FindResource("CategoryButtonStyle"),
-            Tag = category.Name,
-        };
-
-        var panel = new StackPanel
-        {
-            Orientation = Orientation.Horizontal,
-        };
-
-        var icon = new TextBlock
-        {
-            Text = category.Icon,
-            FontSize = 20,
-            Margin = new Thickness(0, 0, 10, 0),
-        };
-
-        var name = new TextBlock
-        {
-            Text = category.Name,
-            VerticalAlignment = VerticalAlignment.Center,
-        };
-
-        var deleteButton = new Button
-        {
-            Content = "×",
-            Width = 25,
-            Height = 25,
-            Background = Brushes.Transparent,
-            Foreground = Brushes.White,
-            BorderThickness = new Thickness(0),
-            FontSize = 18,
-            FontWeight = FontWeights.Bold,
-            Cursor = Cursors.Hand,
-            Margin = new Thickness(10, 0, 0, 0),
-            HorizontalAlignment = HorizontalAlignment.Right,
-            Tag = category,
-        };
-        deleteButton.Click += DeleteCategoryButton_Click;
-
-        var grid = new Grid();
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-
-        Grid.SetColumn(icon, 0);
-        Grid.SetColumn(name, 1);
-        Grid.SetColumn(deleteButton, 2);
-
-        grid.Children.Add(icon);
-        grid.Children.Add(name);
-        grid.Children.Add(deleteButton);
-
-        button.Content = grid;
-        button.Click += CategoryButton_Click;
-
-        return button;
-    }
-
-    private void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
-    {
-        e.Handled = true; // Prevent category button click
-
-        if (sender is Button deleteButton && deleteButton.Tag is CategoryItem category)
+        if (currentEditingCategory != null)
         {
             var result = MessageBox.Show(
-                $"Are you sure you want to delete the '{category.Name}' category?",
+                $"Are you sure you want to delete the '{currentEditingCategory.Name}' category?",
                 "Delete Category",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
             if (result == MessageBoxResult.Yes)
             {
+                await DeleteCategoryAsync(currentEditingCategory);
+                ExitEditMode();
+            }
+        }
+    }
+
+    private void ExitEditMode()
+    {
+        isEditMode = false;
+        currentEditingCategory = null;
+        CategoryNameTextBox.Text = string.Empty;
+        CategoryEditPanel.Visibility = Visibility.Collapsed;
+        NormalButtonsPanel.Visibility = Visibility.Visible;
+        EditButtonsPanel.Visibility = Visibility.Collapsed;
+        AddCategoryButton.Visibility = Visibility.Visible;
+        UpdateAllCategoryButtonsVisibility();
+    }
+
+    private void UpdateAllCategoryButtonsVisibility()
+    {
+        // Update visibility of edit/delete buttons on all custom categories
+        foreach (var child in CategoriesPanel.Children)
+        {
+            if (child is Button btn && btn.Content is Grid grid)
+            {
+                // Find the button panel (third child in grid)
+                if (grid.Children.Count >= 3 && grid.Children[2] is StackPanel buttonPanel)
+                {
+                    buttonPanel.Visibility = isEditMode ? Visibility.Visible : Visibility.Collapsed;
+                }
+            }
+        }
+    }
+
+    private void EditCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button editButton && editButton.Tag is CategoryItem category)
+        {
+            // Enter edit mode for existing category
+            isEditMode = true;
+            currentEditingCategory = category;
+            CategoryNameTextBox.Text = category.Name;
+            CategoryEditPanel.Visibility = Visibility.Visible;
+            NormalButtonsPanel.Visibility = Visibility.Collapsed;
+            EditButtonsPanel.Visibility = Visibility.Visible;
+            AddCategoryButton.Visibility = Visibility.Collapsed;
+            CategoryNameTextBox.Focus();
+            CategoryNameTextBox.SelectAll();
+        }
+    }
+
+    private async Task UpdateCategoryAsync(CategoryItem category, string newName)
+    {
+        try
+        {
+            var queryOptions = new QueryOptions<KeyKeepers.DAL.Entities.PrivateCategory>
+            {
+                Filter = c => c.Id == category.Id,
+            };
+
+            var existingCategory = await repositoryWrapper.PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(queryOptions);
+
+            if (existingCategory != null)
+            {
+                existingCategory.Name = newName;
+                repositoryWrapper.PrivatePasswordCategoryRepository.Update(existingCategory);
+                await repositoryWrapper.SaveChangesAsync();
+
+                category.Name = newName;
+                UpdateCategoryButton(category);
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Category not found.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Error updating category: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private void UpdateCategoryButton(CategoryItem category)
+    {
+        // Find and update the category button
+        foreach (var child in CategoriesPanel.Children)
+        {
+            if (child is Button btn && btn.Tag is CategoryItem tag && tag.Id == category.Id)
+            {
+                // Recreate the button with updated name
+                var index = CategoriesPanel.Children.IndexOf(btn);
+                CategoriesPanel.Children.Remove(btn);
+                var newButton = CreateCategoryButton(category);
+                CategoriesPanel.Children.Insert(index, newButton);
+                break;
+            }
+        }
+    }
+
+    private async Task DeleteCategoryAsync(CategoryItem category)
+    {
+        try
+        {
+            var queryOptions = new QueryOptions<KeyKeepers.DAL.Entities.PrivateCategory>
+            {
+                Filter = c => c.Id == category.Id,
+            };
+
+            var existingCategory = await repositoryWrapper.PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(queryOptions);
+
+            if (existingCategory != null)
+            {
+                repositoryWrapper.PrivatePasswordCategoryRepository.Delete(existingCategory);
+                await repositoryWrapper.SaveChangesAsync();
+
                 // Find and remove the category button
                 Button? buttonToRemove = null;
                 foreach (var child in CategoriesPanel.Children)
                 {
-                    if (child is Button btn && btn.Tag?.ToString() == category.Name)
+                    if (child is Button btn && btn.Tag is CategoryItem tag && tag.Id == category.Id)
                     {
                         buttonToRemove = btn;
                         break;
@@ -311,6 +467,199 @@ public partial class MainWindow : Window
                     CategoriesPanel.Children.Remove(buttonToRemove);
                     customCategories.Remove(category);
                 }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Category not found.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Error deleting category: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private async Task AddCustomCategoryAsync(string categoryName)
+    {
+        try
+        {
+            // If community info is missing, create it first
+            if (!communityUserId.HasValue || !communityId.HasValue)
+            {
+                await EnsureCommunityUserExistsAsync();
+            }
+
+            if (!communityUserId.HasValue)
+            {
+                MessageBox.Show(
+                    "Unable to create category: User community information not found.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            if (!communityId.HasValue)
+            {
+                MessageBox.Show(
+                    "Unable to create category: Community ID not found.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
+
+            // Create entity directly since mapping might not work correctly
+            var newCategory = new KeyKeepers.DAL.Entities.PrivateCategory
+            {
+                Name = categoryName,
+                CommunityId = communityId.Value,
+                CommunityUserId = communityUserId.Value,
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            var createdCategory = await repositoryWrapper.PrivatePasswordCategoryRepository.CreateAsync(newCategory);
+            await repositoryWrapper.SaveChangesAsync();
+
+            var categoryItem = new CategoryItem
+            {
+                Id = createdCategory.Id,
+                Name = createdCategory.Name,
+            };
+
+            customCategories.Add(categoryItem);
+
+            // Create button for the new category
+            var button = CreateCategoryButton(categoryItem);
+            CategoriesPanel.Children.Add(button);
+        }
+        catch (Exception ex)
+        {
+            var errorMessage = $"Exception: {ex.Message}\n\nStack Trace:\n{ex.StackTrace}";
+            if (ex.InnerException != null)
+            {
+                errorMessage += $"\n\nInner Exception: {ex.InnerException.Message}";
+            }
+
+            MessageBox.Show(
+                errorMessage,
+                "Error creating category",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    private Button CreateCategoryButton(CategoryItem category)
+    {
+        var button = new Button
+        {
+            Style = (Style)FindResource("CategoryButtonStyle"),
+            Tag = category,
+        };
+
+        var grid = new Grid();
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+        // Empty space for icon (instead of actual icon)
+        var iconSpace = new Border
+        {
+            Width = 30,
+            Height = 20,
+            Margin = new Thickness(0, 0, 10, 0),
+        };
+
+        var name = new TextBlock
+        {
+            Text = category.Name,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+
+        // Container for edit/delete buttons (on the right)
+        var buttonPanel = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Center,
+            Visibility = isEditMode ? Visibility.Visible : Visibility.Collapsed,
+        };
+
+        // Edit button
+        var editButton = new Button
+        {
+            Content = "✏",
+            Width = 25,
+            Height = 25,
+            Background = Brushes.Transparent,
+            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDE053")),
+            BorderThickness = new Thickness(0),
+            FontSize = 14,
+            Cursor = Cursors.Hand,
+            Margin = new Thickness(5, 0, 5, 0),
+            VerticalAlignment = VerticalAlignment.Center,
+            Tag = category,
+        };
+        editButton.Click += EditCategoryButton_Click;
+
+        // Delete button
+        var deleteButton = new Button
+        {
+            Content = "×",
+            Width = 25,
+            Height = 25,
+            Background = Brushes.Transparent,
+            Foreground = Brushes.White,
+            BorderThickness = new Thickness(0),
+            FontSize = 18,
+            FontWeight = FontWeights.Bold,
+            Cursor = Cursors.Hand,
+            Margin = new Thickness(0, 0, 5, 0),
+            VerticalAlignment = VerticalAlignment.Center,
+            Tag = category,
+        };
+        deleteButton.Click += DeleteCategoryButton_Click;
+
+        buttonPanel.Children.Add(editButton);
+        buttonPanel.Children.Add(deleteButton);
+
+        Grid.SetColumn(iconSpace, 0);
+        Grid.SetColumn(name, 1);
+        Grid.SetColumn(buttonPanel, 2);
+
+        grid.Children.Add(iconSpace);
+        grid.Children.Add(name);
+        grid.Children.Add(buttonPanel);
+
+        button.Content = grid;
+        button.Click += CategoryButton_Click;
+
+        return button;
+    }
+
+    private async void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+        e.Handled = true; // Prevent category button click
+
+        if (sender is Button deleteButton && deleteButton.Tag is CategoryItem category)
+        {
+            var result = MessageBox.Show(
+                $"Are you sure you want to delete the '{category.Name}' category?",
+                "Delete Category",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await DeleteCategoryAsync(category);
             }
         }
     }
