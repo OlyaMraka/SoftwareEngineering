@@ -102,9 +102,6 @@ public partial class MainWindow : Window
             }
             else
             {
-                // Clear any tracked entities from previous operations (especially User with RefreshToken)
-                repositoryWrapper.ClearChangeTracker();
-
                 // Create default community for user WITHOUT loading User entity to avoid RefreshToken DateTime issues
                 var defaultCommunity = new KeyKeepers.DAL.Entities.Community
                 {
@@ -117,9 +114,6 @@ public partial class MainWindow : Window
 
                 // Store the communityId right after creation
                 communityId = defaultCommunity.Id;
-
-                // Clear change tracker to ensure User/RefreshToken are not tracked
-                repositoryWrapper.ClearChangeTracker();
 
                 // Create CommunityUser with completely unique UserName
                 var timestamp = DateTime.UtcNow.Ticks;
