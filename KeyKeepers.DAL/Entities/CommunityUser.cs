@@ -21,6 +21,4 @@ public class CommunityUser
     public Community Community { get; set; } = new Community();
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-    public ICollection<PrivateCategory> PrivateCategories { get; set; } = new List<PrivateCategory>();
 }

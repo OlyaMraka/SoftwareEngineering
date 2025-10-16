@@ -38,7 +38,7 @@ public class UpdatePrivateCategoryHandler : IRequestHandler<UpdatePrivateCategor
                     .CategoryNotFound);
             }
 
-            mapper.Map(request, existingCategory);
+            mapper.Map(request.RequestDto, existingCategory);
 
             repositoryWrapper.PrivatePasswordCategoryRepository.Update(existingCategory);
 

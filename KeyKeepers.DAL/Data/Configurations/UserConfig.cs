@@ -44,5 +44,10 @@ public class UserConfig : IEntityTypeConfiguration<User>
         builder.HasOne(x => x.RefreshToken)
             .WithOne(x => x.User)
             .HasForeignKey<RefreshToken>(x => x.UserId);
+
+        builder.HasMany(x => x.PrivateCategories)
+            .WithOne(x => x.User)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

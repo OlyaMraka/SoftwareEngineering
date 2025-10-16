@@ -8,7 +8,8 @@ public class PasswordCategoryProfile : Profile
 {
     public PasswordCategoryProfile()
     {
-        CreateMap<CreatePrivateCategoryDto, PrivateCategory>();
+        CreateMap<CreatePrivateCategoryDto, PrivateCategory>()
+            .ForMember(dest => dest.Community, opt => opt.Ignore());
         CreateMap<UpdatePrivateCategoryDto, PrivateCategory>();
         CreateMap<PrivateCategory, PrivateCategoryResponseDto>();
     }

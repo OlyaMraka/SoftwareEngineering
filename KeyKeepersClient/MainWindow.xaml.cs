@@ -3,11 +3,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using KeyKeepers.BLL.Commands.PasswordCategory.Create;
+using KeyKeepers.BLL.Commands.PasswordCategory.Delete;
+using KeyKeepers.BLL.Commands.PasswordCategory.Update;
 using KeyKeepers.BLL.Commands.Users.LogOut;
+using KeyKeepers.BLL.DTOs.PasswordCategories;
 using KeyKeepers.BLL.DTOs.Users;
+using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
-using Microsoft.EntityFrameworkCore;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -18,8 +22,6 @@ public partial class MainWindow : Window
     private readonly IMediator mediator;
     private readonly IRepositoryWrapper repositoryWrapper;
     private readonly long userId;
-    private long? communityUserId;
-    private long? communityId;
     private Button? currentActiveButton;
     private ObservableCollection<CategoryItem> customCategories;
     private bool isEditMode = false;
@@ -33,120 +35,48 @@ public partial class MainWindow : Window
         repositoryWrapper = App.ServiceProvider.GetRequiredService<IRepositoryWrapper>();
         customCategories = new ObservableCollection<CategoryItem>();
 
-        // Load categories from database
-        LoadCategoriesAsync();
+        this.Loaded += MainWindow_Loaded;
 
-        // Set the first button as active by default
         SetActiveCategory((Button)CategoriesPanel.Children[0]);
     }
 
-    private async void LoadCategoriesAsync()
+    private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        await LoadCategoriesAsync();
+    }
+
+    private async Task LoadCategoriesAsync()
     {
         try
         {
-            var queryOptions = new QueryOptions<KeyKeepers.DAL.Entities.PrivateCategory>
+            if (this.mediator == null)
             {
-                Filter = c => c.CommunityUser.UserId == userId,
-                AsNoTracking = true, // Don't track to avoid issues with User/RefreshToken
-            };
+                MessageBox
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
-            var categories = await repositoryWrapper.PrivatePasswordCategoryRepository.GetAllAsync(queryOptions);
+            var query = new GetAllPasswordCategoriesQuery(userId);
 
-            foreach (var category in categories)
+            var result = await this.mediator.Send(query);
+
+            foreach (var category in result.Value)
             {
-                // Store communityUserId and communityId from the first category
-                if (!communityUserId.HasValue && category.CommunityUserId > 0)
+                var categoryItem = new CategoryItem
                 {
-                    communityUserId = category.CommunityUserId;
-                    var categoryItem = new CategoryItem
-                    {
-                        Id = category.Id,
-                        Name = category.Name,
-                    };
+                    Id = category.Id,
+                    Name = category.Name,
+                };
 
-                    customCategories.Add(categoryItem);
-                    var button = CreateCategoryButton(categoryItem);
-                    CategoriesPanel.Children.Add(button);
-                }
-
-                // Don't create Community/CommunityUser here - do it only when user creates first category
+                customCategories.Add(categoryItem);
+                var button = CreateCategoryButton(categoryItem);
+                CategoriesPanel.Children.Add(button);
             }
         }
         catch (Exception ex)
         {
             MessageBox.Show(
                 $"Error loading categories: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        }
-    }
-
-    private async Task EnsureCommunityUserExistsAsync()
-    {
-        try
-        {
-            // Try to find existing CommunityUser
-            var communityUserOptions = new QueryOptions<KeyKeepers.DAL.Entities.CommunityUser>
-            {
-                Filter = cu => cu.UserId == userId,
-                AsNoTracking = true, // Don't track to avoid issues with User/RefreshToken
-            };
-
-            var communityUser = await repositoryWrapper.CommunityUserRepository.GetFirstOrDefaultAsync(communityUserOptions);
-
-            if (communityUser != null)
-            {
-                communityUserId = communityUser.Id;
-                communityId = communityUser.CommunityId;
-            }
-            else
-            {
-                // Create default community for user WITHOUT loading User entity to avoid RefreshToken DateTime issues
-                var defaultCommunity = new KeyKeepers.DAL.Entities.Community
-                {
-                    Name = "Personal",
-                    CreatedAt = DateTime.UtcNow,
-                };
-
-                await repositoryWrapper.CommunityRepository.CreateAsync(defaultCommunity);
-                await repositoryWrapper.SaveChangesAsync();
-
-                // Store the communityId right after creation
-                communityId = defaultCommunity.Id;
-
-                // Create CommunityUser with completely unique UserName
-                var timestamp = DateTime.UtcNow.Ticks;
-                var newCommunityUser = new KeyKeepers.DAL.Entities.CommunityUser
-                {
-                    UserId = userId,
-                    UserName = $"cu_{userId}_{timestamp}",
-                    PasswordHash = $"placeholder_{timestamp}",
-                    CommunityId = defaultCommunity.Id,
-                    Role = KeyKeepers.DAL.Enums.CommunityRole.Owner,
-                    CreatedAt = DateTime.UtcNow,
-                };
-
-                await repositoryWrapper.CommunityUserRepository.CreateAsync(newCommunityUser);
-                await repositoryWrapper.SaveChangesAsync();
-
-                communityUserId = newCommunityUser.Id;
-            }
-        }
-        catch (Exception ex)
-        {
-            var errorMessage = $"Error creating user community:\n{ex.Message}";
-            if (ex.InnerException != null)
-            {
-                errorMessage += $"\n\nInner Exception: {ex.InnerException.Message}";
-                if (ex.InnerException.InnerException != null)
-                {
-                    errorMessage += $"\n\nInner Inner Exception: {ex.InnerException.InnerException.Message}";
-                }
-            }
-
-            MessageBox.Show(
-                errorMessage,
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -304,24 +234,6 @@ public partial class MainWindow : Window
         ExitEditMode();
     }
 
-    private async void DeleteEditButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (currentEditingCategory != null)
-        {
-            var result = MessageBox.Show(
-                $"Are you sure you want to delete the '{currentEditingCategory.Name}' category?",
-                "Delete Category",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                await DeleteCategoryAsync(currentEditingCategory);
-                ExitEditMode();
-            }
-        }
-    }
-
     private void ExitEditMode()
     {
         isEditMode = false;
@@ -371,26 +283,33 @@ public partial class MainWindow : Window
     {
         try
         {
-            var queryOptions = new QueryOptions<KeyKeepers.DAL.Entities.PrivateCategory>
+            if (this.mediator == null)
             {
-                Filter = c => c.Id == category.Id,
+                MessageBox
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            var dto = new UpdatePrivateCategoryDto()
+            {
+                UserId = userId,
+                Id = category.Id,
+                Name = newName,
             };
 
-            var existingCategory = await repositoryWrapper.PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(queryOptions);
+            var command = new UpdatePrivateCategoryCommand(dto);
 
-            if (existingCategory != null)
+            var result = await this.mediator.Send(command);
+
+            if (result.IsSuccess)
             {
-                existingCategory.Name = newName;
-                repositoryWrapper.PrivatePasswordCategoryRepository.Update(existingCategory);
-                await repositoryWrapper.SaveChangesAsync();
-
                 category.Name = newName;
                 UpdateCategoryButton(category);
             }
             else
             {
                 MessageBox.Show(
-                    "Category not found.",
+                    $"Error",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -427,18 +346,19 @@ public partial class MainWindow : Window
     {
         try
         {
-            var queryOptions = new QueryOptions<KeyKeepers.DAL.Entities.PrivateCategory>
+            if (this.mediator == null)
             {
-                Filter = c => c.Id == category.Id,
-            };
+                MessageBox
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
-            var existingCategory = await repositoryWrapper.PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(queryOptions);
+            var command = new DeletePrivateCategoryCommand(category.Id);
 
-            if (existingCategory != null)
+            var result = await this.mediator.Send(command);
+
+            if (result.IsSuccess)
             {
-                repositoryWrapper.PrivatePasswordCategoryRepository.Delete(existingCategory);
-                await repositoryWrapper.SaveChangesAsync();
-
                 // Find and remove the category button
                 Button? buttonToRemove = null;
                 foreach (var child in CategoriesPanel.Children)
@@ -483,71 +403,48 @@ public partial class MainWindow : Window
 
     private async Task AddCustomCategoryAsync(string categoryName)
     {
+        string categoryNamee = this.CategoryNameTextBox.Text.Trim();
         try
         {
-            // If community info is missing, create it first
-            if (!communityUserId.HasValue || !communityId.HasValue)
+            if (this.mediator == null)
             {
-                await EnsureCommunityUserExistsAsync();
-            }
-
-            if (!communityUserId.HasValue)
-            {
-                MessageBox.Show(
-                    "Unable to create category: User community information not found.",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                MessageBox
+                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
-            if (!communityId.HasValue)
+            var dto = new CreatePrivateCategoryDto()
             {
-                MessageBox.Show(
-                    "Unable to create category: Community ID not found.",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                return;
+                UserId = userId,
+                Name = categoryNamee,
+            };
+
+            var command = new CreatePrivateCategoryCommand(dto);
+
+            var result = await this.mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                var categoryItem = new CategoryItem
+                {
+                    Id = result.Value.Id,
+                    Name = result.Value.Name,
+                };
+
+                customCategories.Add(categoryItem);
+
+                var button = CreateCategoryButton(categoryItem);
+                CategoriesPanel.Children.Add(button);
             }
-
-            // Create entity directly since mapping might not work correctly
-            var newCategory = new KeyKeepers.DAL.Entities.PrivateCategory
+            else
             {
-                Name = categoryName,
-                CommunityId = communityId.Value,
-                CommunityUserId = communityUserId.Value,
-                CreatedAt = DateTime.UtcNow,
-            };
-
-            var createdCategory = await repositoryWrapper.PrivatePasswordCategoryRepository.CreateAsync(newCategory);
-            await repositoryWrapper.SaveChangesAsync();
-
-            var categoryItem = new CategoryItem
-            {
-                Id = createdCategory.Id,
-                Name = createdCategory.Name,
-            };
-
-            customCategories.Add(categoryItem);
-
-            // Create button for the new category
-            var button = CreateCategoryButton(categoryItem);
-            CategoriesPanel.Children.Add(button);
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Помилка при створенні користувача";
+                MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         catch (Exception ex)
         {
-            var errorMessage = $"Exception: {ex.Message}\n\nStack Trace:\n{ex.StackTrace}";
-            if (ex.InnerException != null)
-            {
-                errorMessage += $"\n\nInner Exception: {ex.InnerException.Message}";
-            }
-
-            MessageBox.Show(
-                errorMessage,
-                "Error creating category",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
