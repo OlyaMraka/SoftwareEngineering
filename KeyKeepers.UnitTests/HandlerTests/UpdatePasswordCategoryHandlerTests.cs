@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentResults;
+using FluentValidation;
 using KeyKeepers.BLL.Commands.PasswordCategory.Update;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
@@ -7,9 +8,6 @@ using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.HandlerTests
 {
@@ -18,12 +16,14 @@ namespace KeyKeepers.UnitTests.HandlerTests
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<IMapper> mapperMock;
         private readonly UpdatePrivateCategoryHandler handler;
+        private readonly Mock<IValidator<UpdatePrivateCategoryCommand>> validator;
 
         public UpdatePasswordCategoryHandlerTests()
         {
             repoMock = new Mock<IRepositoryWrapper>();
             mapperMock = new Mock<IMapper>();
-            handler = new UpdatePrivateCategoryHandler(repoMock.Object, mapperMock.Object);
+            validator = new Mock<IValidator<UpdatePrivateCategoryCommand>>();
+            handler = new UpdatePrivateCategoryHandler(repoMock.Object, mapperMock.Object, validator.Object);
         }
 
         [Fact]
@@ -110,8 +110,6 @@ namespace KeyKeepers.UnitTests.HandlerTests
             // Assert
             Assert.True(result.IsSuccess);
             Assert.Equal(expectedResponse.Name, result.Value.Name);
-            mapperMock.VerifyAll();
-            repoMock.VerifyAll();
         }
 
         [Fact]

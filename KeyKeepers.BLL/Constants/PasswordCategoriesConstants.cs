@@ -21,7 +21,7 @@ public class PasswordCategoriesConstants
         = "Помилка збереження бази даних!";
 
     public static readonly string ErrorMessage
-        = "Виникла невідома помилка!";
+        = "Виникла помилка при створенні категорії";
 
     public static readonly string CategoryNotFound
         = "Категорія не знайдена!";

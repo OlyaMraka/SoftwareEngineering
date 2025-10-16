@@ -1,14 +1,14 @@
 using FluentValidation;
-using KeyKeepers.BLL.Commands.PasswordCategory.Create;
+using KeyKeepers.BLL.DTOs.PasswordCategories;
 using KeyKeepers.BLL.Constants;
 
 namespace KeyKeepers.BLL.Validators.PasswordCategories;
 
-public class CreatePrivateCategoryValidator : AbstractValidator<CreatePrivateCategoryCommand>
+public class PrivateCategoryValidator : AbstractValidator<CreatePrivateCategoryDto>
 {
-    public CreatePrivateCategoryValidator()
+    public PrivateCategoryValidator()
     {
-        RuleFor(x => x.RequestDto.Name)
+        RuleFor(x => x.Name)
             .NotEmpty()
             .WithMessage(PasswordCategoriesConstants.NameRequiredErrorMessage)
             .MinimumLength(PasswordCategoriesConstants.MinNameLength)

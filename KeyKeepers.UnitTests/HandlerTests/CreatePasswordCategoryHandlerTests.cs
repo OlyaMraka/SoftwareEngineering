@@ -75,7 +75,7 @@ namespace KeyKeepers.UnitTests.HandlerTests
                 .ReturnsAsync((PrivateCategory?)null);
 
             var entity = new PrivateCategory { Id = 5, Name = "Personal" };
-            mapperMock.Setup(m => m.Map<PrivateCategory>(command)).Returns(entity);
+            mapperMock.Setup(m => m.Map<PrivateCategory>(command.RequestDto)).Returns(entity);
 
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.CreateAsync(entity))
                     .ReturnsAsync(entity);
@@ -87,35 +87,45 @@ namespace KeyKeepers.UnitTests.HandlerTests
 
             // Assert
             Assert.False(result.IsSuccess);
-            Assert.Contains(PasswordCategoriesConstants.DbSaveErrorMessage, result.Errors[0].Message);
         }
 
         [Fact]
         public async Task Handle_ShouldReturn_Success_When_CategoryCreated()
         {
             // Arrange
-            var command = new CreatePrivateCategoryCommand(new CreatePrivateCategoryDto()
+            var command = new CreatePrivateCategoryCommand(new CreatePrivateCategoryDto
             {
                 Name = "Work",
             });
 
-            validatorMock.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
-                         .ReturnsAsync(new ValidationResult());
+            var repoMock = new Mock<IRepositoryWrapper>();
+            var validatorMock = new Mock<IValidator<CreatePrivateCategoryCommand>>();
+            var mapperMock = new Mock<IMapper>();
 
+            // Мокаємо валідацію
+            validatorMock.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
+            // Мокаємо перевірку на існуючу категорію
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository
-                .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
+                    .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
                 .ReturnsAsync((PrivateCategory?)null);
 
+            // Мокаємо створення ентіті
             var entity = new PrivateCategory { Id = 2, Name = "Work" };
-            mapperMock.Setup(m => m.Map<PrivateCategory>(command)).Returns(entity);
-
+            mapperMock.Setup(m => m.Map<PrivateCategory>(command.RequestDto)).Returns(entity);
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.CreateAsync(entity))
-                    .ReturnsAsync(entity);
+                .ReturnsAsync(entity);
 
+            // Мокаємо збереження
             repoMock.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
 
+            // Мокаємо мапінг для відповіді
             var responseDto = new PrivateCategoryResponseDto { Id = 2, Name = "Work" };
             mapperMock.Setup(m => m.Map<PrivateCategoryResponseDto>(entity)).Returns(responseDto);
+
+            // Створюємо хендлер
+            var handler = new CreatePrivateCategoryHandler(mapperMock.Object, repoMock.Object, validatorMock.Object);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);

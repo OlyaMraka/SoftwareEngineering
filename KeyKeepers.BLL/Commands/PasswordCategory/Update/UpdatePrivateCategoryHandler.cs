@@ -1,4 +1,5 @@
 using AutoMapper;
+using FluentValidation;
 using MediatR;
 using FluentResults;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
@@ -12,12 +13,17 @@ namespace KeyKeepers.BLL.Commands.PasswordCategory.Update;
 public class UpdatePrivateCategoryHandler : IRequestHandler<UpdatePrivateCategoryCommand, Result<PrivateCategoryResponseDto>>
 {
     private readonly IRepositoryWrapper repositoryWrapper;
+    private readonly IValidator<UpdatePrivateCategoryCommand> validator;
     private readonly IMapper mapper;
 
-    public UpdatePrivateCategoryHandler(IRepositoryWrapper repositoryWrapperObj, IMapper mapperObj)
+    public UpdatePrivateCategoryHandler(
+        IRepositoryWrapper repositoryWrapperObj,
+        IMapper mapperObj,
+        IValidator<UpdatePrivateCategoryCommand> validatorObj)
     {
         repositoryWrapper = repositoryWrapperObj;
         mapper = mapperObj;
+        validator = validatorObj;
     }
 
     public async Task<Result<PrivateCategoryResponseDto>> Handle(
@@ -26,6 +32,8 @@ public class UpdatePrivateCategoryHandler : IRequestHandler<UpdatePrivateCategor
     {
         try
         {
+            await validator.ValidateAndThrowAsync(request, cancellationToken);
+
             PrivateCategory? existingCategory = await repositoryWrapper
                 .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
                 {

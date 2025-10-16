@@ -1,5 +1,4 @@
-﻿using FluentResults;
-using KeyKeepers.BLL.Commands.Users.LogIn;
+﻿using KeyKeepers.BLL.Commands.Users.LogIn;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.BLL.Interfaces;
@@ -8,9 +7,6 @@ using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.HandlerTests
 {
