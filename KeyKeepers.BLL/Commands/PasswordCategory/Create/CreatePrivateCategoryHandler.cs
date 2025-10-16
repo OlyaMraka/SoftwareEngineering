@@ -38,6 +38,7 @@ public class CreatePrivateCategoryHandler : IRequestHandler<CreatePrivateCategor
                 .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
                 {
                     Filter = category => category.Name == request.RequestDto.Name,
+                    AsNoTracking = false,
                 });
 
             if (existingCategory != null)

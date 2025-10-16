@@ -30,6 +30,7 @@ public class UpdatePrivateCategoryHandler : IRequestHandler<UpdatePrivateCategor
                 .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
                 {
                     Filter = category => category.Id == request.RequestDto.Id,
+                    AsNoTracking = false,
                 });
 
             if (existingCategory == null)
