@@ -80,7 +80,7 @@ namespace KeyKeepers.UnitTests.HandlerTests
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.CreateAsync(entity))
                     .ReturnsAsync(entity);
 
-            repoMock.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0); // симулюємо невдале збереження
+            repoMock.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -135,13 +135,14 @@ namespace KeyKeepers.UnitTests.HandlerTests
                 Name = "ErrorCategory",
             });
 
-            validatorMock.Setup(v => v.ValidateAndThrowAsync(
+            validatorMock.Setup(v => v.ValidateAsync(
                     It.IsAny<CreatePrivateCategoryCommand>(),
                     It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new ValidationException("Validation failed"));
 
-            // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            Assert.True(result.IsFailed);
         }
     }
 }
