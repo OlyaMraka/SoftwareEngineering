@@ -102,16 +102,13 @@ namespace KeyKeepers.UnitTests.HandlerTests
             var validatorMock = new Mock<IValidator<CreatePrivateCategoryCommand>>();
             var mapperMock = new Mock<IMapper>();
 
-            // Мокаємо валідацію
             validatorMock.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
-            // Мокаємо перевірку на існуючу категорію
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository
                     .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
                 .ReturnsAsync((PrivateCategory?)null);
 
-            // Мокаємо створення ентіті
             var entity = new PrivateCategory { Id = 2, Name = "Work" };
             mapperMock.Setup(m => m.Map<PrivateCategory>(command.RequestDto)).Returns(entity);
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.CreateAsync(entity))
