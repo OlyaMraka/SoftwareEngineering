@@ -167,11 +167,11 @@ public partial class SignUpWindow : Window
 
             if (result.IsSuccess)
             {
-                string message = $"Реєстрація особистого акаунта успішна!\n\nІм'я: {firstName}\nПрізвище: {lastName}\nEmail: {email}\nІм'я користувача: {username}\nТип акаунта: Особистий\n\nКористувач збережений у базі даних!";
-                MessageBox.Show(message, "Успішна реєстрація", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // Очищуємо форму після успішної реєстрації
-                this.ClearForm();
+                var logInWindow = new LogInWindow();
+                logInWindow.Left = this.Left;
+                logInWindow.Top = this.Top;
+                logInWindow.Show();
+                this.Close();
             }
             else
             {
@@ -227,11 +227,11 @@ public partial class SignUpWindow : Window
 
             if (result.IsSuccess)
             {
-                string message = $"Реєстрація командного акаунта успішна!\n\nІм'я: {firstName}\nПрізвище: {lastName}\nEmail: {email}\nІм'я користувача: {username}\nТип акаунта: Командний\n\nКористувач збережений у базі даних!";
-                MessageBox.Show(message, "Успішна реєстрація", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                // Очищуємо форму після успішної реєстрації
-                this.ClearForm();
+                var logInWindow = new LogInWindow();
+                logInWindow.Left = this.Left;
+                logInWindow.Top = this.Top;
+                logInWindow.Show();
+                this.Close();
             }
             else
             {

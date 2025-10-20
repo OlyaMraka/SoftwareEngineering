@@ -8,9 +8,9 @@ public class PrivateCategoryConfiguration : IEntityTypeConfiguration<PrivateCate
 {
     public void Configure(EntityTypeBuilder<PrivateCategory> builder)
     {
-        builder.HasOne(x => x.CommunityUser)
+        builder.HasOne(x => x.User)
             .WithMany(x => x.PrivateCategories)
-            .HasForeignKey(x => x.CommunityUserId)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

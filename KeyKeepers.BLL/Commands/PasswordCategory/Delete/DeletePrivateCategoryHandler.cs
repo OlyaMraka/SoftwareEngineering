@@ -26,6 +26,7 @@ public class DeletePrivateCategoryHandler : IRequestHandler<DeletePrivateCategor
                 Filter = category => category.Id == request.Id,
                 Include = category => category
                     .Include(c => c.CredentialsCollection),
+                AsNoTracking = false,
             });
 
         if (entity == null)

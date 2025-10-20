@@ -2,7 +2,7 @@ namespace KeyKeepers.DAL.Entities;
 
 public class PrivateCategory : BaseCategory
 {
-    public long CommunityUserId { get; set; }
+    public long UserId { get; set; }
 
-    public CommunityUser CommunityUser { get; set; } = new CommunityUser();
+    public User User { get; set; } = null!;
 }

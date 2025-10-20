@@ -17,11 +17,9 @@ public class BaseCategoryConfiguration : IEntityTypeConfiguration<BaseCategory>
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
-            .IsRequired()
-            .ValueGeneratedOnAdd();
-
-        builder.Property(x => x.CommunityId)
             .IsRequired();
+
+        builder.Property(x => x.CommunityId);
 
         builder.HasOne(x => x.Community)
             .WithMany(x => x.Categories)

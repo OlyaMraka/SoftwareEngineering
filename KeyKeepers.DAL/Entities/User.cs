@@ -23,4 +23,6 @@ public class User
     public RefreshToken RefreshToken { get; set; } = new RefreshToken();
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public ICollection<PrivateCategory> PrivateCategories { get; set; } = new List<PrivateCategory>();
 }

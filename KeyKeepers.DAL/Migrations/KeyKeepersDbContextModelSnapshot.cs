@@ -30,11 +30,10 @@ namespace KeyKeepers.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CommunityId")
+                    b.Property<long?>("CommunityId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
@@ -230,10 +229,10 @@ namespace KeyKeepers.DAL.Migrations
                 {
                     b.HasBaseType("KeyKeepers.DAL.Entities.BaseCategory");
 
-                    b.Property<long>("CommunityUserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.HasIndex("CommunityUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("PrivateCategories", (string)null);
                 });
@@ -243,8 +242,7 @@ namespace KeyKeepers.DAL.Migrations
                     b.HasOne("KeyKeepers.DAL.Entities.Community", "Community")
                         .WithMany("Categories")
                         .HasForeignKey("CommunityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Community");
                 });
@@ -292,19 +290,19 @@ namespace KeyKeepers.DAL.Migrations
 
             modelBuilder.Entity("KeyKeepers.DAL.Entities.PrivateCategory", b =>
                 {
-                    b.HasOne("KeyKeepers.DAL.Entities.CommunityUser", "CommunityUser")
-                        .WithMany("PrivateCategories")
-                        .HasForeignKey("CommunityUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("KeyKeepers.DAL.Entities.BaseCategory", null)
                         .WithOne()
                         .HasForeignKey("KeyKeepers.DAL.Entities.PrivateCategory", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CommunityUser");
+                    b.HasOne("KeyKeepers.DAL.Entities.User", "User")
+                        .WithMany("PrivateCategories")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("KeyKeepers.DAL.Entities.BaseCategory", b =>
@@ -319,14 +317,11 @@ namespace KeyKeepers.DAL.Migrations
                     b.Navigation("CommunityUsers");
                 });
 
-            modelBuilder.Entity("KeyKeepers.DAL.Entities.CommunityUser", b =>
-                {
-                    b.Navigation("PrivateCategories");
-                });
-
             modelBuilder.Entity("KeyKeepers.DAL.Entities.User", b =>
                 {
                     b.Navigation("CommunityUsers");
+
+                    b.Navigation("PrivateCategories");
 
                     b.Navigation("RefreshToken")
                         .IsRequired();

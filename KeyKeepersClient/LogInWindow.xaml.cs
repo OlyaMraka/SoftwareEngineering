@@ -88,7 +88,7 @@ public partial class LogInWindow : Window
             if (result.IsSuccess)
             {
                 // Успішний логін - переходимо до головного вікна
-                var mainWindow = new MainWindow();
+                var mainWindow = new MainWindow(result.Value.Id);
                 mainWindow.Left = this.Left;
                 mainWindow.Top = this.Top;
                 mainWindow.Show();

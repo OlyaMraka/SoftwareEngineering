@@ -6,11 +6,11 @@ public class BaseCategory
 
     public string Name { get; set; } = string.Empty;
 
-    public long CommunityId { get; set; }
+    public long? CommunityId { get; set; }
 
-    public Community Community { get; set; } = new Community();
+    public Community? Community { get; set; }
 
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<Credentials> CredentialsCollection { get; set; } = new List<Credentials>();
 }

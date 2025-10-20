@@ -38,6 +38,7 @@ public class CreatePrivateCategoryHandler : IRequestHandler<CreatePrivateCategor
                 .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
                 {
                     Filter = category => category.Name == request.RequestDto.Name,
+                    AsNoTracking = false,
                 });
 
             if (existingCategory != null)
@@ -46,7 +47,9 @@ public class CreatePrivateCategoryHandler : IRequestHandler<CreatePrivateCategor
                     .CategoryAlreadyExistsErrorMessage);
             }
 
-            PrivateCategory entity = mapper.Map<PrivateCategory>(request);
+            PrivateCategory entity = mapper.Map<PrivateCategory>(request.RequestDto);
+            entity.Community = null;
+            entity.CommunityId = null;
 
             await repositoryWrapper.PrivatePasswordCategoryRepository.CreateAsync(entity);
 

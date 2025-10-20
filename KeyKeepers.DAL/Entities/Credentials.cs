@@ -14,5 +14,5 @@ public class Credentials
 
     public long CategoryId { get; set; }
 
-    public BaseCategory Category { get; set; } = new BaseCategory();
+    public BaseCategory Category { get; set; } = null!;
 }
