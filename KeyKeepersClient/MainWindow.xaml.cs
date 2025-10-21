@@ -617,4 +617,22 @@ public partial class MainWindow : Window
     private void ClearStoredTokens()
     {
     }
+
+    private void CopyPasswordButton_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show(
+            "Функціонал копіювання паролю буде реалізовано в майбутньому.",
+            "Копіювання",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void FavoriteButton_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show(
+            "Функціонал додавання до улюблених буде реалізовано в майбутньому.",
+            "Улюблені",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
 }

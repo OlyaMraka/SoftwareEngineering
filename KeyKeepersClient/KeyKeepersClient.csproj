@@ -24,19 +24,31 @@
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1"/>
     <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0"/>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Images\logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\plus.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\settings.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\SignIn_LogUp\user.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+  <ItemGroup><!-- Main Images -->
+    <Resource Include="Images\logo.png"/>
+    <Resource Include="Images\plus.png"/>
+    <Resource Include="Images\settings.png"/>
+    <Resource Include="Images\copy.png"/>
+    <Resource Include="Images\star.png"/>
+    <Resource Include="Images\search.png"/>
+    <Resource Include="Images\edit 1.png"/><!-- Icons folder -->
+    <Resource Include="Images\Icons\cell-phone_1.png"/>
+    <Resource Include="Images\Icons\cell-phone_2.png"/>
+    <Resource Include="Images\Icons\credit-card_1.png"/>
+    <Resource Include="Images\Icons\credit-card_2.png"/>
+    <Resource Include="Images\Icons\human_1.png"/>
+    <Resource Include="Images\Icons\human_2.png"/>
+    <Resource Include="Images\Icons\internet_1.png"/>
+    <Resource Include="Images\Icons\internet_2.png"/>
+    <Resource Include="Images\Icons\mail_1.png"/>
+    <Resource Include="Images\Icons\mail_2.png"/>
+    <Resource Include="Images\Icons\shield_1.png"/>
+    <Resource Include="Images\Icons\shield_2.png"/>
+    <Resource Include="Images\Icons\sparkles_1.png"/>
+    <Resource Include="Images\Icons\sparkles_2.png"/>
+    <Resource Include="Images\Icons\star_1.png"/>
+    <Resource Include="Images\Icons\star_2.png"/><!-- SignIn/LogUp folder -->
+    <Resource Include="Images\SignIn_LogUp\user.png"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KeyKeepers.BLL\KeyKeepers.BLL.csproj"/>

@@ -246,6 +246,121 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <!-- Password Strength Badge Styles -->
+        <Style x:Key="StrongBadgeStyle"
+                TargetType="Border">
+            <Setter Property="Background"
+                    Value="#14532D"/>
+            <Setter Property="BorderBrush"
+                    Value="#86EDAF"/>
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+            <Setter Property="CornerRadius"
+                    Value="10"/>
+            <Setter Property="Padding"
+                    Value="12,5"/>
+            <Setter Property="Width"
+                    Value="85"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+        </Style>
+
+        <Style x:Key="MediumBadgeStyle"
+                TargetType="Border">
+            <Setter Property="Background"
+                    Value="#713F12"/>
+            <Setter Property="BorderBrush"
+                    Value="#FDE053"/>
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+            <Setter Property="CornerRadius"
+                    Value="10"/>
+            <Setter Property="Padding"
+                    Value="12,5"/>
+            <Setter Property="Width"
+                    Value="85"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+        </Style>
+
+        <Style x:Key="WeakBadgeStyle"
+                TargetType="Border">
+            <Setter Property="Background"
+                    Value="#620D0D"/>
+            <Setter Property="BorderBrush"
+                    Value="#FF6767"/>
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+            <Setter Property="CornerRadius"
+                    Value="10"/>
+            <Setter Property="Padding"
+                    Value="12,5"/>
+            <Setter Property="Width"
+                    Value="85"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+        </Style>
+
+        <!-- Password Strength Text Style -->
+        <Style x:Key="StrengthTextStyle"
+                TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="12"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Center"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+            <Setter Property="TextAlignment"
+                    Value="Center"/>
+        </Style>
+
+        <!-- Icon Button Style -->
+        <Style x:Key="IconButtonStyle"
+                TargetType="Button">
+            <Setter Property="Background"
+                    Value="Transparent"/>
+            <Setter Property="BorderThickness"
+                    Value="2"/>
+            <Setter Property="BorderBrush"
+                    Value="#222A39"/>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+            <Setter Property="Width"
+                    Value="40"/>
+            <Setter Property="Height"
+                    Value="40"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                    Value="True">
+                                <Setter Property="Background"
+                                        Value="#222A39"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -529,13 +644,433 @@
         <Grid Grid.Row="1"
               Grid.Column="1"
               Background="#171C26">
-            <TextBlock Text="Main Application Content"
-                       FontFamily="Bahnschrift"
-                       FontSize="24"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Style="{StaticResource CustomScrollViewer}"
+                          Margin="30,30,30,30">
+                <StackPanel x:Name="PasswordsPanel">
+                    <!-- Sample Password Items - will be populated dynamically -->
+                    <!-- GitHub Enterprise -->
+                    <Border Background="#0E121B"
+                            BorderBrush="#222A39"
+                            BorderThickness="2"
+                            CornerRadius="15"
+                            Padding="20"
+                            Margin="0,0,0,15"
+                            Height="100">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon with Gradient Background -->
+                            <Border Grid.Column="0"
+                                    Width="60"
+                                    Height="60"
+                                    CornerRadius="15"
+                                    VerticalAlignment="Center">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                            EndPoint="1,1">
+                                        <GradientStop Color="#38BDF8"
+                                                Offset="0"/>
+                                        <GradientStop Color="#FDE047"
+                                                Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Image Source="Images/Icons/internet_2.png"
+                                       Width="35"
+                                       Height="35"
+                                       Stretch="Uniform"/>
+                            </Border>
+
+                            <!-- Name and Email/Login -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <TextBlock Text="GitHub Enterprise"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="developer@company.com"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="14"
+                                           Foreground="#999"/>
+                            </StackPanel>
+
+                            <!-- Password Strength Badge -->
+                            <Border Grid.Column="2"
+                                    Style="{StaticResource StrongBadgeStyle}"
+                                    Margin="0,0,15,0">
+                                <TextBlock Text="strong"
+                                           Style="{StaticResource StrengthTextStyle}"
+                                           Foreground="#86EDAF"/>
+                            </Border>
+
+                            <!-- Copy Button -->
+                            <Button Grid.Column="3"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="CopyPasswordButton_Click"
+                                    Margin="0,0,5,0">
+                                <Image Source="Images/copy.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+
+                            <!-- Favorite Button -->
+                            <Button Grid.Column="4"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="FavoriteButton_Click">
+                                <Image Source="Images/star.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Figma -->
+                    <Border Background="#0E121B"
+                            BorderBrush="#222A39"
+                            BorderThickness="2"
+                            CornerRadius="15"
+                            Padding="20"
+                            Margin="0,0,0,15"
+                            Height="100">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon with Gradient Background -->
+                            <Border Grid.Column="0"
+                                    Width="60"
+                                    Height="60"
+                                    CornerRadius="15"
+                                    VerticalAlignment="Center">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                            EndPoint="1,1">
+                                        <GradientStop Color="#38BDF8"
+                                                Offset="0"/>
+                                        <GradientStop Color="#FDE047"
+                                                Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Image Source="Images/Icons/sparkles_2.png"
+                                       Width="35"
+                                       Height="35"
+                                       Stretch="Uniform"/>
+                            </Border>
+
+                            <!-- Name and Email/Login -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <TextBlock Text="Figma"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="designer@studio.com"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="14"
+                                           Foreground="#999"/>
+                            </StackPanel>
+
+                            <!-- Password Strength Badge -->
+                            <Border Grid.Column="2"
+                                    Style="{StaticResource MediumBadgeStyle}"
+                                    Margin="0,0,15,0">
+                                <TextBlock Text="medium"
+                                           Style="{StaticResource StrengthTextStyle}"
+                                           Foreground="#FDE053"/>
+                            </Border>
+
+                            <!-- Copy Button -->
+                            <Button Grid.Column="3"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="CopyPasswordButton_Click"
+                                    Margin="0,0,5,0">
+                                <Image Source="Images/copy.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+
+                            <!-- Favorite Button -->
+                            <Button Grid.Column="4"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="FavoriteButton_Click">
+                                <Image Source="Images/star.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- MonoBank -->
+                    <Border Background="#0E121B"
+                            BorderBrush="#222A39"
+                            BorderThickness="2"
+                            CornerRadius="15"
+                            Padding="20"
+                            Margin="0,0,0,15"
+                            Height="100">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon with Gradient Background -->
+                            <Border Grid.Column="0"
+                                    Width="60"
+                                    Height="60"
+                                    CornerRadius="15"
+                                    VerticalAlignment="Center">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                            EndPoint="1,1">
+                                        <GradientStop Color="#38BDF8"
+                                                Offset="0"/>
+                                        <GradientStop Color="#FDE047"
+                                                Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Image Source="Images/Icons/credit-card_2.png"
+                                       Width="35"
+                                       Height="35"
+                                       Stretch="Uniform"/>
+                            </Border>
+
+                            <!-- Name and Email/Login -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <TextBlock Text="MonoBank"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="4444 1141 4354"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="14"
+                                           Foreground="#999"/>
+                            </StackPanel>
+
+                            <!-- Password Strength Badge -->
+                            <Border Grid.Column="2"
+                                    Style="{StaticResource MediumBadgeStyle}"
+                                    Margin="0,0,15,0">
+                                <TextBlock Text="medium"
+                                           Style="{StaticResource StrengthTextStyle}"
+                                           Foreground="#FDE053"/>
+                            </Border>
+
+                            <!-- Copy Button -->
+                            <Button Grid.Column="3"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="CopyPasswordButton_Click"
+                                    Margin="0,0,5,0">
+                                <Image Source="Images/copy.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+
+                            <!-- Favorite Button -->
+                            <Button Grid.Column="4"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="FavoriteButton_Click">
+                                <Image Source="Images/star.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Adobe Creative Cloud -->
+                    <Border Background="#0E121B"
+                            BorderBrush="#222A39"
+                            BorderThickness="2"
+                            CornerRadius="15"
+                            Padding="20"
+                            Margin="0,0,0,15"
+                            Height="100">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon with Gradient Background -->
+                            <Border Grid.Column="0"
+                                    Width="60"
+                                    Height="60"
+                                    CornerRadius="15"
+                                    VerticalAlignment="Center">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                            EndPoint="1,1">
+                                        <GradientStop Color="#38BDF8"
+                                                Offset="0"/>
+                                        <GradientStop Color="#FDE047"
+                                                Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Image Source="Images/Icons/sparkles_2.png"
+                                       Width="35"
+                                       Height="35"
+                                       Stretch="Uniform"/>
+                            </Border>
+
+                            <!-- Name and Email/Login -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <TextBlock Text="Adobe Creative Cloud"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="designer@studio.com"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="14"
+                                           Foreground="#999"/>
+                            </StackPanel>
+
+                            <!-- Password Strength Badge -->
+                            <Border Grid.Column="2"
+                                    Style="{StaticResource WeakBadgeStyle}"
+                                    Margin="0,0,15,0">
+                                <TextBlock Text="weak"
+                                           Style="{StaticResource StrengthTextStyle}"
+                                           Foreground="#FF6767"/>
+                            </Border>
+
+                            <!-- Copy Button -->
+                            <Button Grid.Column="3"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="CopyPasswordButton_Click"
+                                    Margin="0,0,5,0">
+                                <Image Source="Images/copy.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+
+                            <!-- Favorite Button -->
+                            <Button Grid.Column="4"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="FavoriteButton_Click">
+                                <Image Source="Images/star.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Open IA -->
+                    <Border Background="#0E121B"
+                            BorderBrush="#222A39"
+                            BorderThickness="2"
+                            CornerRadius="15"
+                            Padding="20"
+                            Margin="0,0,0,15"
+                            Height="100">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Icon with Gradient Background -->
+                            <Border Grid.Column="0"
+                                    Width="60"
+                                    Height="60"
+                                    CornerRadius="15"
+                                    VerticalAlignment="Center">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0"
+                                            EndPoint="1,1">
+                                        <GradientStop Color="#38BDF8"
+                                                Offset="0"/>
+                                        <GradientStop Color="#FDE047"
+                                                Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                                <Image Source="Images/Icons/internet_2.png"
+                                       Width="35"
+                                       Height="35"
+                                       Stretch="Uniform"/>
+                            </Border>
+
+                            <!-- Name and Email/Login -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="20,0,0,0">
+                                <TextBlock Text="Open IA"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           Margin="0,0,0,5"/>
+                                <TextBlock Text="designer@studio.com"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="14"
+                                           Foreground="#999"/>
+                            </StackPanel>
+
+                            <!-- Password Strength Badge -->
+                            <Border Grid.Column="2"
+                                    Style="{StaticResource MediumBadgeStyle}"
+                                    Margin="0,0,15,0">
+                                <TextBlock Text="medium"
+                                           Style="{StaticResource StrengthTextStyle}"
+                                           Foreground="#FDE053"/>
+                            </Border>
+
+                            <!-- Copy Button -->
+                            <Button Grid.Column="3"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="CopyPasswordButton_Click"
+                                    Margin="0,0,5,0">
+                                <Image Source="Images/copy.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+
+                            <!-- Favorite Button -->
+                            <Button Grid.Column="4"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Click="FavoriteButton_Click">
+                                <Image Source="Images/star.png"
+                                       Width="22"
+                                       Height="22"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <!-- Bottom Panel -->
