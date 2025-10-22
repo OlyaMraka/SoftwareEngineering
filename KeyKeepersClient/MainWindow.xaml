@@ -574,11 +574,11 @@
                                         CornerRadius="8">
                                     <Border.Background>
                                         <LinearGradientBrush StartPoint="0,0"
-                                                EndPoint="1,1">
+                                                             EndPoint="1,1">
                                             <GradientStop Color="#38BDF8"
-                                                    Offset="0"/>
+                                                          Offset="0"/>
                                             <GradientStop Color="#FDE047"
-                                                    Offset="1"/>
+                                                          Offset="1"/>
                                         </LinearGradientBrush>
                                     </Border.Background>
                                     <Image x:Name="CategoryIconImage"
@@ -623,11 +623,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/internet_2.png"
@@ -647,11 +647,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/mail_2.png"
@@ -671,11 +671,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/shield_2.png"
@@ -695,11 +695,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/credit-card_2.png"
@@ -719,11 +719,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/cell-phone_2.png"
@@ -743,11 +743,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/human_2.png"
@@ -767,11 +767,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/star_2.png"
@@ -791,11 +791,11 @@
                                                                         Height="35">
                                                                     <Border.Background>
                                                                         <LinearGradientBrush StartPoint="0,0"
-                                                                                EndPoint="1,1">
+                                                                                             EndPoint="1,1">
                                                                             <GradientStop Color="#38BDF8"
-                                                                                    Offset="0"/>
+                                                                                          Offset="0"/>
                                                                             <GradientStop Color="#FDE047"
-                                                                                    Offset="1"/>
+                                                                                          Offset="1"/>
                                                                         </LinearGradientBrush>
                                                                     </Border.Background>
                                                                     <Image Source="Images/Icons/sparkles_2.png"
@@ -1053,11 +1053,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/internet_2.png"
@@ -1077,11 +1077,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/mail_2.png"
@@ -1101,11 +1101,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/shield_2.png"
@@ -1125,11 +1125,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/credit-card_2.png"
@@ -1149,11 +1149,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/cell-phone_2.png"
@@ -1173,11 +1173,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/human_2.png"
@@ -1197,11 +1197,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/star_2.png"
@@ -1221,11 +1221,11 @@
                                                                             Height="35">
                                                                         <Border.Background>
                                                                             <LinearGradientBrush StartPoint="0,0"
-                                                                                    EndPoint="1,1">
+                                                                                                 EndPoint="1,1">
                                                                                 <GradientStop Color="#38BDF8"
-                                                                                        Offset="0"/>
+                                                                                              Offset="0"/>
                                                                                 <GradientStop Color="#FDE047"
-                                                                                        Offset="1"/>
+                                                                                              Offset="1"/>
                                                                             </LinearGradientBrush>
                                                                         </Border.Background>
                                                                         <Image Source="Images/Icons/sparkles_2.png"
