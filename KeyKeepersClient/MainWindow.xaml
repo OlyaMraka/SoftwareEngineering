@@ -559,13 +559,259 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Icon placeholder -->
-                            <Border Grid.Column="0"
+                            <!-- Icon Button with popup -->
+                            <Button x:Name="CategoryIconButton"
+                                    Grid.Column="0"
                                     Width="40"
                                     Height="40"
-                                    Background="#0E121B"
-                                    CornerRadius="5"
-                                    VerticalAlignment="Center"/>
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    VerticalAlignment="Center"
+                                    Click="CategoryIconButton_Click">
+                                <Border Width="40"
+                                        Height="40"
+                                        CornerRadius="8">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                EndPoint="1,1">
+                                            <GradientStop Color="#38BDF8"
+                                                    Offset="0"/>
+                                            <GradientStop Color="#FDE047"
+                                                    Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+                                    <Image x:Name="CategoryIconImage"
+                                           Source="Images/Icons/internet_2.png"
+                                           Width="28"
+                                           Height="28"
+                                           Stretch="Uniform"/>
+                                </Border>
+
+                                <!-- Category Icon Selection Popup -->
+                                <Button.ContextMenu>
+                                    <ContextMenu x:Name="CategoryIconSelectionPopup"
+                                                 Background="#0E121B"
+                                                 BorderBrush="#38BDF8"
+                                                 BorderThickness="2"
+                                                 Padding="15">
+                                        <ContextMenu.Template>
+                                            <ControlTemplate TargetType="ContextMenu">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="10"
+                                                        Padding="{TemplateBinding Padding}">
+                                                    <StackPanel>
+                                                        <TextBlock Text="Choose Icon"
+                                                                   FontFamily="Bahnschrift"
+                                                                   FontSize="16"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="White"
+                                                                   Margin="0,0,0,15"
+                                                                   HorizontalAlignment="Center"/>
+
+                                                        <WrapPanel Width="280"
+                                                                   Orientation="Horizontal">
+                                                            <!-- Internet Icon -->
+                                                            <Button Tag="Images/Icons/internet"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/internet_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Email Icon -->
+                                                            <Button Tag="Images/Icons/mail"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/mail_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Shield Icon -->
+                                                            <Button Tag="Images/Icons/shield"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/shield_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Credit Card Icon -->
+                                                            <Button Tag="Images/Icons/credit-card"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/credit-card_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Phone Icon -->
+                                                            <Button Tag="Images/Icons/cell-phone"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/cell-phone_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Human Icon -->
+                                                            <Button Tag="Images/Icons/human"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/human_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Star Icon -->
+                                                            <Button Tag="Images/Icons/star"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/star_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+
+                                                            <!-- Sparkles Icon -->
+                                                            <Button Tag="Images/Icons/sparkles"
+                                                                    Click="SelectCategoryIcon_Click"
+                                                                    Style="{StaticResource IconButtonStyle}"
+                                                                    Margin="5">
+                                                                <Border CornerRadius="8"
+                                                                        Width="35"
+                                                                        Height="35">
+                                                                    <Border.Background>
+                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                EndPoint="1,1">
+                                                                            <GradientStop Color="#38BDF8"
+                                                                                    Offset="0"/>
+                                                                            <GradientStop Color="#FDE047"
+                                                                                    Offset="1"/>
+                                                                        </LinearGradientBrush>
+                                                                    </Border.Background>
+                                                                    <Image Source="Images/Icons/sparkles_2.png"
+                                                                           Width="28"
+                                                                           Height="28"
+                                                                           Stretch="Uniform"/>
+                                                                </Border>
+                                                            </Button>
+                                                        </WrapPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </ContextMenu.Template>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
 
                             <!-- Name TextBox -->
                             <TextBox x:Name="CategoryNameTextBox"
@@ -771,6 +1017,230 @@
                                                Height="45"
                                                Stretch="Uniform"/>
                                     </Border>
+
+                                    <!-- Icon Selection Popup -->
+                                    <Button.ContextMenu>
+                                        <ContextMenu x:Name="IconSelectionPopup"
+                                                     Background="#0E121B"
+                                                     BorderBrush="#38BDF8"
+                                                     BorderThickness="2"
+                                                     Padding="15">
+                                            <ContextMenu.Template>
+                                                <ControlTemplate TargetType="ContextMenu">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="10"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <StackPanel>
+                                                            <TextBlock Text="Choose Icon"
+                                                                       FontFamily="Bahnschrift"
+                                                                       FontSize="16"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="White"
+                                                                       Margin="0,0,0,15"
+                                                                       HorizontalAlignment="Center"/>
+
+                                                            <WrapPanel Width="280"
+                                                                       Orientation="Horizontal">
+                                                                <!-- Internet Icon -->
+                                                                <Button Tag="Images/Icons/internet_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/internet_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Email Icon -->
+                                                                <Button Tag="Images/Icons/mail_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/mail_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Shield Icon -->
+                                                                <Button Tag="Images/Icons/shield_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/shield_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Credit Card Icon -->
+                                                                <Button Tag="Images/Icons/credit-card_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/credit-card_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Phone Icon -->
+                                                                <Button Tag="Images/Icons/cell-phone_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/cell-phone_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Human Icon -->
+                                                                <Button Tag="Images/Icons/human_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/human_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Star Icon -->
+                                                                <Button Tag="Images/Icons/star_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/star_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+
+                                                                <!-- Sparkles Icon -->
+                                                                <Button Tag="Images/Icons/sparkles_2.png"
+                                                                        Click="SelectIcon_Click"
+                                                                        Style="{StaticResource IconButtonStyle}"
+                                                                        Margin="5">
+                                                                    <Border CornerRadius="8"
+                                                                            Width="35"
+                                                                            Height="35">
+                                                                        <Border.Background>
+                                                                            <LinearGradientBrush StartPoint="0,0"
+                                                                                    EndPoint="1,1">
+                                                                                <GradientStop Color="#38BDF8"
+                                                                                        Offset="0"/>
+                                                                                <GradientStop Color="#FDE047"
+                                                                                        Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </Border.Background>
+                                                                        <Image Source="Images/Icons/sparkles_2.png"
+                                                                               Width="28"
+                                                                               Height="28"
+                                                                               Stretch="Uniform"/>
+                                                                    </Border>
+                                                                </Button>
+                                                            </WrapPanel>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </ContextMenu.Template>
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
                                 </Button>
 
                                 <!-- Fields Column -->

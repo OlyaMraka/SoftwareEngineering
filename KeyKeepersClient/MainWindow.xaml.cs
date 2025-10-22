@@ -39,6 +39,7 @@ public partial class MainWindow : Window
 #pragma warning restore CS0414
 
     private string selectedPasswordIcon = "Images/Icons/internet_2.png";
+    private string selectedCategoryIcon = "Images/Icons/internet";
     private Border? currentEditingPasswordCard = null;
     private PasswordData? currentEditingPassword = null;
 
@@ -227,6 +228,11 @@ public partial class MainWindow : Window
         isEditMode = true;
         currentEditingCategory = null;
         CategoryNameTextBox.Text = string.Empty;
+
+        // Set default icon
+        selectedCategoryIcon = "Images/Icons/internet";
+        CategoryIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedCategoryIcon + "_2.png"));
+
         CategoryEditPanel.Visibility = Visibility.Visible;
         NormalButtonsPanel.Visibility = Visibility.Collapsed;
         EditButtonsPanel.Visibility = Visibility.Visible;
@@ -829,12 +835,110 @@ public partial class MainWindow : Window
 
     private void PasswordIconButton_Click(object sender, RoutedEventArgs e)
     {
-        // TODO: Open icon selection dialog
-        MessageBox.Show(
-            "Вибір іконки буде реалізовано в майбутньому.",
-            "Вибір іконки",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        // Open icon selection popup
+        if (sender is Button button && button.ContextMenu != null)
+        {
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
+        }
+    }
+
+    private void SelectIcon_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is string iconPath)
+        {
+            selectedPasswordIcon = iconPath;
+            PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + iconPath));
+
+            // Close the popup
+            if (PasswordIconButton.ContextMenu != null)
+            {
+                PasswordIconButton.ContextMenu.IsOpen = false;
+            }
+
+            // Update border style for all icon buttons in the context menu
+            UpdateIconSelectionHighlight(iconPath);
+        }
+    }
+
+    private void UpdateIconSelectionHighlight(string selectedIconPath)
+    {
+        if (PasswordIconButton.ContextMenu == null)
+        {
+            return;
+        }
+
+        // Find the WrapPanel in the ContextMenu template
+        var contextMenu = PasswordIconButton.ContextMenu;
+        if (contextMenu.IsLoaded)
+        {
+            var border = System.Windows.Media.VisualTreeHelper.GetChild(contextMenu, 0) as Border;
+            if (border != null)
+            {
+                var stackPanel = border.Child as StackPanel;
+                if (stackPanel != null && stackPanel.Children.Count > 1)
+                {
+                    var wrapPanel = stackPanel.Children[1] as System.Windows.Controls.WrapPanel;
+                    if (wrapPanel != null)
+                    {
+                        foreach (var child in wrapPanel.Children)
+                        {
+                            if (child is Button btn)
+                            {
+                                if (btn.Tag?.ToString() == selectedIconPath)
+                                {
+                                    // Highlight selected icon
+                                    btn.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#38BDF8"));
+                                    btn.BorderThickness = new Thickness(3);
+                                }
+                                else
+                                {
+                                    // Reset other icons
+                                    btn.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39"));
+                                    btn.BorderThickness = new Thickness(2);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void HighlightSelectedIcon(string iconPath)
+    {
+        // This method now just updates the highlight when the popup opens
+        UpdateIconSelectionHighlight(iconPath);
+    }
+
+    private void CategoryIconButton_Click(object sender, RoutedEventArgs e)
+    {
+        // Open category icon selection popup
+        if (sender is Button button && button.ContextMenu != null)
+        {
+            button.ContextMenu.PlacementTarget = button;
+            button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            button.ContextMenu.IsOpen = true;
+        }
+    }
+
+    private void SelectCategoryIcon_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.Tag is string iconPath)
+        {
+            // Store icon path without _1 or _2 suffix
+            selectedCategoryIcon = iconPath;
+
+            // Update the icon image to show _2 version in edit mode
+            CategoryIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + iconPath + "_2.png"));
+
+            // Close the popup
+            if (CategoryIconButton.ContextMenu != null)
+            {
+                CategoryIconButton.ContextMenu.IsOpen = false;
+            }
+        }
     }
 
     private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
