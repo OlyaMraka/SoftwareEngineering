@@ -7,10 +7,15 @@ using System.Windows.Media;
 using KeyKeepers.BLL.Commands.PasswordCategory.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Delete;
 using KeyKeepers.BLL.Commands.PasswordCategory.Update;
+using KeyKeepers.BLL.Commands.Passwords.Create;
+using KeyKeepers.BLL.Commands.Passwords.Delete;
+using KeyKeepers.BLL.Commands.Passwords.Update;
 using KeyKeepers.BLL.Commands.Users.LogOut;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
+using KeyKeepers.BLL.DTOs.Passwords;
 using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
+using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using MediatR;
@@ -27,6 +32,7 @@ public partial class MainWindow : Window
     private ObservableCollection<CategoryItem> customCategories;
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
+    private long currentCategoryId = 0; // 0 means "All items"
 
 #pragma warning disable CS0414 // Field is assigned but its value is never used
     private bool isPasswordEditMode = false;
@@ -52,6 +58,9 @@ public partial class MainWindow : Window
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
         await LoadCategoriesAsync();
+
+        // Load all passwords by default (category ID = 0 means "All items")
+        await LoadPasswordsAsync(0);
     }
 
     private async Task LoadCategoriesAsync()
@@ -92,6 +101,47 @@ public partial class MainWindow : Window
         }
     }
 
+    private async Task LoadPasswordsAsync(long categoryId)
+    {
+        try
+        {
+            if (this.mediator == null)
+            {
+                return;
+            }
+
+            // Clear current passwords
+            PasswordsPanel.Children.Clear();
+
+            var query = new GetCredentialsByIdQuery(categoryId);
+            var result = await this.mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                foreach (var password in result.Value)
+                {
+                    string strength = CalculatePasswordStrength(password.Password);
+                    CreatePasswordCard(
+                        password.Id,
+                        password.AppName,
+                        password.Login,
+                        password.Password,
+                        password.LogoUrl ?? "Images/Icons/internet_2.png",
+                        strength,
+                        password.CategoryId);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Error loading passwords: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ButtonState == MouseButtonState.Pressed)
@@ -115,6 +165,19 @@ public partial class MainWindow : Window
         if (sender is Button clickedButton)
         {
             SetActiveCategory(clickedButton);
+
+            // Load passwords for this category
+            if (clickedButton.Tag is CategoryItem category)
+            {
+                currentCategoryId = category.Id;
+                _ = LoadPasswordsAsync(category.Id);
+            }
+            else
+            {
+                // "All items" button
+                currentCategoryId = 0;
+                _ = LoadPasswordsAsync(0);
+            }
         }
     }
 
@@ -642,11 +705,53 @@ public partial class MainWindow : Window
 
     private void CopyPasswordButton_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show(
-            "Функціонал копіювання паролю буде реалізовано в майбутньому.",
-            "Копіювання",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        try
+        {
+            // Find the password card (Border) that contains this button
+            var button = sender as Button;
+            if (button == null)
+            {
+                return;
+            }
+
+            // Navigate up to find the Grid that contains the button
+            var grid = button.Parent as Grid;
+            if (grid == null)
+            {
+                return;
+            }
+
+            // Navigate up to find the Border (password card)
+            var border = grid.Parent as Border;
+            if (border == null || border.Tag == null)
+            {
+                return;
+            }
+
+            // Extract password data from Tag
+            var passwordData = border.Tag as PasswordData;
+            if (passwordData == null)
+            {
+                return;
+            }
+
+            // Copy password to clipboard
+            Clipboard.SetText(passwordData.Password);
+
+            MessageBox.Show(
+                "Пароль скопійовано в буфер обміну!",
+                "Успіх",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"Помилка копіювання: {ex.Message}",
+                "Помилка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private void FavoriteButton_Click(object sender, RoutedEventArgs e)
@@ -750,7 +855,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void SavePasswordButton_Click(object sender, RoutedEventArgs e)
+    private async void SavePasswordButton_Click(object sender, RoutedEventArgs e)
     {
         // Check if all fields are filled
         string name = PasswordNameTextBox.Text.Trim();
@@ -759,56 +864,204 @@ public partial class MainWindow : Window
             ? PasswordValueBox.Password
             : PasswordValueTextBox.Text;
 
-        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+        // Validation
+        if (string.IsNullOrWhiteSpace(name))
         {
             MessageBox.Show(
-                "Будь ласка, заповніть всі поля.",
+                "Ім'я додатку обов'язкове!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (name.Length < 3)
+        {
+            MessageBox.Show(
+                "Мінімальна довжина назви додатку 3 символів!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (name.Length > 30)
+        {
+            MessageBox.Show(
+                "Максимальна довжина назви додатку 30 символів!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(login))
+        {
+            MessageBox.Show(
+                "Логін обов'язковий!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (login.Length > 50)
+        {
+            MessageBox.Show(
+                "Максимальна довжина логіну 50 символів!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            MessageBox.Show(
+                "Пароль обов'язковий!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (password.Length > 30)
+        {
+            MessageBox.Show(
+                "Максимальна довжина паролю 30 символів!",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        if (currentCategoryId == 0)
+        {
+            MessageBox.Show(
+                "Будь ласка, оберіть категорію для паролю!",
                 "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
         }
 
-        // Calculate password strength
-        string strength = CalculatePasswordStrength(password);
-
-        // Check if editing existing password or creating new one
-        if (currentEditingPasswordCard != null && currentEditingPassword != null)
+        try
         {
-            // Update existing password card
-            UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
+            if (this.mediator == null)
+            {
+                MessageBox.Show(
+                    "База даних не налаштована.",
+                    "Помилка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                return;
+            }
 
-            // TODO: Update password in database
-            MessageBox.Show(
-                "Пароль оновлено!",
-                "Успіх",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            // Calculate password strength
+            string strength = CalculatePasswordStrength(password);
 
-            // Clear editing references
-            currentEditingPasswordCard = null;
-            currentEditingPassword = null;
+            // Check if editing existing password or creating new one
+            if (currentEditingPasswordCard != null && currentEditingPassword != null)
+            {
+                // Update existing password
+                var updateRequest = new UpdatePasswordRequest
+                {
+                    Id = currentEditingPassword.Id,
+                    AppName = name,
+                    Login = login,
+                    Password = password,
+                    LogoUrl = selectedPasswordIcon,
+                    CategoryId = currentCategoryId,
+                };
+
+                var updateCommand = new UpdatePasswordCommand(updateRequest);
+                var updateResult = await this.mediator.Send(updateCommand);
+
+                if (updateResult.IsSuccess)
+                {
+                    // Update the password card in UI
+                    UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
+
+                    MessageBox.Show(
+                        "Пароль успішно оновлено!",
+                        "Успіх",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    // Clear editing references
+                    currentEditingPasswordCard = null;
+                    currentEditingPassword = null;
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Помилка оновлення паролю: {string.Join(", ", updateResult.Errors.Select(e => e.Message))}",
+                        "Помилка",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
+            }
+            else
+            {
+                // Create new password
+                var createRequest = new CreatePasswordRequest
+                {
+                    AppName = name,
+                    Login = login,
+                    Password = password,
+                    LogoUrl = selectedPasswordIcon,
+                    CategoryId = currentCategoryId,
+                };
+
+                var createCommand = new CreatePasswordCommand(createRequest);
+                var createResult = await this.mediator.Send(createCommand);
+
+                if (createResult.IsSuccess)
+                {
+                    // Create new password card in UI
+                    CreatePasswordCard(
+                        createResult.Value.Id,
+                        createResult.Value.AppName,
+                        createResult.Value.Login,
+                        createResult.Value.Password,
+                        createResult.Value.LogoUrl ?? "Images/Icons/internet_2.png",
+                        strength,
+                        createResult.Value.CategoryId);
+
+                    MessageBox.Show(
+                        "Пароль успішно збережено!",
+                        "Успіх",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"Помилка збереження паролю: {string.Join(", ", createResult.Errors.Select(e => e.Message))}",
+                        "Помилка",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
+            }
+
+            // Clear fields
+            PasswordNameTextBox.Text = string.Empty;
+            PasswordLoginTextBox.Text = string.Empty;
+            PasswordValueBox.Password = string.Empty;
+            PasswordValueTextBox.Text = string.Empty;
+            selectedPasswordIcon = "Images/Icons/internet_2.png";
+            PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
         }
-        else
+        catch (Exception ex)
         {
-            // Create new password card
-            CreatePasswordCard(name, login, password, selectedPasswordIcon, strength);
-
-            // TODO: Save password to database
             MessageBox.Show(
-                "Пароль збережено!",
-                "Успіх",
+                $"Помилка: {ex.Message}",
+                "Помилка",
                 MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                MessageBoxImage.Error);
         }
-
-        // Clear fields
-        PasswordNameTextBox.Text = string.Empty;
-        PasswordLoginTextBox.Text = string.Empty;
-        PasswordValueBox.Password = string.Empty;
-        PasswordValueTextBox.Text = string.Empty;
-        selectedPasswordIcon = "Images/Icons/internet_2.png";
-        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
     }
 
     private string CalculatePasswordStrength(string password)
@@ -869,7 +1122,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void CreatePasswordCard(string name, string login, string password, string iconPath, string strength)
+    private void CreatePasswordCard(long id, string name, string login, string password, string iconPath, string strength, long categoryId)
     {
 #pragma warning disable SA1413 // Use trailing comma in multi-line initializers
         // Create main border
@@ -887,11 +1140,13 @@ public partial class MainWindow : Window
         // Store password data in Tag
         var passwordData = new PasswordData
         {
+            Id = id,
             Name = name,
             Login = login,
             Password = password,
             IconPath = iconPath,
-            Strength = strength
+            Strength = strength,
+            CategoryId = categoryId
         };
         border.Tag = passwordData;
 
@@ -1189,7 +1444,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void DeletePasswordButton_Click(object sender, RoutedEventArgs e)
+    private async void DeletePasswordButton_Click(object sender, RoutedEventArgs e)
     {
         var result = MessageBox.Show(
             "Ви впевнені, що хочете видалити цей пароль?",
@@ -1200,27 +1455,60 @@ public partial class MainWindow : Window
         if (result == MessageBoxResult.Yes)
         {
             // Delete password card if editing existing password
-            if (currentEditingPasswordCard != null)
+            if (currentEditingPasswordCard != null && currentEditingPassword != null)
             {
-                PasswordsPanel.Children.Remove(currentEditingPasswordCard);
-                currentEditingPasswordCard = null;
-                currentEditingPassword = null;
+                try
+                {
+                    if (this.mediator == null)
+                    {
+                        MessageBox.Show(
+                            "База даних не налаштована.",
+                            "Помилка",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                        return;
+                    }
+
+                    var deleteCommand = new DeletePasswordCommand(currentEditingPassword.Id);
+                    var deleteResult = await this.mediator.Send(deleteCommand);
+
+                    if (deleteResult.IsSuccess)
+                    {
+                        PasswordsPanel.Children.Remove(currentEditingPasswordCard);
+                        currentEditingPasswordCard = null;
+                        currentEditingPassword = null;
+
+                        // Clear fields
+                        PasswordNameTextBox.Text = string.Empty;
+                        PasswordLoginTextBox.Text = string.Empty;
+                        PasswordValueBox.Password = string.Empty;
+                        PasswordValueTextBox.Text = string.Empty;
+                        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
+
+                        MessageBox.Show(
+                            "Пароль успішно видалено!",
+                            "Успіх",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show(
+                            $"Помилка видалення паролю: {string.Join(", ", deleteResult.Errors.Select(e => e.Message))}",
+                            "Помилка",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(
+                        $"Помилка: {ex.Message}",
+                        "Помилка",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
             }
-
-            // TODO: Delete password from database
-
-            // Clear fields
-            PasswordNameTextBox.Text = string.Empty;
-            PasswordLoginTextBox.Text = string.Empty;
-            PasswordValueBox.Password = string.Empty;
-            PasswordValueTextBox.Text = string.Empty;
-            PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
-
-            MessageBox.Show(
-                "Пароль видалено!",
-                "Успіх",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
         }
     }
 

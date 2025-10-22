@@ -8,7 +8,9 @@ public class CredentialsProfile : Profile
 {
     public CredentialsProfile()
     {
-        CreateMap<CreatePasswordRequest, Credentials>();
-        CreateMap<Credentials, PasswordResponse>();
+        CreateMap<CreatePasswordRequest, Credentials>()
+            .ForMember(dest => dest.PasswordHash, opt => opt.MapFrom(src => src.Password));
+        CreateMap<Credentials, PasswordResponse>()
+            .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash));
     }
 }
