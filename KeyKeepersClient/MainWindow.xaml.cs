@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,6 +27,14 @@ public partial class MainWindow : Window
     private ObservableCollection<CategoryItem> customCategories;
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
+
+#pragma warning disable CS0414 // Field is assigned but its value is never used
+    private bool isPasswordEditMode = false;
+#pragma warning restore CS0414
+
+    private string selectedPasswordIcon = "Images/Icons/internet_2.png";
+    private Border? currentEditingPasswordCard = null;
+    private PasswordData? currentEditingPassword = null;
 
     public MainWindow(long userId)
     {
@@ -149,16 +158,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private void AddPasswordButton_Click(object sender, RoutedEventArgs e)
-    {
-        // TODO: Open dialog or window to add a new password
-        MessageBox.Show(
-            "Add Password functionality will be implemented here.",
-            "Add Password",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
-    }
-
     private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
     {
         // Enter edit mode for creating new category
@@ -171,6 +170,29 @@ public partial class MainWindow : Window
         AddCategoryButton.Visibility = Visibility.Collapsed;
         UpdateAllCategoryButtonsVisibility();
         CategoryNameTextBox.Focus();
+    }
+
+    private void AddPasswordButton_Click(object sender, RoutedEventArgs e)
+    {
+        isPasswordEditMode = true;
+        PasswordEditPanel.Visibility = Visibility.Visible;
+        CategoryEditPanel.Visibility = Visibility.Collapsed;
+        NormalButtonsPanel.Visibility = Visibility.Collapsed;
+        PasswordEditButtonsPanel.Visibility = Visibility.Visible;
+        AddCategoryButton.Visibility = Visibility.Collapsed;
+
+        // Clear form
+        PasswordNameTextBox.Text = string.Empty;
+        PasswordLoginTextBox.Text = string.Empty;
+        PasswordValueBox.Password = string.Empty;
+        PasswordValueTextBox.Text = string.Empty;
+        PasswordValueBox.Visibility = Visibility.Visible;
+        PasswordValueTextBox.Visibility = Visibility.Collapsed;
+        selectedPasswordIcon = "Images/Icons/internet_2.png";
+        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
+
+        // Update all password cards to show edit button
+        UpdatePasswordCardsButtons(true);
     }
 
     private async void SaveCategoryButton_Click(object sender, RoutedEventArgs e)
@@ -634,5 +656,680 @@ public partial class MainWindow : Window
             "Улюблені",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
+    }
+
+    private void EditPasswordButton_Click(object sender, RoutedEventArgs e)
+    {
+        // Find the password card (Border) that contains this button
+        var button = sender as Button;
+        if (button == null)
+        {
+            return;
+        }
+
+        // Navigate up to find the Border (password card)
+        var grid = button.Parent as Grid;
+        if (grid == null)
+        {
+            return;
+        }
+
+        var border = grid.Parent as Border;
+        if (border == null || border.Tag == null)
+        {
+            return;
+        }
+
+        // Extract password data from Tag
+        var passwordData = border.Tag as PasswordData;
+        if (passwordData == null)
+        {
+            return;
+        }
+
+        // Enter edit mode if not already in it
+        if (!isPasswordEditMode)
+        {
+            isPasswordEditMode = true;
+            CategoryEditPanel.Visibility = Visibility.Collapsed;
+            NormalButtonsPanel.Visibility = Visibility.Collapsed;
+            PasswordEditButtonsPanel.Visibility = Visibility.Visible;
+            AddCategoryButton.Visibility = Visibility.Collapsed;
+
+            // Update all password cards to show edit button
+            UpdatePasswordCardsButtons(true);
+        }
+
+        // Store reference to the card being edited
+        currentEditingPasswordCard = border;
+        currentEditingPassword = passwordData;
+
+        // Populate form fields
+        PasswordNameTextBox.Text = passwordData.Name;
+        PasswordLoginTextBox.Text = passwordData.Login;
+        PasswordValueBox.Password = passwordData.Password;
+        PasswordValueTextBox.Text = passwordData.Password;
+        selectedPasswordIcon = passwordData.IconPath;
+        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + passwordData.IconPath));
+
+        // Show edit panel
+        PasswordEditPanel.Visibility = Visibility.Visible;
+
+        // Scroll to top to show the edit panel
+        if (PasswordsScrollViewer != null)
+        {
+            PasswordsScrollViewer.ScrollToTop();
+        }
+    }
+
+    private void PasswordIconButton_Click(object sender, RoutedEventArgs e)
+    {
+        // TODO: Open icon selection dialog
+        MessageBox.Show(
+            "Вибір іконки буде реалізовано в майбутньому.",
+            "Вибір іконки",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
+    private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
+    {
+        if (PasswordValueBox.Visibility == Visibility.Visible)
+        {
+            // Show password
+            PasswordValueTextBox.Text = PasswordValueBox.Password;
+            PasswordValueBox.Visibility = Visibility.Collapsed;
+            PasswordValueTextBox.Visibility = Visibility.Visible;
+        }
+        else
+        {
+            // Hide password
+            PasswordValueBox.Password = PasswordValueTextBox.Text;
+            PasswordValueTextBox.Visibility = Visibility.Collapsed;
+            PasswordValueBox.Visibility = Visibility.Visible;
+        }
+    }
+
+    private void SavePasswordButton_Click(object sender, RoutedEventArgs e)
+    {
+        // Check if all fields are filled
+        string name = PasswordNameTextBox.Text.Trim();
+        string login = PasswordLoginTextBox.Text.Trim();
+        string password = PasswordValueBox.Visibility == Visibility.Visible
+            ? PasswordValueBox.Password
+            : PasswordValueTextBox.Text;
+
+        if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
+        {
+            MessageBox.Show(
+                "Будь ласка, заповніть всі поля.",
+                "Помилка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        // Calculate password strength
+        string strength = CalculatePasswordStrength(password);
+
+        // Check if editing existing password or creating new one
+        if (currentEditingPasswordCard != null && currentEditingPassword != null)
+        {
+            // Update existing password card
+            UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
+
+            // TODO: Update password in database
+            MessageBox.Show(
+                "Пароль оновлено!",
+                "Успіх",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+
+            // Clear editing references
+            currentEditingPasswordCard = null;
+            currentEditingPassword = null;
+        }
+        else
+        {
+            // Create new password card
+            CreatePasswordCard(name, login, password, selectedPasswordIcon, strength);
+
+            // TODO: Save password to database
+            MessageBox.Show(
+                "Пароль збережено!",
+                "Успіх",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+
+        // Clear fields
+        PasswordNameTextBox.Text = string.Empty;
+        PasswordLoginTextBox.Text = string.Empty;
+        PasswordValueBox.Password = string.Empty;
+        PasswordValueTextBox.Text = string.Empty;
+        selectedPasswordIcon = "Images/Icons/internet_2.png";
+        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
+    }
+
+    private string CalculatePasswordStrength(string password)
+    {
+        if (string.IsNullOrEmpty(password))
+        {
+            return "none";
+        }
+
+        int score = 0;
+
+        // Length
+        if (password.Length >= 8)
+        {
+            score++;
+        }
+
+        if (password.Length >= 12)
+        {
+            score++;
+        }
+
+        // Contains lowercase
+        if (password.Any(char.IsLower))
+        {
+            score++;
+        }
+
+        // Contains uppercase
+        if (password.Any(char.IsUpper))
+        {
+            score++;
+        }
+
+        // Contains digits
+        if (password.Any(char.IsDigit))
+        {
+            score++;
+        }
+
+        // Contains special characters
+        if (password.Any(ch => !char.IsLetterOrDigit(ch)))
+        {
+            score++;
+        }
+
+        if (score >= 5)
+        {
+            return "strong";
+        }
+        else if (score >= 3)
+        {
+            return "medium";
+        }
+        else
+        {
+            return "weak";
+        }
+    }
+
+    private void CreatePasswordCard(string name, string login, string password, string iconPath, string strength)
+    {
+#pragma warning disable SA1413 // Use trailing comma in multi-line initializers
+        // Create main border
+        var border = new Border
+        {
+            Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0E121B")),
+            BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39")),
+            BorderThickness = new Thickness(2),
+            CornerRadius = new CornerRadius(15),
+            Padding = new Thickness(20),
+            Margin = new Thickness(0, 0, 0, 15),
+            Height = 100
+        };
+
+        // Store password data in Tag
+        var passwordData = new PasswordData
+        {
+            Name = name,
+            Login = login,
+            Password = password,
+            IconPath = iconPath,
+            Strength = strength
+        };
+        border.Tag = passwordData;
+
+        // Create grid
+        var grid = new Grid();
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
+
+        // Icon with gradient background
+        var iconBorder = new Border
+        {
+            Width = 60,
+            Height = 60,
+            CornerRadius = new CornerRadius(15),
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+        var gradient = new LinearGradientBrush
+        {
+            StartPoint = new Point(0, 0),
+            EndPoint = new Point(1, 1)
+        };
+        gradient.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#38BDF8"), 0));
+        gradient.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FDE047"), 1));
+        iconBorder.Background = gradient;
+
+        var iconImage = new Image
+        {
+            Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + iconPath)),
+            Width = 35,
+            Height = 35,
+            Stretch = Stretch.Uniform
+        };
+        iconBorder.Child = iconImage;
+        Grid.SetColumn(iconBorder, 0);
+
+        // Name and Login
+        var stackPanel = new StackPanel
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(20, 0, 0, 0)
+        };
+
+        var nameText = new TextBlock
+        {
+            Text = name,
+            FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+            FontSize = 18,
+            FontWeight = FontWeights.SemiBold,
+            Foreground = Brushes.White,
+            Margin = new Thickness(0, 0, 0, 5)
+        };
+
+        var loginText = new TextBlock
+        {
+            Text = login,
+            FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+            FontSize = 14,
+            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#999999"))
+        };
+
+        stackPanel.Children.Add(nameText);
+        stackPanel.Children.Add(loginText);
+        Grid.SetColumn(stackPanel, 1);
+
+        // Strength badge
+        if (strength != "none")
+        {
+            var strengthBorder = new Border
+            {
+                Width = 85,
+                Height = 30,
+                CornerRadius = new CornerRadius(8),
+                Margin = new Thickness(0, 0, 15, 0),
+                VerticalAlignment = VerticalAlignment.Center
+            };
+
+            var strengthText = new TextBlock
+            {
+                Text = strength,
+                FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Center
+            };
+
+            switch (strength)
+            {
+                case "strong":
+                    strengthBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#14532D"));
+                    strengthBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#86EDAF"));
+                    strengthBorder.BorderThickness = new Thickness(2);
+                    strengthText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#86EDAF"));
+                    break;
+                case "medium":
+                    strengthBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#713F12"));
+                    strengthBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDE053"));
+                    strengthBorder.BorderThickness = new Thickness(2);
+                    strengthText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDE053"));
+                    break;
+                case "weak":
+                    strengthBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#620D0D"));
+                    strengthBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6767"));
+                    strengthBorder.BorderThickness = new Thickness(2);
+                    strengthText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6767"));
+                    break;
+            }
+
+            strengthBorder.Child = strengthText;
+            Grid.SetColumn(strengthBorder, 2);
+            grid.Children.Add(strengthBorder);
+        }
+
+        // Copy button
+        var copyButton = new Button
+        {
+            Style = (Style)FindResource("IconButtonStyle"),
+            Margin = new Thickness(0, 0, 5, 0)
+        };
+        copyButton.Click += CopyPasswordButton_Click;
+
+        var copyImage = new Image
+        {
+            Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/copy.png")),
+            Width = 22,
+            Height = 22
+        };
+        copyButton.Content = copyImage;
+        Grid.SetColumn(copyButton, 3);
+
+        // Edit or Favorite button (depending on mode)
+        var actionButton = new Button
+        {
+            Style = (Style)FindResource("IconButtonStyle")
+        };
+
+        if (isPasswordEditMode)
+        {
+            // Edit button
+            actionButton.Click += EditPasswordButton_Click;
+            var editImage = new Image
+            {
+                Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/edit 1.png")),
+                Width = 22,
+                Height = 22
+            };
+            actionButton.Content = editImage;
+        }
+        else
+        {
+            // Favorite button
+            actionButton.Click += FavoriteButton_Click;
+            var starImage = new Image
+            {
+                Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/star.png")),
+                Width = 22,
+                Height = 22
+            };
+            actionButton.Content = starImage;
+        }
+
+        Grid.SetColumn(actionButton, 4);
+
+        // Add all elements to grid
+        grid.Children.Add(iconBorder);
+        grid.Children.Add(stackPanel);
+        grid.Children.Add(copyButton);
+        grid.Children.Add(actionButton);
+
+        border.Child = grid;
+
+        // Add to passwords panel
+        PasswordsPanel.Children.Add(border);
+#pragma warning restore SA1413
+    }
+
+    private void UpdatePasswordCard(Border border, string name, string login, string password, string iconPath, string strength)
+    {
+        // Update the Tag with new data
+        var passwordData = new PasswordData
+        {
+            Name = name,
+            Login = login,
+            Password = password,
+            IconPath = iconPath,
+            Strength = strength,
+        };
+        border.Tag = passwordData;
+
+        // Get the grid inside the border
+        var grid = border.Child as Grid;
+        if (grid == null)
+        {
+            return;
+        }
+
+        // Update icon (column 0)
+        var iconBorder = grid.Children[0] as Border;
+        if (iconBorder != null)
+        {
+            var iconImage = iconBorder.Child as Image;
+            if (iconImage != null)
+            {
+                iconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + iconPath));
+            }
+        }
+
+        // Update name and login (column 1)
+        var stackPanel = grid.Children[1] as StackPanel;
+        if (stackPanel != null && stackPanel.Children.Count >= 2)
+        {
+            var nameText = stackPanel.Children[0] as TextBlock;
+            if (nameText != null)
+            {
+                nameText.Text = name;
+            }
+
+            var loginText = stackPanel.Children[1] as TextBlock;
+            if (loginText != null)
+            {
+                loginText.Text = login;
+            }
+        }
+
+        // Update strength badge (column 2) - might need to be recreated if strength changed
+        // Find and remove old strength badge if exists
+        UIElement? oldStrengthBadge = null;
+        foreach (UIElement child in grid.Children)
+        {
+            if (Grid.GetColumn(child) == 2)
+            {
+                oldStrengthBadge = child;
+                break;
+            }
+        }
+
+        if (oldStrengthBadge != null)
+        {
+            grid.Children.Remove(oldStrengthBadge);
+        }
+
+        // Add new strength badge if needed
+        if (strength != "none")
+        {
+            var strengthBorder = new Border
+            {
+                Width = 85,
+                Height = 30,
+                CornerRadius = new CornerRadius(8),
+                Margin = new Thickness(0, 0, 15, 0),
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            var strengthText = new TextBlock
+            {
+                Text = strength,
+                FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                TextAlignment = TextAlignment.Center,
+            };
+
+            switch (strength)
+            {
+                case "strong":
+                    strengthBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#14532D"));
+                    strengthBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#86EDAF"));
+                    strengthBorder.BorderThickness = new Thickness(2);
+                    strengthText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#86EDAF"));
+                    break;
+                case "medium":
+                    strengthBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#713F12"));
+                    strengthBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDE053"));
+                    strengthBorder.BorderThickness = new Thickness(2);
+                    strengthText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FDE053"));
+                    break;
+                case "weak":
+                    strengthBorder.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#620D0D"));
+                    strengthBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6767"));
+                    strengthBorder.BorderThickness = new Thickness(2);
+                    strengthText.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6767"));
+                    break;
+            }
+
+            strengthBorder.Child = strengthText;
+            Grid.SetColumn(strengthBorder, 2);
+            grid.Children.Add(strengthBorder);
+        }
+    }
+
+    private void DeletePasswordButton_Click(object sender, RoutedEventArgs e)
+    {
+        var result = MessageBox.Show(
+            "Ви впевнені, що хочете видалити цей пароль?",
+            "Підтвердження",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            // Delete password card if editing existing password
+            if (currentEditingPasswordCard != null)
+            {
+                PasswordsPanel.Children.Remove(currentEditingPasswordCard);
+                currentEditingPasswordCard = null;
+                currentEditingPassword = null;
+            }
+
+            // TODO: Delete password from database
+
+            // Clear fields
+            PasswordNameTextBox.Text = string.Empty;
+            PasswordLoginTextBox.Text = string.Empty;
+            PasswordValueBox.Password = string.Empty;
+            PasswordValueTextBox.Text = string.Empty;
+            PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
+
+            MessageBox.Show(
+                "Пароль видалено!",
+                "Успіх",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+    }
+
+    private void ExitPasswordEditMode_Click(object sender, RoutedEventArgs e)
+    {
+        // Check if there are unsaved changes
+        bool hasChanges = !string.IsNullOrWhiteSpace(PasswordNameTextBox.Text) ||
+                          !string.IsNullOrWhiteSpace(PasswordLoginTextBox.Text) ||
+                          !string.IsNullOrWhiteSpace(PasswordValueBox.Password) ||
+                          !string.IsNullOrWhiteSpace(PasswordValueTextBox.Text);
+
+        if (hasChanges)
+        {
+            var result = MessageBox.Show(
+                "У вас є незбережені зміни. Зберегти їх перед виходом?",
+                "Незбережені зміни",
+                MessageBoxButton.YesNoCancel,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                SavePasswordButton_Click(sender, e);
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                return;
+            }
+        }
+
+        // Exit password edit mode
+        isPasswordEditMode = false;
+        PasswordEditPanel.Visibility = Visibility.Collapsed;
+        NormalButtonsPanel.Visibility = Visibility.Visible;
+        PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
+        AddCategoryButton.Visibility = Visibility.Visible;
+
+        // Update all password cards to show favorite button
+        UpdatePasswordCardsButtons(false);
+
+        // Clear editing references
+        currentEditingPasswordCard = null;
+        currentEditingPassword = null;
+
+        // Clear fields
+        PasswordNameTextBox.Text = string.Empty;
+        PasswordLoginTextBox.Text = string.Empty;
+        PasswordValueBox.Password = string.Empty;
+        PasswordValueTextBox.Text = string.Empty;
+        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
+    }
+
+    private void UpdatePasswordCardsButtons(bool showEditButton)
+    {
+        // Iterate through all password cards in PasswordsPanel
+        foreach (var child in PasswordsPanel.Children)
+        {
+            if (child is Border border && border.Child is Grid grid)
+            {
+                // Find the action button (column 4)
+                Button? actionButton = null;
+                foreach (UIElement element in grid.Children)
+                {
+                    if (element is Button btn && Grid.GetColumn(btn) == 4)
+                    {
+                        actionButton = btn;
+                        break;
+                    }
+                }
+
+                if (actionButton != null)
+                {
+                    // Remove old button
+                    grid.Children.Remove(actionButton);
+
+                    // Create new button
+                    var newButton = new Button
+                    {
+                        Style = (Style)FindResource("IconButtonStyle"),
+                    };
+
+                    if (showEditButton)
+                    {
+                        // Edit button
+                        newButton.Click += EditPasswordButton_Click;
+                        var editImage = new Image
+                        {
+                            Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/edit 1.png")),
+                            Width = 22,
+                            Height = 22,
+                        };
+                        newButton.Content = editImage;
+                    }
+                    else
+                    {
+                        // Favorite button
+                        newButton.Click += FavoriteButton_Click;
+                        var starImage = new Image
+                        {
+                            Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/star.png")),
+                            Width = 22,
+                            Height = 22,
+                        };
+                        newButton.Content = starImage;
+                    }
+
+                    Grid.SetColumn(newButton, 4);
+                    grid.Children.Add(newButton);
+                }
+            }
+        }
     }
 }
