@@ -670,17 +670,9 @@
                     <!-- Exit Button -->
                     <Button Style="{StaticResource ExitButtonStyle}"
                             Click="ExitPasswordEditMode_Click">
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                            <Image Source="Images/settings.png"
-                                   Width="20"
-                                   Height="20"
-                                   Margin="0,0,12,0"
+                        <TextBlock Text="Exit"
+                                   HorizontalAlignment="Center"
                                    VerticalAlignment="Center"/>
-                            <TextBlock Text="Exit"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
                     </Button>
                 </Grid>
 
@@ -730,10 +722,6 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="20"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="15"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="15"/>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
@@ -746,95 +734,113 @@
                                        FontWeight="Bold"
                                        Foreground="White"/>
 
-                            <!-- Icon Button with gradient background -->
-                            <Button x:Name="PasswordIconButton"
-                                    Grid.Row="2"
-                                    Width="80"
-                                    Height="80"
-                                    HorizontalAlignment="Left"
-                                    Background="Transparent"
-                                    BorderThickness="0"
-                                    Cursor="Hand"
-                                    Click="PasswordIconButton_Click">
-                                <Border Width="80"
+                            <!-- Main Content: Icon + Fields -->
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Icon Button with gradient background -->
+                                <Button x:Name="PasswordIconButton"
+                                        Grid.Column="0"
+                                        Width="80"
                                         Height="80"
-                                        CornerRadius="15">
-                                    <Border.Background>
-                                        <LinearGradientBrush StartPoint="0,0"
-                                                             EndPoint="1,1">
-                                            <GradientStop Color="#38BDF8"
-                                                          Offset="0"/>
-                                            <GradientStop Color="#FDE047"
-                                                          Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                    <Image x:Name="PasswordIconImage"
-                                           Source="Images/Icons/internet_2.png"
-                                           Width="45"
-                                           Height="45"
-                                           Stretch="Uniform"/>
-                                </Border>
-                            </Button>
+                                        VerticalAlignment="Top"
+                                        Margin="0,40,0,0"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Cursor="Hand"
+                                        Click="PasswordIconButton_Click">
+                                    <Border Width="80"
+                                            Height="80"
+                                            CornerRadius="15">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0"
+                                                                 EndPoint="1,1">
+                                                <GradientStop Color="#38BDF8"
+                                                              Offset="0"/>
+                                                <GradientStop Color="#FDE047"
+                                                              Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Image x:Name="PasswordIconImage"
+                                               Source="Images/Icons/internet_2.png"
+                                               Width="45"
+                                               Height="45"
+                                               Stretch="Uniform"/>
+                                    </Border>
+                                </Button>
 
-                            <!-- Name Label and TextBox -->
-                            <TextBlock Grid.Row="4"
-                                       Text="Name:"
-                                       FontFamily="Bahnschrift"
-                                       FontSize="16"
-                                       FontWeight="SemiBold"
-                                       Foreground="White"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="PasswordNameTextBox"
-                                     Grid.Row="4"
-                                     Background="#171C26"
-                                     Foreground="White"
-                                     FontFamily="Bahnschrift"
-                                     FontSize="16"
-                                     BorderThickness="0"
-                                     Padding="15"
-                                     Margin="0,30,0,0"
-                                     Height="50"
-                                     VerticalContentAlignment="Center"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="False"/>
+                                <!-- Fields Column -->
+                                <StackPanel Grid.Column="2">
+                                    <!-- Name Label and TextBox -->
+                                    <TextBlock Text="Name:"
+                                               FontFamily="Bahnschrift"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="White"
+                                               Margin="0,0,0,5"/>
+                                    <TextBox x:Name="PasswordNameTextBox"
+                                             Background="#171C26"
+                                             Foreground="White"
+                                             FontFamily="Bahnschrift"
+                                             FontSize="16"
+                                             BorderThickness="0"
+                                             Padding="15"
+                                             Margin="0,5,0,0"
+                                             Height="50"
+                                             VerticalContentAlignment="Center"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="False"/>
 
-                            <!-- Login Label and TextBox -->
-                            <TextBlock Grid.Row="6"
-                                       Text="Login:"
-                                       FontFamily="Bahnschrift"
-                                       FontSize="16"
-                                       FontWeight="SemiBold"
-                                       Foreground="White"
-                                       Margin="0,0,0,5"/>
-                            <TextBox x:Name="PasswordLoginTextBox"
-                                     Grid.Row="6"
-                                     Background="#171C26"
-                                     Foreground="White"
-                                     FontFamily="Bahnschrift"
-                                     FontSize="16"
-                                     BorderThickness="0"
-                                     Padding="15"
-                                     Margin="0,30,0,0"
-                                     Height="50"
-                                     VerticalContentAlignment="Center"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="False"/>
+                                    <!-- Login Label and TextBox -->
+                                    <TextBlock Text="Login:"
+                                               FontFamily="Bahnschrift"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="White"
+                                               Margin="0,15,0,5"/>
+                                    <TextBox x:Name="PasswordLoginTextBox"
+                                             Background="#171C26"
+                                             Foreground="White"
+                                             FontFamily="Bahnschrift"
+                                             FontSize="16"
+                                             BorderThickness="0"
+                                             Padding="15"
+                                             Margin="0,5,0,0"
+                                             Height="50"
+                                             VerticalContentAlignment="Center"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="False"/>
 
-                            <!-- Password Label and Field with Show/Hide -->
-                            <StackPanel Grid.Row="8">
-                                <TextBlock Text="Password:"
-                                           FontFamily="Bahnschrift"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"
-                                           Foreground="White"
-                                           Margin="0,0,0,5"/>
-                                <Grid Margin="0,5,0,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="50"/>
-                                    </Grid.ColumnDefinitions>
+                                    <!-- Password Label and Field with Show/Hide -->
+                                    <TextBlock Text="Password:"
+                                               FontFamily="Bahnschrift"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="White"
+                                               Margin="0,15,0,5"/>
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <PasswordBox x:Name="PasswordValueBox"
+                                        <PasswordBox x:Name="PasswordValueBox"
+                                                     Grid.Column="0"
+                                                     Background="#171C26"
+                                                     Foreground="White"
+                                                     FontFamily="Bahnschrift"
+                                                     FontSize="16"
+                                                     BorderThickness="0"
+                                                     Padding="15"
+                                                     Height="50"
+                                                     VerticalContentAlignment="Center"
+                                                     Visibility="Visible"/>
+
+                                        <TextBox x:Name="PasswordValueTextBox"
                                                  Grid.Column="0"
                                                  Background="#171C26"
                                                  Foreground="White"
@@ -844,64 +850,53 @@
                                                  Padding="15"
                                                  Height="50"
                                                  VerticalContentAlignment="Center"
-                                                 Visibility="Visible"/>
+                                                 Visibility="Collapsed"/>
 
-                                    <TextBox x:Name="PasswordValueTextBox"
-                                             Grid.Column="0"
-                                             Background="#171C26"
-                                             Foreground="White"
-                                             FontFamily="Bahnschrift"
-                                             FontSize="16"
-                                             BorderThickness="0"
-                                             Padding="15"
-                                             Height="50"
-                                             VerticalContentAlignment="Center"
-                                             Visibility="Collapsed"/>
+                                        <Button Grid.Column="1"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Width="40"
+                                                Height="40"
+                                                Cursor="Hand"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Click="TogglePasswordVisibility_Click">
+                                            <Image Source="Images/hide.png"
+                                                   Width="24"
+                                                   Height="24"/>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
 
-                                    <Button Grid.Column="1"
-                                            Background="Transparent"
-                                            BorderThickness="0"
-                                            Width="40"
-                                            Height="40"
-                                            Cursor="Hand"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Click="TogglePasswordVisibility_Click">
-                                        <Image Source="Images/hide.png"
-                                               Width="24"
-                                               Height="24"/>
-                                    </Button>
-                                </Grid>
+                            <!-- Buttons Row -->
+                            <Grid Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="15"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                                <!-- Buttons Row -->
-                                <Grid Margin="0,30,0,0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="15"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
+                                <!-- Save Button -->
+                                <Button Grid.Column="0"
+                                        Style="{StaticResource AddButtonStyle}"
+                                        Height="50"
+                                        Click="SavePasswordButton_Click">
+                                    <TextBlock Text="Save"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                </Button>
 
-                                    <!-- Save Button -->
-                                    <Button Grid.Column="0"
-                                            Style="{StaticResource AddButtonStyle}"
-                                            Height="50"
-                                            Click="SavePasswordButton_Click">
-                                        <TextBlock Text="Save"
-                                                   FontSize="16"
-                                                   FontWeight="Bold"/>
-                                    </Button>
-
-                                    <!-- Delete Button -->
-                                    <Button Grid.Column="2"
-                                            Style="{StaticResource DeleteButtonStyle}"
-                                            Height="50"
-                                            Click="DeletePasswordButton_Click">
-                                        <TextBlock Text="Delete"
-                                                   FontSize="16"
-                                                   FontWeight="Bold"/>
-                                    </Button>
-                                </Grid>
-                            </StackPanel>
+                                <!-- Delete Button -->
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource DeleteButtonStyle}"
+                                        Height="50"
+                                        Click="DeletePasswordButton_Click">
+                                    <TextBlock Text="Delete"
+                                               FontSize="16"
+                                               FontWeight="Bold"/>
+                                </Button>
+                            </Grid>
                         </Grid>
                     </Border>
 
