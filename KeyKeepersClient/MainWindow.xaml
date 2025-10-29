@@ -496,17 +496,23 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
+                <StackPanel x:Name="UserContainer"
+                            Grid.Row="0"
+                            Margin="0,0,0,0"> 
+                </StackPanel>
+
                 <!-- Search Box -->
-                <Border Grid.Row="0"
+                <Border Grid.Row="1"
                         Background="#171C26"
                         CornerRadius="20"
                         Height="45"
-                        Margin="0,10,0,20">
+                        Margin="0,0,0,20">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="45"/>
@@ -522,7 +528,7 @@
                                    VerticalAlignment="Center"/>
 
                         <!-- Search TextBox -->
-                        <TextBox Grid.Column="1"
+                        <TextBox Grid.Column="0"
                                  x:Name="SearchTextBox"
                                  Background="Transparent"
                                  BorderThickness="0"
@@ -538,7 +544,7 @@
 
                 <!-- Category Edit Panel (Hidden by default) -->
                 <Border x:Name="CategoryEditPanel"
-                        Grid.Row="1"
+                        Grid.Row="2"
                         Background="#171C26"
                         CornerRadius="10"
                         Padding="15"
@@ -598,7 +604,7 @@
                 </Border>
 
                 <!-- Categories ScrollViewer -->
-                <ScrollViewer Grid.Row="2"
+                <ScrollViewer Grid.Row="3"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled"
                               Style="{StaticResource CustomScrollViewer}"
@@ -633,7 +639,7 @@
 
                 <!-- Bottom Buttons Panel -->
                 <Grid x:Name="NormalButtonsPanel"
-                      Grid.Row="3"
+                      Grid.Row="4"
                       Margin="0,0,0,8">
                     <!-- Add Password Button -->
                     <Button Style="{StaticResource AddButtonStyle}"
@@ -653,7 +659,7 @@
                 </Grid>
 
                 <Grid x:Name="EditButtonsPanel"
-                      Grid.Row="3"
+                      Grid.Row="4"
                       Visibility="Collapsed">
                     <!-- Save Button (Full Width) -->
                     <Button Style="{StaticResource AddButtonStyle}"
@@ -665,7 +671,7 @@
                 </Grid>
 
                 <Grid x:Name="PasswordEditButtonsPanel"
-                      Grid.Row="3"
+                      Grid.Row="4"
                       Visibility="Collapsed">
                     <!-- Exit Button -->
                     <Button Style="{StaticResource ExitButtonStyle}"
@@ -678,7 +684,7 @@
 
                 <!-- Add Category Button -->
                 <Button x:Name="AddCategoryButton"
-                        Grid.Row="4"
+                        Grid.Row="5"
                         Style="{StaticResource AddButtonStyle}"
                         Margin="0"
                         Click="AddCategoryButton_Click">

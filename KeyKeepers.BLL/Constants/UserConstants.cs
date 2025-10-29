@@ -71,4 +71,7 @@ public static class UserConstants
 
     public static readonly string UserLogOutError
         = "Невалідний токен!";
+
+    public static readonly string UserNotFound
+        = "Користувач не знайдений!";
 }

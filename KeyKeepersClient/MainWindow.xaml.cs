@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -16,8 +15,8 @@ using KeyKeepers.BLL.DTOs.Passwords;
 using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
+using KeyKeepers.BLL.Queries.Users.GetById;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
-using KeyKeepers.DAL.Repositories.Options;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -61,6 +60,127 @@ public partial class MainWindow : Window
 
         // Load all passwords by default (category ID = 0 means "All items")
         await LoadPasswordsAsync(0);
+        await LoadCurrentUser();
+    }
+
+    private async Task LoadCurrentUser()
+    {
+        try
+        {
+            if (this.mediator == null)
+            {
+                MessageBox
+                    .Show(
+                        "База даних не налаштована. Реєстрація тимчасово недоступна.",
+                        "Інформація",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                return;
+            }
+
+            var query = new GetUserByIdQuery(userId);
+
+            var result = await this.mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                var userDto = result.Value;
+
+                UIElement userProfilePanel = CreateUserProfilePanel(userDto.Name, userDto.Surname, userDto.Email);
+                UserContainer.Children.Add(userProfilePanel);
+            }
+            else
+            {
+                MessageBox.Show($"Помилка завантаження даних користувача", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error loading categories: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private UIElement CreateUserProfilePanel(string firstName, string lastName, string email)
+    {
+        var panel = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+            Margin = new Thickness(0, 0, 0, 0),
+        };
+
+        var icon = new Border
+        {
+            Width = 60,
+            Height = 60,
+            CornerRadius = new CornerRadius(30),
+            Background = CreateSoftGreenGradientBrush(),
+            HorizontalAlignment = HorizontalAlignment.Center,
+            Margin = new Thickness(0, 0, 0, 10),
+            Child = new TextBlock
+            {
+                Text = $"{(firstName.Length > 0 ? firstName[0].ToString() : string.Empty)}{(lastName.Length > 0 ? lastName[0].ToString() : string.Empty)}".ToUpper(),
+                Foreground = Brushes.White,
+                FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+                FontSize = 24,
+                FontWeight = FontWeights.Bold,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+            },
+        };
+        panel.Children.Add(icon);
+
+        var nameBlock = new TextBlock
+        {
+            Text = $"{firstName} {lastName}",
+            Foreground = Brushes.White,
+            FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+            FontSize = 16,
+            FontWeight = FontWeights.SemiBold,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            TextAlignment = TextAlignment.Center,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 0, 0, 5),
+        };
+        panel.Children.Add(nameBlock);
+
+        var emailBlock = new TextBlock
+        {
+            Text = email,
+            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#999999")),
+            FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+            FontSize = 12,
+            HorizontalAlignment = HorizontalAlignment.Center,
+            TextAlignment = TextAlignment.Center,
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(0, 0, 0, 15),
+        };
+        panel.Children.Add(emailBlock);
+
+        var separator = new Border
+        {
+            Height = 1,
+            Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39")),
+            Margin = new Thickness(0, 0, 0, 20),
+        };
+        panel.Children.Add(separator);
+
+        return panel;
+    }
+
+    private LinearGradientBrush CreateSoftGreenGradientBrush()
+    {
+        var brush = new LinearGradientBrush
+        {
+            StartPoint = new Point(0, 0),
+            EndPoint = new Point(0, 1), // Вертикальний градієнт
+        };
+
+        // Ніжний зелений/м'ятний градієнт
+        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF81C784"), 0.0)); // Світлий, м'який зелений (верх)
+        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF4CAF50"), 0.5)); // Середній зелений (центр)
+        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF1B5E20"), 1.0)); // Темний зелений (низ)
+
+        return brush;
     }
 
     private async Task LoadCategoriesAsync()
@@ -987,6 +1107,8 @@ public partial class MainWindow : Window
                         "Успіх",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
+
+                    UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
 
                     // Clear editing references
                     currentEditingPasswordCard = null;
