@@ -85,28 +85,17 @@ namespace KeyKeepers.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CommunityId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserName")
-                        .IsUnique();
 
                     b.ToTable("CommunityUsers");
                 });

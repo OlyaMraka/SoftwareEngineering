@@ -36,54 +36,47 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<AuthR
 
     public async Task<Result<AuthResponseDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        try
+        await validator.ValidateAndThrowAsync(request, cancellationToken);
+
+        User? existingUser = await repositoryWrapper.UserRepository.GetFirstOrDefaultAsync(new QueryOptions<User>
         {
-            await validator.ValidateAndThrowAsync(request, cancellationToken);
+            Filter = user =>
+                user.Email == request.RegisterDto.Email || user.UserName == request.RegisterDto.UserName,
+        });
 
-            User? existingUser = await repositoryWrapper.UserRepository.GetFirstOrDefaultAsync(new QueryOptions<User>
-            {
-                Filter = user =>
-                    user.Email == request.RegisterDto.Email || user.UserName == request.RegisterDto.UserName,
-            });
-
-            if (existingUser != null)
-            {
-                return Result.Fail<AuthResponseDto>("Exists");
-            }
-
-            User user = mapper.Map<User>(request.RegisterDto);
-            user.PasswordHash = passwordHasher.HashPassword(user, request.RegisterDto.Password);
-            await repositoryWrapper.UserRepository.CreateAsync(user);
-
-            if (await repositoryWrapper.SaveChangesAsync() <= 0)
-            {
-                return Result.Fail<AuthResponseDto>("Saveeroor");
-            }
-
-            RefreshToken refreshToken = tokenService.GenerateRefreshToken(user);
-            await repositoryWrapper.RefreshTokenRepository.CreateAsync(refreshToken);
-            user.TokenId = refreshToken.Id;
-
-            if (await repositoryWrapper.SaveChangesAsync() <= 0)
-            {
-                return Result.Fail<AuthResponseDto>(UserConstants.UserCreationError);
-            }
-
-            UserResponseDto userResponseDto = mapper.Map<UserResponseDto>(user);
-
-            AuthResponseDto authResponseDto = new AuthResponseDto()
-            {
-                AccessToken = tokenService.GenerateJwtToken(user),
-                RefreshToken = refreshToken.Token,
-                ExpiresAt = refreshToken.ExpiresAt,
-                UserResponseDto = userResponseDto,
-            };
-
-            return Result.Ok(authResponseDto);
-        }
-        catch
+        if (existingUser != null)
         {
-            return Result.Fail<AuthResponseDto>("huyna");
+            return Result.Fail<AuthResponseDto>(UserConstants.UserCreationError);
         }
+
+        User user = mapper.Map<User>(request.RegisterDto);
+        user.PasswordHash = passwordHasher.HashPassword(user, request.RegisterDto.Password);
+        await repositoryWrapper.UserRepository.CreateAsync(user);
+
+        if (await repositoryWrapper.SaveChangesAsync() <= 0)
+        {
+            return Result.Fail<AuthResponseDto>(UserConstants.DbSaveError);
+        }
+
+        RefreshToken refreshToken = tokenService.GenerateRefreshToken(user);
+        await repositoryWrapper.RefreshTokenRepository.CreateAsync(refreshToken);
+        user.TokenId = refreshToken.Id;
+
+        if (await repositoryWrapper.SaveChangesAsync() <= 0)
+        {
+            return Result.Fail<AuthResponseDto>(UserConstants.UserCreationError);
+        }
+
+        UserResponseDto userResponseDto = mapper.Map<UserResponseDto>(user);
+
+        AuthResponseDto authResponseDto = new AuthResponseDto()
+        {
+            AccessToken = tokenService.GenerateJwtToken(user),
+            RefreshToken = refreshToken.Token,
+            ExpiresAt = refreshToken.ExpiresAt,
+            UserResponseDto = userResponseDto,
+        };
+
+        return Result.Ok(authResponseDto);
     }
 }

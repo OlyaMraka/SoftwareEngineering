@@ -13,15 +13,6 @@ public class CommunityUserConfiguration : IEntityTypeConfiguration<CommunityUser
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
 
-        builder.Property(x => x.UserName)
-            .IsRequired();
-
-        builder.HasIndex(x => x.UserName)
-            .IsUnique();
-
-        builder.Property(x => x.PasswordHash)
-            .IsRequired();
-
         builder.Property(x => x.Role)
             .IsRequired();
 

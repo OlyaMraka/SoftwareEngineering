@@ -74,4 +74,7 @@ public static class UserConstants
 
     public static readonly string UserNotFound
         = "Користувач не знайдений!";
+
+    public static readonly string DbSaveError
+        = "Помилка збереження бази даних!";
 }
