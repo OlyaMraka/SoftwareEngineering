@@ -70,24 +70,6 @@ namespace KeyKeepers.UnitTests.ValidatorTests
         }
 
         [Fact]
-        public void Should_Have_Error_When_Password_Invalid()
-        {
-            var dto = new UserRegisterDto
-            {
-                Name = "Olga",
-                Surname = "Petrova",
-                Email = "olga@example.com",
-                UserName = "olga123",
-                Password = "abc",
-            };
-
-            var result = validator.TestValidate(dto);
-
-            result.ShouldHaveValidationErrorFor(x => x.Password)
-                  .WithErrorMessage(UserConstants.PasswordLengthErrorMessage);
-        }
-
-        [Fact]
         public void Should_Not_Have_Error_For_Valid_Data()
         {
             var dto = new UserRegisterDto

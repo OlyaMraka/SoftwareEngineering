@@ -73,7 +73,7 @@ namespace KeyKeepersClient
 
                 // If password is empty, use a special marker that backend will recognize
                 string password = string.IsNullOrWhiteSpace(PasswordBox.Password)
-                    ? "KEEP_CURRENT_PASSWORD_UNCHANGED"
+                    ? string.Empty
                     : PasswordBox.Password;
 
                 var dto = new UpdateUserDto
