@@ -260,7 +260,7 @@
                     Height="40"
                     Background="#2A2F3A"
                     CornerRadius="20"
-                    BorderThickness="1">
+                    BorderThickness="1"> <!-- краще 1, щоб колір був видимий -->
                 <Grid>
                     <TextBox x:Name="UsernameTextBox"
                              Background="Transparent"
@@ -326,44 +326,90 @@
                 </Grid>
             </Border>
 
-            <!-- Register Button -->
-            <Border Grid.Row="18"
-                    Height="50"
-                    CornerRadius="27"
-                    HorizontalAlignment="Stretch"
-                    Margin="20,0,20,0">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#815A11"
-                                      Offset="0"/>
-                        <GradientStop Color="#FDE053"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Button Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="Black"
-                        FontFamily="Bahnschrift"
-                        FontSize="20"
-                        FontWeight="SemiBold"
-                        Content="register"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Cursor="Hand"
-                        Click="RegisterButton_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Border>
+            <!-- Buttons Container -->
+            <Grid Grid.Row="18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Personal Button -->
+                <Border Grid.Column="0"
+                        Height="50"
+                        CornerRadius="24"
+                        HorizontalAlignment="Stretch">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,0">
+                            <GradientStop Color="#815A11"
+                                          Offset="0"/>
+                            <GradientStop Color="#FDE053"
+                                          Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Button Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="Black"
+                            FontFamily="Bahnschrift"
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Content="personal"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Cursor="Hand"
+                            Click="PersonalButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Border>
+
+                <!-- Team Button -->
+                <Border Grid.Column="2"
+                        Height="50"
+                        CornerRadius="24"
+                        HorizontalAlignment="Stretch">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,0">
+                            <GradientStop Color="#815A11"
+                                          Offset="0"/>
+                            <GradientStop Color="#FDE053"
+                                          Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Button Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="Black"
+                            FontFamily="Bahnschrift"
+                            FontSize="20"
+                            FontWeight="SemiBold"
+                            Content="team"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Cursor="Hand"
+                            Click="TeamButton_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

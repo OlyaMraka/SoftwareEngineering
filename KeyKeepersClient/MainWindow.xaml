@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="FamilyPass Manager"
         Icon="Images/logo.png"
-        Height="800"
-        Width="1200"
+        WindowState="Maximized"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -412,9 +411,9 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
             <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -422,7 +421,7 @@
         <!-- Top Panel -->
         <Border Grid.Row="0"
                 Grid.Column="0"
-                Grid.ColumnSpan="2"
+                Grid.ColumnSpan="3"
                 Background="#0E121B"
                 BorderBrush="#222A39"
                 BorderThickness="0,0,0,2"
@@ -486,9 +485,68 @@
             </Grid>
         </Border>
 
-        <!-- Left Sidebar Panel -->
+        <!-- Left Sidebar Panel - Communities -->
         <Border Grid.Row="1"
                 Grid.Column="0"
+                Background="#0E121B"
+                BorderBrush="#222A39"
+                BorderThickness="0,0,2,0">
+            <Grid Margin="15">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Title -->
+                <TextBlock Grid.Row="0"
+                           Text="Communities"
+                           FontFamily="Bahnschrift"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           Margin="10,10,0,20"/>
+
+                <!-- Communities ScrollViewer -->
+                <ScrollViewer Grid.Row="1"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              Style="{StaticResource CustomScrollViewer}"
+                              Margin="0,0,0,10">
+                    <StackPanel x:Name="CommunitiesPanel">
+                        <!-- Private (Default) -->
+                        <Button x:Name="PrivateCommunityButton"
+                                Style="{StaticResource ActiveCategoryButtonStyle}"
+                                Content="Private"
+                                Tag="0"
+                                Click="CommunityButton_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Settings Button -->
+                <Button x:Name="SettingsButton"
+                        Grid.Row="2"
+                        Style="{StaticResource AddButtonStyle}"
+                        Margin="0"
+                        Click="SettingsButton_Click">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <Image Source="Images/settings.png"
+                               Width="20"
+                               Height="20"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"/>
+                        <TextBlock Text="Settings"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Left Sidebar Panel -->
+        <Border Grid.Row="1"
+                Grid.Column="1"
                 Background="#0E121B"
                 BorderBrush="#222A39"
                 BorderThickness="0,0,2,0">
@@ -499,12 +557,11 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <StackPanel x:Name="UserContainer"
                             Grid.Row="0"
-                            Margin="0,0,0,0"> 
+                            Margin="0,0,0,0">
                 </StackPanel>
 
                 <!-- Search Box -->
@@ -637,27 +694,7 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Bottom Buttons Panel -->
-                <Grid x:Name="NormalButtonsPanel"
-                      Grid.Row="4"
-                      Margin="0,0,0,8">
-                    <!-- Add Password Button -->
-                    <Button Style="{StaticResource AddButtonStyle}"
-                            Click="AddPasswordButton_Click">
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center">
-                            <Image Source="Images/settings.png"
-                                   Width="20"
-                                   Height="20"
-                                   Margin="0,0,12,0"
-                                   VerticalAlignment="Center"/>
-                            <TextBlock Text="Password"
-                                       VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </Grid>
-
+                <!-- Edit Mode Panels (Hidden by default) -->
                 <Grid x:Name="EditButtonsPanel"
                       Grid.Row="4"
                       Visibility="Collapsed">
@@ -681,31 +718,12 @@
                                    VerticalAlignment="Center"/>
                     </Button>
                 </Grid>
-
-                <!-- Add Category Button -->
-                <Button x:Name="AddCategoryButton"
-                        Grid.Row="5"
-                        Style="{StaticResource AddButtonStyle}"
-                        Margin="0"
-                        Click="AddCategoryButton_Click">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Image Source="Images/settings.png"
-                               Width="20"
-                               Height="20"
-                               Margin="0,0,12,0"
-                               VerticalAlignment="Center"/>
-                        <TextBlock Text="Category"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
             </Grid>
         </Border>
 
         <!-- Main Content Area -->
         <Grid Grid.Row="1"
-              Grid.Column="1"
+              Grid.Column="2"
               Background="#171C26">
 
             <ScrollViewer x:Name="PasswordsScrollViewer"
@@ -913,56 +931,5 @@
                 </StackPanel>
             </ScrollViewer>
         </Grid>
-
-        <!-- Bottom Panel -->
-        <Border Grid.Row="2"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
-                Background="#0E121B"
-                BorderBrush="#222A39"
-                BorderThickness="0,2,0,0">
-            <Grid>
-                <!-- Log Out Button -->
-                <Button HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="20,0,0,0"
-                        Background="#171C26"
-                        BorderBrush="#222A39"
-                        BorderThickness="2"
-                        Width="100"
-                        Height="35"
-                        Content="Log Out"
-                        FontFamily="Bahnschrift"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Foreground="White"
-                        Cursor="Hand"
-                        Click="LogOutButton_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="5">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver"
-                                         Value="True">
-                                    <Setter Property="Background"
-                                            Value="#222A39"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed"
-                                         Value="True">
-                                    <Setter Property="Background"
-                                            Value="#2A3441"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-            </Grid>
-        </Border>
     </Grid>
 </Window>
