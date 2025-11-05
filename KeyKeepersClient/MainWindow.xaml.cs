@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using KeyKeepers.BLL.Commands.Communities.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Delete;
 using KeyKeepers.BLL.Commands.PasswordCategory.Update;
@@ -10,9 +11,11 @@ using KeyKeepers.BLL.Commands.Passwords.Create;
 using KeyKeepers.BLL.Commands.Passwords.Delete;
 using KeyKeepers.BLL.Commands.Passwords.Update;
 using KeyKeepers.BLL.Commands.Users.LogOut;
+using KeyKeepers.BLL.DTOs.Communities;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
 using KeyKeepers.BLL.DTOs.Passwords;
 using KeyKeepers.BLL.DTOs.Users;
+using KeyKeepers.BLL.Queries.CommunityUsers.GetByUserId;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.BLL.Queries.Users.GetById;
@@ -28,11 +31,14 @@ public partial class MainWindow : Window
     private readonly IRepositoryWrapper repositoryWrapper;
     private readonly long userId;
     private Button? currentActiveButton;
+    private Button? currentActiveCommunityButton;
     private ObservableCollection<CategoryItem> customCategories;
+    private ObservableCollection<CommunityItem> communities;
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
     private long currentCategoryId = 0; // 0 means "All items"
 
+    // private long currentCommunityId = 0; // 0 means "Private"
 #pragma warning disable CS0414 // Field is assigned but its value is never used
     private bool isPasswordEditMode = false;
 #pragma warning restore CS0414
@@ -48,14 +54,181 @@ public partial class MainWindow : Window
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
         repositoryWrapper = App.ServiceProvider.GetRequiredService<IRepositoryWrapper>();
         customCategories = new ObservableCollection<CategoryItem>();
+        communities = new ObservableCollection<CommunityItem>();
 
         this.Loaded += MainWindow_Loaded;
 
         SetActiveCategory((Button)CategoriesPanel.Children[0]);
+        SetActiveCommunity(PrivateCommunityButton);
+    }
+
+    public void OpenAddPasswordMode()
+    {
+        // Exit category edit mode if active
+        if (isEditMode)
+        {
+            ExitEditMode();
+        }
+
+        isPasswordEditMode = true;
+        PasswordEditPanel.Visibility = Visibility.Visible;
+        CategoryEditPanel.Visibility = Visibility.Collapsed;
+        PasswordEditButtonsPanel.Visibility = Visibility.Visible;
+
+        // Clear form
+        PasswordNameTextBox.Text = string.Empty;
+        PasswordLoginTextBox.Text = string.Empty;
+        PasswordValueBox.Password = string.Empty;
+        PasswordValueTextBox.Text = string.Empty;
+        PasswordValueBox.Visibility = Visibility.Visible;
+        PasswordValueTextBox.Visibility = Visibility.Collapsed;
+        selectedPasswordIcon = "Images/Icons/internet_2.png";
+        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
+
+        // Update all password cards to show edit button
+        UpdatePasswordCardsButtons(true);
+
+        // Scroll to top
+        if (PasswordsScrollViewer != null)
+        {
+            PasswordsScrollViewer.ScrollToTop();
+        }
+    }
+
+    public void OpenAddCategoryMode()
+    {
+        // Exit password edit mode if active
+        if (isPasswordEditMode)
+        {
+            ExitPasswordEditMode();
+        }
+
+        // Enter edit mode for creating new category
+        isEditMode = true;
+        currentEditingCategory = null;
+        CategoryNameTextBox.Text = string.Empty;
+        CategoryEditPanel.Visibility = Visibility.Visible;
+        EditButtonsPanel.Visibility = Visibility.Visible;
+        UpdateAllCategoryButtonsVisibility();
+        CategoryNameTextBox.Focus();
+    }
+
+    public async void OpenAddCommunityMode()
+    {
+        var addCommunityWindow = new AddCommunityWindow
+        {
+            Owner = this,
+        };
+
+        if (addCommunityWindow.ShowDialog() == true)
+        {
+            var communityName = addCommunityWindow.CommunityName;
+
+            if (!string.IsNullOrWhiteSpace(communityName))
+            {
+                await CreateCommunityAsync(communityName);
+            }
+        }
+    }
+
+    public async void OpenEditUserMode()
+    {
+        try
+        {
+            // Get current user data
+            var query = new GetUserByIdQuery(userId);
+            var result = await mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                var editUserWindow = new EditUserWindow(userId, result.Value)
+                {
+                    Owner = this,
+                };
+
+                if (editUserWindow.ShowDialog() == true)
+                {
+                    // Reload user data after successful update
+                    await LoadCurrentUser();
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Не вдалося завантажити дані користувача",
+                    "Помилка",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Exception in OpenEditUserMode: {ex}");
+            MessageBox.Show(
+                $"Виникла помилка: {ex.Message}",
+                "Помилка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+    }
+
+    public async void LogOutButton_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            string refreshToken = GetStoredRefreshToken();
+
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                var logOutDto = new UserLogOutDto
+                {
+                    RefreshToken = refreshToken,
+                };
+
+                var command = new UserLogOutCommand(logOutDto);
+                var result = await mediator.Send(command);
+
+                if (result.IsSuccess)
+                {
+                    ClearStoredTokens();
+
+                    var firstWindow = new FirstWindow();
+                    firstWindow.Left = this.Left;
+                    firstWindow.Top = this.Top;
+                    firstWindow.Show();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Error during logout. Please try again.",
+                        "Logout Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                var firstWindow = new FirstWindow();
+                firstWindow.Left = this.Left;
+                firstWindow.Top = this.Top;
+                firstWindow.Show();
+                this.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(
+                $"An error occurred during logout: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
     }
 
     private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
     {
+        await LoadCommunitiesAsync();
         await LoadCategoriesAsync();
 
         // Load all passwords by default (category ID = 0 means "All items")
@@ -86,6 +259,9 @@ public partial class MainWindow : Window
             {
                 var userDto = result.Value;
 
+                // Remove old user profile if exists
+                UserContainer.Children.Clear();
+
                 UIElement userProfilePanel = CreateUserProfilePanel(userDto.Name, userDto.Surname, userDto.Email);
                 UserContainer.Children.Add(userProfilePanel);
             }
@@ -102,6 +278,16 @@ public partial class MainWindow : Window
 
     private UIElement CreateUserProfilePanel(string firstName, string lastName, string email)
     {
+        var button = new Button
+        {
+            Background = Brushes.Transparent,
+            BorderThickness = new Thickness(0),
+            Cursor = Cursors.Hand,
+            HorizontalContentAlignment = HorizontalAlignment.Stretch,
+        };
+
+        button.Click += UserProfileButton_Click;
+
         var panel = new StackPanel
         {
             Orientation = Orientation.Vertical,
@@ -156,15 +342,30 @@ public partial class MainWindow : Window
         };
         panel.Children.Add(emailBlock);
 
+        button.Content = panel;
+
+        // Create a container with button and separator separate
+        var container = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+        };
+
+        container.Children.Add(button);
+
         var separator = new Border
         {
             Height = 1,
             Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39")),
             Margin = new Thickness(0, 0, 0, 20),
         };
-        panel.Children.Add(separator);
+        container.Children.Add(separator);
 
-        return panel;
+        return container;
+    }
+
+    private void UserProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenEditUserMode();
     }
 
     private LinearGradientBrush CreateSoftGreenGradientBrush()
@@ -314,6 +515,26 @@ public partial class MainWindow : Window
         button.Style = (Style)FindResource("ActiveCategoryButtonStyle");
     }
 
+    private void SetActiveCommunity(Button button)
+    {
+        // Reset previous active community button to normal style
+        if (currentActiveCommunityButton != null)
+        {
+            currentActiveCommunityButton.Style = (Style)FindResource("CommunityButtonStyle");
+        }
+
+        // Set new active community button
+        currentActiveCommunityButton = button;
+        button.Style = (Style)FindResource("ActiveCommunityButtonStyle");
+    }
+
+    private void SettingsButton_Click(object sender, RoutedEventArgs e)
+    {
+        // Open settings window
+        var settingsWindow = new SettingsWindow(this);
+        settingsWindow.ShowDialog();
+    }
+
     private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         string searchText = SearchTextBox.Text.ToLower();
@@ -339,43 +560,6 @@ public partial class MainWindow : Window
 
             e.Handled = true;
         }
-    }
-
-    private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
-    {
-        // Enter edit mode for creating new category
-        isEditMode = true;
-        currentEditingCategory = null;
-        CategoryNameTextBox.Text = string.Empty;
-        CategoryEditPanel.Visibility = Visibility.Visible;
-        NormalButtonsPanel.Visibility = Visibility.Collapsed;
-        EditButtonsPanel.Visibility = Visibility.Visible;
-        AddCategoryButton.Visibility = Visibility.Collapsed;
-        UpdateAllCategoryButtonsVisibility();
-        CategoryNameTextBox.Focus();
-    }
-
-    private void AddPasswordButton_Click(object sender, RoutedEventArgs e)
-    {
-        isPasswordEditMode = true;
-        PasswordEditPanel.Visibility = Visibility.Visible;
-        CategoryEditPanel.Visibility = Visibility.Collapsed;
-        NormalButtonsPanel.Visibility = Visibility.Collapsed;
-        PasswordEditButtonsPanel.Visibility = Visibility.Visible;
-        AddCategoryButton.Visibility = Visibility.Collapsed;
-
-        // Clear form
-        PasswordNameTextBox.Text = string.Empty;
-        PasswordLoginTextBox.Text = string.Empty;
-        PasswordValueBox.Password = string.Empty;
-        PasswordValueTextBox.Text = string.Empty;
-        PasswordValueBox.Visibility = Visibility.Visible;
-        PasswordValueTextBox.Visibility = Visibility.Collapsed;
-        selectedPasswordIcon = "Images/Icons/internet_2.png";
-        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
-
-        // Update all password cards to show edit button
-        UpdatePasswordCardsButtons(true);
     }
 
     private async void SaveCategoryButton_Click(object sender, RoutedEventArgs e)
@@ -445,9 +629,7 @@ public partial class MainWindow : Window
         currentEditingCategory = null;
         CategoryNameTextBox.Text = string.Empty;
         CategoryEditPanel.Visibility = Visibility.Collapsed;
-        NormalButtonsPanel.Visibility = Visibility.Visible;
         EditButtonsPanel.Visibility = Visibility.Collapsed;
-        AddCategoryButton.Visibility = Visibility.Visible;
         UpdateAllCategoryButtonsVisibility();
     }
 
@@ -476,9 +658,7 @@ public partial class MainWindow : Window
             currentEditingCategory = category;
             CategoryNameTextBox.Text = category.Name;
             CategoryEditPanel.Visibility = Visibility.Visible;
-            NormalButtonsPanel.Visibility = Visibility.Collapsed;
             EditButtonsPanel.Visibility = Visibility.Visible;
-            AddCategoryButton.Visibility = Visibility.Collapsed;
             CategoryNameTextBox.Focus();
             CategoryNameTextBox.SelectAll();
         }
@@ -653,6 +833,150 @@ public partial class MainWindow : Window
         }
     }
 
+    private async Task CreateCommunityAsync(string communityName)
+    {
+        try
+        {
+            if (mediator == null)
+            {
+                MessageBox.Show("База даних не налаштована.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(communityName))
+            {
+                MessageBox.Show("Будь ласка, введіть назву команди.", "Попередження", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            var dto = new CreateCommunityDto
+            {
+                OwnerId = userId,
+                Name = communityName.Trim(),
+            };
+
+            var command = new CreateCommunityCommand(dto);
+            var result = await mediator.Send(command);
+
+            if (result.IsSuccess)
+            {
+                var communityItem = new CommunityItem
+                {
+                    Id = result.Value.NewCommunity.Id,
+                    Name = result.Value.NewCommunity.Name,
+                };
+
+                communities.Add(communityItem);
+
+                var button = CreateCommunityButton(communityItem);
+                CommunitiesPanel.Children.Add(button);
+
+                MessageBox.Show(
+                    $"Команду '{communityName}' успішно створено!",
+                    "Успіх",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                // Automatically select the newly created community
+                button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+            else
+            {
+                string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Невідома помилка при створенні команди";
+                System.Diagnostics.Debug.WriteLine($"CreateCommunityAsync failed: {errorMsg}");
+                MessageBox.Show($"Помилка створення команди:\n{errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception in CreateCommunityAsync: {httpEx}");
+            MessageBox.Show($"Помилка з'єднання з сервером:\n{httpEx.Message}", "Помилка з'єднання", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid Operation in CreateCommunityAsync: {invEx}");
+            MessageBox.Show($"Некоректна операція:\n{invEx.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Exception in CreateCommunityAsync: {ex}");
+            MessageBox.Show($"Виникла помилка при створенні команди:\n{ex.Message}\n\nТип помилки: {ex.GetType().Name}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async Task LoadCommunitiesAsync()
+    {
+        try
+        {
+            if (mediator == null)
+            {
+                return;
+            }
+
+            var query = new GetByUserIdQuery(userId);
+            var result = await mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                communities.Clear();
+
+                // Remove all community buttons except the Private button (first child)
+                for (int i = CommunitiesPanel.Children.Count - 1; i >= 1; i--)
+                {
+                    CommunitiesPanel.Children.RemoveAt(i);
+                }
+
+                foreach (var communityUser in result.Value)
+                {
+                    var communityItem = new CommunityItem
+                    {
+                        Id = communityUser.Community.Id,
+                        Name = communityUser.Community.Name,
+                    };
+
+                    communities.Add(communityItem);
+
+                    var button = CreateCommunityButton(communityItem);
+                    CommunitiesPanel.Children.Add(button);
+                }
+            }
+            else
+            {
+                // Log error details
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Невідома помилка";
+                System.Diagnostics.Debug.WriteLine($"LoadCommunitiesAsync failed: {errorMsg}");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Exception in LoadCommunitiesAsync: {ex}");
+            MessageBox.Show($"Помилка при завантаженні команд: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private Button CreateCommunityButton(CommunityItem community)
+    {
+        var button = new Button
+        {
+            Style = (Style)FindResource("CommunityButtonStyle"),
+            Tag = community,
+            Content = community.Name,
+        };
+
+        button.Click += CommunityButton_Click;
+
+        return button;
+    }
+
+    private void CommunityButton_Click(object sender, RoutedEventArgs e)
+    {
+        MessageBox.Show(
+            $"Цей функціонал ще в розробці!",
+            "Інформація",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
     private Button CreateCategoryButton(CategoryItem category)
     {
         var button = new Button
@@ -760,60 +1084,6 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void LogOutButton_Click(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            string refreshToken = GetStoredRefreshToken();
-
-            if (!string.IsNullOrEmpty(refreshToken))
-            {
-                var logOutDto = new UserLogOutDto
-                {
-                    RefreshToken = refreshToken,
-                };
-
-                var command = new UserLogOutCommand(logOutDto);
-                var result = await mediator.Send(command);
-
-                if (result.IsSuccess)
-                {
-                    ClearStoredTokens();
-
-                    var firstWindow = new FirstWindow();
-                    firstWindow.Left = this.Left;
-                    firstWindow.Top = this.Top;
-                    firstWindow.Show();
-                    this.Close();
-                }
-                else
-                {
-                    MessageBox.Show(
-                        "Error during logout. Please try again.",
-                        "Logout Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            }
-            else
-            {
-                var firstWindow = new FirstWindow();
-                firstWindow.Left = this.Left;
-                firstWindow.Top = this.Top;
-                firstWindow.Show();
-                this.Close();
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"An error occurred during logout: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        }
-    }
-
     private string GetStoredRefreshToken()
     {
         return string.Empty;
@@ -917,9 +1187,7 @@ public partial class MainWindow : Window
         {
             isPasswordEditMode = true;
             CategoryEditPanel.Visibility = Visibility.Collapsed;
-            NormalButtonsPanel.Visibility = Visibility.Collapsed;
             PasswordEditButtonsPanel.Visibility = Visibility.Visible;
-            AddCategoryButton.Visibility = Visibility.Collapsed;
 
             // Update all password cards to show edit button
             UpdatePasswordCardsButtons(true);
@@ -1634,6 +1902,28 @@ public partial class MainWindow : Window
         }
     }
 
+    private void ExitPasswordEditMode()
+    {
+        // Exit password edit mode without asking for confirmation
+        isPasswordEditMode = false;
+        PasswordEditPanel.Visibility = Visibility.Collapsed;
+        PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
+
+        // Update all password cards to show favorite button
+        UpdatePasswordCardsButtons(false);
+
+        // Clear editing references
+        currentEditingPasswordCard = null;
+        currentEditingPassword = null;
+
+        // Clear fields
+        PasswordNameTextBox.Text = string.Empty;
+        PasswordLoginTextBox.Text = string.Empty;
+        PasswordValueBox.Password = string.Empty;
+        PasswordValueTextBox.Text = string.Empty;
+        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
+    }
+
     private void ExitPasswordEditMode_Click(object sender, RoutedEventArgs e)
     {
         // Check if there are unsaved changes
@@ -1663,9 +1953,7 @@ public partial class MainWindow : Window
         // Exit password edit mode
         isPasswordEditMode = false;
         PasswordEditPanel.Visibility = Visibility.Collapsed;
-        NormalButtonsPanel.Visibility = Visibility.Visible;
         PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
-        AddCategoryButton.Visibility = Visibility.Visible;
 
         // Update all password cards to show favorite button
         UpdatePasswordCardsButtons(false);

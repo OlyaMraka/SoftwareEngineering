@@ -26,7 +26,7 @@ public class GetByUserIdHandler : IRequestHandler<GetByUserIdQuery, Result<IEnum
     {
         QueryOptions<CommunityUser> options = new QueryOptions<CommunityUser>
         {
-            Filter = x => x.Id == request.UserId,
+            Filter = x => x.UserId == request.UserId,
             Include = x => x.Include(x => x.Community),
         };
 

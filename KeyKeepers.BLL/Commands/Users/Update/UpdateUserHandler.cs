@@ -16,18 +16,21 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Result<UserR
     private readonly IMapper mapper;
     private readonly IRepositoryWrapper repositoryWrapper;
     private readonly IValidator<UpdateUserCommand> validator;
+    private readonly IValidator<string> passwordValidator;
     private readonly IPasswordHasher<User> passwordHasher;
 
     public UpdateUserHandler(
         IMapper mapperObj,
         IRepositoryWrapper repositoryWrapperObj,
         IValidator<UpdateUserCommand> validatorObj,
-        IPasswordHasher<User> passwordHasherObj)
+        IPasswordHasher<User> passwordHasherObj,
+        IValidator<string> passwordValidatorObj)
     {
         mapper = mapperObj;
         repositoryWrapper = repositoryWrapperObj;
         validator = validatorObj;
         passwordHasher = passwordHasherObj;
+        passwordValidator = passwordValidatorObj;
     }
 
     public async Task<Result<UserResponseDto>> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
@@ -41,11 +44,26 @@ public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, Result<UserR
         QueryOptions<User> options = new QueryOptions<User>()
         {
             Filter = user => user.Id == request.RequestDto.UserId,
+            AsNoTracking = false,
         };
         User? user = await repositoryWrapper.UserRepository.GetFirstOrDefaultAsync(options);
 
+        if (user == null)
+        {
+            return Result.Fail<UserResponseDto>(UserConstants.UserNotFound);
+        }
+
         mapper.Map(request.RequestDto, user);
-        user!.PasswordHash = passwordHasher.HashPassword(user, request.RequestDto.Password);
+        if (request.RequestDto.Password != string.Empty)
+        {
+            var passwordCheck = await passwordValidator.ValidateAsync(request.RequestDto.Password, cancellationToken);
+            if (!passwordCheck.IsValid)
+            {
+                return Result.Fail<UserResponseDto>(passwordCheck.Errors.First().ErrorMessage);
+            }
+
+            user.PasswordHash = passwordHasher.HashPassword(user, request.RequestDto.Password);
+        }
 
         repositoryWrapper.UserRepository.Update(user);
         if (await repositoryWrapper.SaveChangesAsync() < 1)

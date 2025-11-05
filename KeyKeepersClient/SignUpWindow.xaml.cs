@@ -125,67 +125,7 @@ public partial class SignUpWindow : Window
         }
     }
 
-    private async void PersonalButton_Click(object sender, RoutedEventArgs e)
-    {
-        if (!this.ValidateRegistrationData(out string errorMessage))
-        {
-            MessageBox.Show(errorMessage, "Помилка валідації", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-
-        string firstName = this.FirstNameTextBox.Text.Trim();
-        string lastName = this.LastNameTextBox.Text.Trim();
-        string email = this.EmailTextBox.Text.Trim();
-        string username = this.UsernameTextBox.Text.Trim();
-        string password = this.PasswordTextBox.Password;
-
-        try
-        {
-            // Перевірка чи налаштований mediator (база даних та DI)
-            if (this.mediator == null)
-            {
-                MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            // Створюємо DTO для реєстрації користувача
-            var registerDto = new UserRegisterDto
-            {
-                Name = firstName,
-                Surname = lastName,
-                Email = email,
-                UserName = username,
-                Password = password,
-            };
-
-            // Створюємо команду для реєстрації користувача
-            var createUserCommand = new CreateUserCommand(registerDto);
-
-            // Виконуємо команду через mediator
-            var result = await this.mediator.Send(createUserCommand);
-
-            if (result.IsSuccess)
-            {
-                var logInWindow = new LogInWindow();
-                logInWindow.Left = this.Left;
-                logInWindow.Top = this.Top;
-                logInWindow.Show();
-                this.Close();
-            }
-            else
-            {
-                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Помилка при створенні користувача";
-                MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
-
-    private async void TeamButton_Click(object sender, RoutedEventArgs e)
+    private async void RegisterButton_Click(object sender, RoutedEventArgs e)
     {
         if (!this.ValidateRegistrationData(out string errorMessage))
         {
