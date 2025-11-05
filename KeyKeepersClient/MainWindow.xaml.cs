@@ -37,8 +37,8 @@ public partial class MainWindow : Window
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
     private long currentCategoryId = 0; // 0 means "All items"
-    private long currentCommunityId = 0; // 0 means "Private"
 
+    // private long currentCommunityId = 0; // 0 means "Private"
 #pragma warning disable CS0414 // Field is assigned but its value is never used
     private bool isPasswordEditMode = false;
 #pragma warning restore CS0414
@@ -520,12 +520,12 @@ public partial class MainWindow : Window
         // Reset previous active community button to normal style
         if (currentActiveCommunityButton != null)
         {
-            currentActiveCommunityButton.Style = (Style)FindResource("CategoryButtonStyle");
+            currentActiveCommunityButton.Style = (Style)FindResource("CommunityButtonStyle");
         }
 
         // Set new active community button
         currentActiveCommunityButton = button;
-        button.Style = (Style)FindResource("ActiveCategoryButtonStyle");
+        button.Style = (Style)FindResource("ActiveCommunityButtonStyle");
     }
 
     private void SettingsButton_Click(object sender, RoutedEventArgs e)
@@ -970,18 +970,11 @@ public partial class MainWindow : Window
 
     private void CommunityButton_Click(object sender, RoutedEventArgs e)
     {
-        var button = sender as Button;
-        if (button != null)
-        {
-            SetActiveCommunity(button);
-
-            if (button.Tag is CommunityItem community)
-            {
-                currentCommunityId = community.Id;
-                _ = LoadCategoriesAsync();
-                _ = LoadPasswordsAsync(currentCategoryId);
-            }
-        }
+        MessageBox.Show(
+            $"Цей функціонал ще в розробці!",
+            "Інформація",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
     }
 
     private Button CreateCategoryButton(CategoryItem category)
