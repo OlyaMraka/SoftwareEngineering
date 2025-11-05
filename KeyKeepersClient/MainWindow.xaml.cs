@@ -259,6 +259,9 @@ public partial class MainWindow : Window
             {
                 var userDto = result.Value;
 
+                // Remove old user profile if exists
+                UserContainer.Children.Clear();
+
                 UIElement userProfilePanel = CreateUserProfilePanel(userDto.Name, userDto.Surname, userDto.Email);
                 UserContainer.Children.Add(userProfilePanel);
             }
@@ -339,17 +342,25 @@ public partial class MainWindow : Window
         };
         panel.Children.Add(emailBlock);
 
+        button.Content = panel;
+
+        // Create a container with button and separator separate
+        var container = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+        };
+
+        container.Children.Add(button);
+
         var separator = new Border
         {
             Height = 1,
             Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39")),
             Margin = new Thickness(0, 0, 0, 20),
         };
-        panel.Children.Add(separator);
+        container.Children.Add(separator);
 
-        button.Content = panel;
-
-        return button;
+        return container;
     }
 
     private void UserProfileButton_Click(object sender, RoutedEventArgs e)
