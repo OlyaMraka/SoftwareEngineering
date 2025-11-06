@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using KeyKeepers.BLL.Commands.Users.Update;
@@ -10,9 +9,6 @@ using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.HandlerTests
 {
@@ -21,6 +17,7 @@ namespace KeyKeepers.UnitTests.HandlerTests
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<IValidator<UpdateUserCommand>> validatorMock;
+        private readonly Mock<IValidator<string>> passwordValidator;
         private readonly Mock<IPasswordHasher<User>> passwordHasherMock;
         private readonly UpdateUserHandler handler;
 
@@ -30,12 +27,14 @@ namespace KeyKeepers.UnitTests.HandlerTests
             repoMock = new Mock<IRepositoryWrapper>();
             validatorMock = new Mock<IValidator<UpdateUserCommand>>();
             passwordHasherMock = new Mock<IPasswordHasher<User>>();
+            passwordValidator = new Mock<IValidator<string>>();
 
             handler = new UpdateUserHandler(
                 mapperMock.Object,
                 repoMock.Object,
                 validatorMock.Object,
-                passwordHasherMock.Object);
+                passwordHasherMock.Object,
+                passwordValidator.Object);
         }
 
         [Fact]
@@ -79,6 +78,10 @@ namespace KeyKeepers.UnitTests.HandlerTests
 
             var user = new User { Id = 1 };
 
+            passwordValidator.Setup(v => v.ValidateAsync(
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
+
             validatorMock.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
                          .ReturnsAsync(new ValidationResult());
 
@@ -115,8 +118,13 @@ namespace KeyKeepers.UnitTests.HandlerTests
 
             var user = new User { Id = 1 };
 
-            validatorMock.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
-                         .ReturnsAsync(new ValidationResult());
+            passwordValidator.Setup(v => v.ValidateAsync(
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
+
+            validatorMock.Setup(v => v.ValidateAsync(
+                    command,
+                    It.IsAny<CancellationToken>())).ReturnsAsync(new ValidationResult());
 
             repoMock.Setup(r => r.UserRepository.GetFirstOrDefaultAsync(It.IsAny<QueryOptions<User>>()))
                     .ReturnsAsync(user);
