@@ -10,5 +10,6 @@ public class CommunityProfile : Profile
     {
         CreateMap<Community, CommunityResponseDto>();
         CreateMap<CreateCommunityDto, Community>();
+        CreateMap<UpdateCommunityRequestDto, Community>();
     }
 }
