@@ -54,6 +54,7 @@ public partial class App : Application
 
         services.AddScoped<IRepositoryWrapper, RepositoryWrapper>();
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        services.AddSingleton<IEncryptionService, EncryptionService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddRepositoriesFromAssembly(typeof(RepositoryWrapper).Assembly);
         services.AddServicesFromAssembly(typeof(TokenService).Assembly);

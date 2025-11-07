@@ -4,6 +4,7 @@ using FluentResults;
 using FluentValidation;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Passwords;
+using KeyKeepers.BLL.Interfaces;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Options;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
@@ -13,15 +14,18 @@ namespace KeyKeepers.BLL.Commands.Passwords.Update;
 public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Result<PasswordResponse>>
 {
     private readonly IMapper mapper;
+    private readonly IEncryptionService encryptionService;
     private readonly IRepositoryWrapper repositoryWrapper;
     private readonly IValidator<UpdatePasswordCommand> validator;
 
     public UpdatePasswordHandler(
         IMapper mapperObj,
+        IEncryptionService encryptionObj,
         IRepositoryWrapper repositoryWrapperObj,
         IValidator<UpdatePasswordCommand> validatorObj)
     {
         mapper = mapperObj;
+        encryptionService = encryptionObj;
         repositoryWrapper = repositoryWrapperObj;
         validator = validatorObj;
     }
@@ -49,6 +53,7 @@ public class UpdatePasswordHandler : IRequestHandler<UpdatePasswordCommand, Resu
         }
 
         mapper.Map(request.Request, entity);
+        entity.PasswordHash = encryptionService.Encrypt(request.Request.Password);
 
         repositoryWrapper.PasswordRepository.Update(entity);
 

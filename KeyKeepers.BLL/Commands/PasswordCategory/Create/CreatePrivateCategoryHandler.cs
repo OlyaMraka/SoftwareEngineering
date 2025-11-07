@@ -30,41 +30,38 @@ public class CreatePrivateCategoryHandler : IRequestHandler<CreatePrivateCategor
         CreatePrivateCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        try
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            await validator.ValidateAndThrowAsync(request, cancellationToken);
-
-            PrivateCategory? existingCategory = await repositoryWrapper
-                .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
-                {
-                    Filter = category => category.Name == request.RequestDto.Name,
-                    AsNoTracking = false,
-                });
-
-            if (existingCategory != null)
-            {
-                return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants
-                    .CategoryAlreadyExistsErrorMessage);
-            }
-
-            PrivateCategory entity = mapper.Map<PrivateCategory>(request.RequestDto);
-            entity.Community = null;
-            entity.CommunityId = null;
-
-            await repositoryWrapper.PrivatePasswordCategoryRepository.CreateAsync(entity);
-
-            if (await repositoryWrapper.SaveChangesAsync() <= 0)
-            {
-                return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants.DbSaveErrorMessage);
-            }
-
-            PrivateCategoryResponseDto response = mapper.Map<PrivateCategoryResponseDto>(entity);
-
-            return Result.Ok(response);
+            return Result.Fail<PrivateCategoryResponseDto>(validationResult.Errors.First().ErrorMessage);
         }
-        catch
+
+        PrivateCategory? existingCategory = await repositoryWrapper
+            .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
+            {
+                Filter = category => category.Name == request.RequestDto.Name,
+                AsNoTracking = false,
+            });
+
+        if (existingCategory != null)
         {
-            return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants.ErrorMessage);
+            return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants
+                .CategoryAlreadyExistsErrorMessage);
         }
+
+        PrivateCategory entity = mapper.Map<PrivateCategory>(request.RequestDto);
+        entity.Community = null;
+        entity.CommunityId = null;
+
+        await repositoryWrapper.PrivatePasswordCategoryRepository.CreateAsync(entity);
+
+        if (await repositoryWrapper.SaveChangesAsync() <= 0)
+        {
+            return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants.DbSaveErrorMessage);
+        }
+
+        PrivateCategoryResponseDto response = mapper.Map<PrivateCategoryResponseDto>(entity);
+
+        return Result.Ok(response);
     }
 }

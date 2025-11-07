@@ -36,7 +36,11 @@ public class CreateUserHandler : IRequestHandler<CreateUserCommand, Result<AuthR
 
     public async Task<Result<AuthResponseDto>> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return Result.Fail<AuthResponseDto>(validationResult.Errors.First().ErrorMessage);
+        }
 
         User? existingUser = await repositoryWrapper.UserRepository.GetFirstOrDefaultAsync(new QueryOptions<User>
         {

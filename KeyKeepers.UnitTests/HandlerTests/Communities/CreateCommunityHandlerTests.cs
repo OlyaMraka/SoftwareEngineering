@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentResults;
 using KeyKeepers.BLL.Commands.Communities.Create;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Communities;
@@ -9,11 +8,8 @@ using KeyKeepers.DAL.Enums;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.Communities
 {
     public class CreateCommunityHandlerTests
     {
@@ -100,8 +96,8 @@ namespace KeyKeepers.UnitTests.HandlerTests
 
             repoMock.Setup(r => r.CommunityRepository.CreateAsync(community)).ReturnsAsync(community);
             repoMock.SetupSequence(r => r.SaveChangesAsync())
-                    .ReturnsAsync(1) // first success
-                    .ReturnsAsync(0); // second fails
+                    .ReturnsAsync(1)
+                    .ReturnsAsync(0);
 
             repoMock.Setup(r => r.CommunityUserRepository.CreateAsync(It.IsAny<CommunityUser>()))
                     .ReturnsAsync(communityUser);

@@ -1,18 +1,18 @@
-using Xunit;
 using Moq;
 using AutoMapper;
-using FluentResults;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.BLL.DTOs.Passwords;
+using KeyKeepers.BLL.Interfaces;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 
-namespace KeyKeepers.UnitTests.Handlers.Passwords
+namespace KeyKeepers.UnitTests.HandlerTests.Passwords
 {
     public class GetCredentialsByIdHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
+        private readonly Mock<IEncryptionService> encriptionServiceMock;
         private readonly Mock<IMapper> mapperMock;
         private readonly GetCredentialsByIdHandler handler;
 
@@ -20,7 +20,11 @@ namespace KeyKeepers.UnitTests.Handlers.Passwords
         {
             repositoryWrapperMock = new Mock<IRepositoryWrapper>();
             mapperMock = new Mock<IMapper>();
-            handler = new GetCredentialsByIdHandler(mapperMock.Object, repositoryWrapperMock.Object);
+            encriptionServiceMock = new Mock<IEncryptionService>();
+            handler = new GetCredentialsByIdHandler(
+                mapperMock.Object,
+                repositoryWrapperMock.Object,
+                encriptionServiceMock.Object);
         }
 
         [Fact]

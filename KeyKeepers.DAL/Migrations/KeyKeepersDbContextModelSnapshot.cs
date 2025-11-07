@@ -70,7 +70,7 @@ namespace KeyKeepers.DAL.Migrations
                     b.ToTable("Communities");
                 });
 
-            modelBuilder.Entity("KeyKeepers.DAL.Entities.CommunityUser", b =>
+            modelBuilder.Entity("KeyKeepers.DAL.Entities.CommunityUsers", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -236,7 +236,7 @@ namespace KeyKeepers.DAL.Migrations
                     b.Navigation("Community");
                 });
 
-            modelBuilder.Entity("KeyKeepers.DAL.Entities.CommunityUser", b =>
+            modelBuilder.Entity("KeyKeepers.DAL.Entities.CommunityUsers", b =>
                 {
                     b.HasOne("KeyKeepers.DAL.Entities.Community", "Community")
                         .WithMany("CommunityUsers")

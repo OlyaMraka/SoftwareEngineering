@@ -1,16 +1,11 @@
-using FluentResults;
 using KeyKeepers.BLL.Commands.PasswordCategory.Delete;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.PasswordCategories
 {
     public class DeletePasswordCategoryHandlerTests
     {
@@ -61,7 +56,7 @@ namespace KeyKeepers.UnitTests.HandlerTests
                     .Verifiable();
 
             repoMock.Setup(r => r.SaveChangesAsync())
-                    .ReturnsAsync(0); // імітуємо помилку збереження
+                    .ReturnsAsync(0);
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);

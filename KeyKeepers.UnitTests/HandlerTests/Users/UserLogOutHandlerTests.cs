@@ -1,5 +1,4 @@
-﻿using FluentResults;
-using KeyKeepers.BLL.Commands.Users.LogOut;
+﻿using KeyKeepers.BLL.Commands.Users.LogOut;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.DAL.Entities;
@@ -7,11 +6,8 @@ using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Interfaces.RefreshTokens;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.Users
 {
     public class UserLogOutHandlerTests
     {

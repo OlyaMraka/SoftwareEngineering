@@ -1,15 +1,11 @@
-using FluentResults;
 using KeyKeepers.BLL.Commands.Passwords.Delete;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.Passwords
 {
     public class DeletePasswordHandlerTests
     {

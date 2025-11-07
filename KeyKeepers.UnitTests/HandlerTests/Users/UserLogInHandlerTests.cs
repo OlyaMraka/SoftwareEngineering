@@ -8,7 +8,7 @@ using KeyKeepers.DAL.Repositories.Options;
 using Microsoft.AspNetCore.Identity;
 using Moq;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.Users
 {
     public class UserLogInHandlerTests
     {

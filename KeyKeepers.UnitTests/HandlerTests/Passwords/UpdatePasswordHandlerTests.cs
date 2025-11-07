@@ -1,25 +1,22 @@
 using AutoMapper;
-using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using KeyKeepers.BLL.Commands.Passwords.Update;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Passwords;
+using KeyKeepers.BLL.Interfaces;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.Passwords
 {
     public class UpdatePasswordHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<IMapper> mapperMock;
+        private readonly Mock<IEncryptionService> encryptionServiceMock;
         private readonly Mock<IValidator<UpdatePasswordCommand>> validatorMock;
         private readonly UpdatePasswordHandler handler;
 
@@ -27,9 +24,14 @@ namespace KeyKeepers.UnitTests.HandlerTests
         {
             repoMock = new Mock<IRepositoryWrapper>();
             mapperMock = new Mock<IMapper>();
+            encryptionServiceMock = new Mock<IEncryptionService>();
             validatorMock = new Mock<IValidator<UpdatePasswordCommand>>();
 
-            handler = new UpdatePasswordHandler(mapperMock.Object, repoMock.Object, validatorMock.Object);
+            handler = new UpdatePasswordHandler(
+                mapperMock.Object,
+                encryptionServiceMock.Object,
+                repoMock.Object,
+                validatorMock.Object);
         }
 
         [Fact]

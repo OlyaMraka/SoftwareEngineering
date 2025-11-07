@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using KeyKeepers.BLL.Commands.Users.Create;
@@ -10,11 +9,8 @@ using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.Users
 {
     public class CreateUserHandlerTests
     {
@@ -53,7 +49,6 @@ namespace KeyKeepers.UnitTests.HandlerTests
                 Password = "Password1!",
             });
 
-            // Замокаємо валідатор через ValidateAsync, щоб не кидати exception
             validatorMock.Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
                          .ReturnsAsync(new ValidationResult());
 

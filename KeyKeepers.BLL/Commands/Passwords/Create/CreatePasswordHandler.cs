@@ -3,6 +3,7 @@ using FluentResults;
 using FluentValidation;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Passwords;
+using KeyKeepers.BLL.Interfaces;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
@@ -14,14 +15,17 @@ public class CreatePasswordHandler : IRequestHandler<CreatePasswordCommand, Resu
 {
     private readonly IMapper mapper;
     private readonly IRepositoryWrapper repositoryWrapper;
+    private readonly IEncryptionService encryptionService;
     private readonly IValidator<CreatePasswordCommand> validator;
 
     public CreatePasswordHandler(
         IMapper mapperObj,
         IRepositoryWrapper repositoryWrapperObj,
+        IEncryptionService encryptionServiceObj,
         IValidator<CreatePasswordCommand> validatorObj)
     {
         mapper = mapperObj;
+        encryptionService = encryptionServiceObj;
         repositoryWrapper = repositoryWrapperObj;
         validator = validatorObj;
     }
@@ -49,6 +53,7 @@ public class CreatePasswordHandler : IRequestHandler<CreatePasswordCommand, Resu
         }
 
         Credentials newEntity = mapper.Map<Credentials>(request.Request);
+        newEntity.PasswordHash = encryptionService.Encrypt(request.Request.Password);
 
         await repositoryWrapper.PasswordRepository.CreateAsync(newEntity);
 

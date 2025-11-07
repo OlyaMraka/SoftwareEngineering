@@ -30,39 +30,36 @@ public class UpdatePrivateCategoryHandler : IRequestHandler<UpdatePrivateCategor
         UpdatePrivateCategoryCommand request,
         CancellationToken cancellationToken)
     {
-        try
+        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            await validator.ValidateAndThrowAsync(request, cancellationToken);
-
-            PrivateCategory? existingCategory = await repositoryWrapper
-                .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
-                {
-                    Filter = category => category.Id == request.RequestDto.Id,
-                    AsNoTracking = false,
-                });
-
-            if (existingCategory == null)
-            {
-                return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants
-                    .CategoryNotFound);
-            }
-
-            mapper.Map(request.RequestDto, existingCategory);
-
-            repositoryWrapper.PrivatePasswordCategoryRepository.Update(existingCategory);
-
-            if (await repositoryWrapper.SaveChangesAsync() <= 0)
-            {
-                return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants.DbSaveErrorMessage);
-            }
-
-            PrivateCategoryResponseDto response = mapper.Map<PrivateCategoryResponseDto>(existingCategory);
-
-            return Result.Ok(response);
+            return Result.Fail<PrivateCategoryResponseDto>(validationResult.Errors.First().ErrorMessage);
         }
-        catch
+
+        PrivateCategory? existingCategory = await repositoryWrapper
+            .PrivatePasswordCategoryRepository.GetFirstOrDefaultAsync(new QueryOptions<PrivateCategory>
+            {
+                Filter = category => category.Id == request.RequestDto.Id,
+                AsNoTracking = false,
+            });
+
+        if (existingCategory == null)
         {
-            return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants.ErrorMessage);
+            return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants
+                .CategoryNotFound);
         }
+
+        mapper.Map(request.RequestDto, existingCategory);
+
+        repositoryWrapper.PrivatePasswordCategoryRepository.Update(existingCategory);
+
+        if (await repositoryWrapper.SaveChangesAsync() <= 0)
+        {
+            return Result.Fail<PrivateCategoryResponseDto>(PasswordCategoriesConstants.DbSaveErrorMessage);
+        }
+
+        PrivateCategoryResponseDto response = mapper.Map<PrivateCategoryResponseDto>(existingCategory);
+
+        return Result.Ok(response);
     }
 }

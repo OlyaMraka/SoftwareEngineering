@@ -1,7 +1,5 @@
-using Xunit;
 using Moq;
 using AutoMapper;
-using FluentResults;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
 using KeyKeepers.DAL.Entities;
@@ -9,7 +7,7 @@ using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using KeyKeepers.BLL.Constants;
 
-namespace KeyKeepers.UnitTests.Handlers.PasswordCategories
+namespace KeyKeepers.UnitTests.HandlerTests.PasswordCategories
 {
     public class GetAllPrivateCategoriesHandlerTests
     {

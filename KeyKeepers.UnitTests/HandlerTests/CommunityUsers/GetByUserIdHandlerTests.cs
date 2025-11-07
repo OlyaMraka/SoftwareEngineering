@@ -1,4 +1,3 @@
-using Xunit;
 using Moq;
 using FluentAssertions;
 using AutoMapper;
@@ -8,12 +7,8 @@ using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Options;
 using KeyKeepers.BLL.DTOs.CommunityUsers;
 using KeyKeepers.BLL.DTOs.Communities;
-using FluentResults;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.CommunityUsers
 {
     public class GetByUserIdHandlerTests
     {

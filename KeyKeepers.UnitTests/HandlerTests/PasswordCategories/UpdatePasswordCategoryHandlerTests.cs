@@ -1,6 +1,6 @@
 using AutoMapper;
-using FluentResults;
 using FluentValidation;
+using FluentValidation.Results;
 using KeyKeepers.BLL.Commands.PasswordCategory.Update;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
@@ -9,21 +9,45 @@ using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.PasswordCategories
 {
     public class UpdatePasswordCategoryHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<IMapper> mapperMock;
+        private readonly Mock<IValidator<UpdatePrivateCategoryCommand>> validatorMock;
         private readonly UpdatePrivateCategoryHandler handler;
-        private readonly Mock<IValidator<UpdatePrivateCategoryCommand>> validator;
 
         public UpdatePasswordCategoryHandlerTests()
         {
             repoMock = new Mock<IRepositoryWrapper>();
             mapperMock = new Mock<IMapper>();
-            validator = new Mock<IValidator<UpdatePrivateCategoryCommand>>();
-            handler = new UpdatePrivateCategoryHandler(repoMock.Object, mapperMock.Object, validator.Object);
+            validatorMock = new Mock<IValidator<UpdatePrivateCategoryCommand>>();
+
+            handler = new UpdatePrivateCategoryHandler(
+                repoMock.Object,
+                mapperMock.Object,
+                validatorMock.Object);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldReturn_Fail_When_ValidationFails()
+        {
+            // Arrange
+            var dto = new UpdatePrivateCategoryDto { Id = 1, Name = string.Empty }; // invalid
+            var command = new UpdatePrivateCategoryCommand(dto);
+
+            var validationFailure = new ValidationFailure("Name", "Name is required");
+            validatorMock
+                .Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ValidationResult(new[] { validationFailure }));
+
+            // Act
+            var result = await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.False(result.IsSuccess);
+            Assert.Equal("Name is required", result.Errors[0].Message);
         }
 
         [Fact]
@@ -32,6 +56,10 @@ namespace KeyKeepers.UnitTests.HandlerTests
             // Arrange
             var dto = new UpdatePrivateCategoryDto { Id = 5, Name = "UpdatedName" };
             var command = new UpdatePrivateCategoryCommand(dto);
+
+            validatorMock
+                .Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ValidationResult()); // valid
 
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository
                 .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
@@ -53,18 +81,22 @@ namespace KeyKeepers.UnitTests.HandlerTests
             var command = new UpdatePrivateCategoryCommand(dto);
             var existingCategory = new PrivateCategory { Id = 2, Name = "Work" };
 
+            validatorMock
+                .Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ValidationResult()); // valid
+
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository
                 .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
                 .ReturnsAsync(existingCategory);
 
-            mapperMock.Setup(m => m.Map(command, existingCategory))
+            mapperMock.Setup(m => m.Map(command.RequestDto, existingCategory))
                       .Verifiable();
 
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.Update(existingCategory))
                     .Verifiable();
 
             repoMock.Setup(r => r.SaveChangesAsync())
-                    .ReturnsAsync(0); // помилка при збереженні
+                    .ReturnsAsync(0); // симулюємо помилку збереження
 
             // Act
             var result = await handler.Handle(command, CancellationToken.None);
@@ -82,11 +114,15 @@ namespace KeyKeepers.UnitTests.HandlerTests
             var command = new UpdatePrivateCategoryCommand(dto);
             var existingCategory = new PrivateCategory { Id = 1, Name = "Personal" };
 
+            validatorMock
+                .Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ValidationResult()); // valid
+
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository
                 .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
                 .ReturnsAsync(existingCategory);
 
-            mapperMock.Setup(m => m.Map(command, existingCategory))
+            mapperMock.Setup(m => m.Map(command.RequestDto, existingCategory))
                       .Verifiable();
 
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.Update(existingCategory))
@@ -113,22 +149,25 @@ namespace KeyKeepers.UnitTests.HandlerTests
         }
 
         [Fact]
-        public async Task Handle_ShouldReturn_Fail_When_ExceptionThrown()
+        public async Task Handle_ShouldThrowException_When_RepositoryThrows()
         {
             // Arrange
             var dto = new UpdatePrivateCategoryDto { Id = 10, Name = "ErrorCase" };
             var command = new UpdatePrivateCategoryCommand(dto);
 
+            validatorMock
+                .Setup(v => v.ValidateAsync(command, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new ValidationResult()); // valid
+
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository
-                .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
-                .ThrowsAsync(new System.Exception("DB error"));
+                    .GetFirstOrDefaultAsync(It.IsAny<QueryOptions<PrivateCategory>>()))
+                .ThrowsAsync(new Exception("DB error"));
 
-            // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            // Act + Assert
+            var ex = await Assert.ThrowsAsync<Exception>(async () =>
+                await handler.Handle(command, CancellationToken.None));
 
-            // Assert
-            Assert.False(result.IsSuccess);
-            Assert.Equal(PasswordCategoriesConstants.ErrorMessage, result.Errors[0].Message);
+            Assert.Equal("DB error", ex.Message);
         }
     }
 }

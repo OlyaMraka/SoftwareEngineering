@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentResults;
 using FluentValidation;
 using FluentValidation.Results;
 using KeyKeepers.BLL.Commands.PasswordCategory.Create;
@@ -9,11 +8,8 @@ using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using System.Threading;
-using System.Threading.Tasks;
-using Xunit;
 
-namespace KeyKeepers.UnitTests.HandlerTests
+namespace KeyKeepers.UnitTests.HandlerTests.PasswordCategories
 {
     public class CreatePasswordCategoryHandlerTests
     {
@@ -114,42 +110,45 @@ namespace KeyKeepers.UnitTests.HandlerTests
             repoMock.Setup(r => r.PrivatePasswordCategoryRepository.CreateAsync(entity))
                 .ReturnsAsync(entity);
 
-            // Мокаємо збереження
             repoMock.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
 
-            // Мокаємо мапінг для відповіді
             var responseDto = new PrivateCategoryResponseDto { Id = 2, Name = "Work" };
             mapperMock.Setup(m => m.Map<PrivateCategoryResponseDto>(entity)).Returns(responseDto);
 
-            // Створюємо хендлер
             var handler = new CreatePrivateCategoryHandler(mapperMock.Object, repoMock.Object, validatorMock.Object);
 
-            // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
-            // Assert
             Assert.True(result.IsSuccess);
             Assert.Equal(responseDto.Id, result.Value.Id);
             Assert.Equal("Work", result.Value.Name);
         }
 
         [Fact]
-        public async Task Handle_ShouldThrow_When_ValidationFails()
+        public async Task Handle_ShouldReturnFail_When_ValidationFails()
         {
             // Arrange
-            var command = new CreatePrivateCategoryCommand(new CreatePrivateCategoryDto()
+            var command = new CreatePrivateCategoryCommand(new CreatePrivateCategoryDto
             {
                 Name = "ErrorCategory",
+            });
+
+            var validationResult = new ValidationResult(new List<FluentValidation.Results.ValidationFailure>
+            {
+                new FluentValidation.Results.ValidationFailure("Name", "Validation failed"),
             });
 
             validatorMock.Setup(v => v.ValidateAsync(
                     It.IsAny<CreatePrivateCategoryCommand>(),
                     It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new ValidationException("Validation failed"));
+                .ReturnsAsync(validationResult);
 
+            // Act
             var result = await handler.Handle(command, CancellationToken.None);
 
+            // Assert
             Assert.True(result.IsFailed);
+            Assert.Equal("Validation failed", result.Errors.First().Message);
         }
     }
 }
