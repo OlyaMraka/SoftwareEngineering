@@ -29,5 +29,10 @@ public class CommunityConfiguration : IEntityTypeConfiguration<Community>
             .WithOne(x => x.Community)
             .HasForeignKey(x => x.CommunityId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder.HasMany(x => x.JoinRequests)
+            .WithOne(x => x.Community)
+            .HasForeignKey(x => x.CommunityId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

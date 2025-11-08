@@ -25,4 +25,6 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<PrivateCategory> PrivateCategories { get; set; } = new List<PrivateCategory>();
+
+    public ICollection<JoinRequest> JoinRequests { get; set; } = new List<JoinRequest>();
 }

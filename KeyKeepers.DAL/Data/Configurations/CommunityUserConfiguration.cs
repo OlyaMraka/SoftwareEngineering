@@ -32,5 +32,10 @@ public class CommunityUserConfiguration : IEntityTypeConfiguration<CommunityUser
         builder.Property(x => x.CreatedAt)
             .IsRequired()
             .ValueGeneratedOnAdd();
+
+        builder.HasMany(x => x.Requests)
+            .WithOne(x => x.Sender)
+            .HasForeignKey(x => x.SenderId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

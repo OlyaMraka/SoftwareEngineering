@@ -1,5 +1,6 @@
 using KeyKeepers.DAL.Repositories.Interfaces.Communities;
 using KeyKeepers.DAL.Repositories.Interfaces.CommunityUsers;
+using KeyKeepers.DAL.Repositories.Interfaces.JoinRequests;
 using KeyKeepers.DAL.Repositories.Interfaces.PasswordCategories;
 using KeyKeepers.DAL.Repositories.Interfaces.Passwords;
 using KeyKeepers.DAL.Repositories.Interfaces.RefreshTokens;
@@ -20,6 +21,8 @@ public interface IRepositoryWrapper
     IPasswordCategoryRepository PrivatePasswordCategoryRepository { get; }
 
     IPasswordRepository PasswordRepository { get; }
+
+    IJoinRequestRepository JoinRequestRepository { get; }
 
     int SaveChanges();
 

@@ -17,4 +17,6 @@ public class CommunityUser
     public Community Community { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    public ICollection<JoinRequest> Requests { get; set; } = new List<JoinRequest>();
 }

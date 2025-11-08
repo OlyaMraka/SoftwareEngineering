@@ -1,3 +1,4 @@
+using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.DAL.Enums;
 
 namespace KeyKeepers.BLL.DTOs.CommunityUsers;

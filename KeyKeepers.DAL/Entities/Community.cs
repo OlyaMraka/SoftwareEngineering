@@ -11,4 +11,6 @@ public class Community
     public ICollection<CommunityUser> CommunityUsers { get; set; } = new List<CommunityUser>();
 
     public ICollection<BaseCategory> Categories { get; set; } = new List<BaseCategory>();
+
+    public ICollection<JoinRequest> JoinRequests { get; set; } = new List<JoinRequest>();
 }
