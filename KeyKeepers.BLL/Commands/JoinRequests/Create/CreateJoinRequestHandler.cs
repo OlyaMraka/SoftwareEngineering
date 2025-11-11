@@ -39,7 +39,7 @@ public class CreateJoinRequestHandler : IRequestHandler<CreateJoinRequestCommand
             return Result.Fail<JoinRequestResponseDto>(JoinRequestConstants.RequestAlreadyExistsError);
         }
 
-        JoinRequest newEntity = mapper.Map<JoinRequest>(request);
+        JoinRequest newEntity = mapper.Map<JoinRequest>(request.RequestDto);
 
         await repositoryWrapper.JoinRequestRepository.CreateAsync(newEntity);
 

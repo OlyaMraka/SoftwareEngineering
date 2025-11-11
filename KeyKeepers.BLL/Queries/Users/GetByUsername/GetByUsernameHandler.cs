@@ -4,9 +4,7 @@ using AutoMapper;
 using FluentResults;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Users;
-using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
-using KeyKeepers.DAL.Repositories.Options;
 
 namespace KeyKeepers.BLL.Queries.Users.GetByUsername;
 
@@ -25,19 +23,13 @@ public class GetByUsernameHandler : IRequestHandler<GetByUsernameQuery, Result<I
         GetByUsernameQuery request,
         CancellationToken cancellationToken)
     {
-        QueryOptions<User> options = new QueryOptions<User>
-        {
-            Filter = c => Fuzz.Ratio(c.UserName.ToLower(), request.Username.ToLower()) > 70,
-        };
+        var entities = await repositoryWrapper.UserRepository.GetAllAsync();
 
-        var entities = await repositoryWrapper.UserRepository.GetAllAsync(options);
+        var filtered = entities
+            .ToList()
+            .Where(c => Fuzz.Ratio(c.UserName.ToLower(), request.Username.ToLower()) > 70);
 
-        if (!entities.Any())
-        {
-            return Result.Fail<IEnumerable<UserResponseDto>>(UserConstants.DataNotFound);
-        }
-
-        IEnumerable<UserResponseDto> response = mapper.Map<IEnumerable<UserResponseDto>>(entities);
+        IEnumerable<UserResponseDto> response = mapper.Map<IEnumerable<UserResponseDto>>(filtered);
 
         return Result.Ok(response);
     }
