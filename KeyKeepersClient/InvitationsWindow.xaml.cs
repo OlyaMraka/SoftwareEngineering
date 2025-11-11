@@ -64,6 +64,9 @@ public partial class InvitationsWindow : Window
                     NoInvitationsText.Visibility = Visibility.Visible;
                     AcceptAllButton.IsEnabled = false;
                     DeclineAllButton.IsEnabled = false;
+
+                    // Notify parent to hide the button
+                    onInvitationHandled?.Invoke();
                 }
                 else
                 {
@@ -73,8 +76,19 @@ public partial class InvitationsWindow : Window
 
                     foreach (var invitation in invitations)
                     {
-                        var card = CreateInvitationCard(invitation);
-                        InvitationsPanel.Children.Add(card);
+                        try
+                        {
+                            var card = CreateInvitationCard(invitation);
+                            InvitationsPanel.Children.Add(card);
+                        }
+                        catch (Exception cardEx)
+                        {
+                            MessageBox.Show(
+                                $"Error creating invitation card: {cardEx.Message}\nInvitation ID: {invitation.Id}",
+                                "Card Creation Error",
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                        }
                     }
                 }
             }
@@ -90,7 +104,7 @@ public partial class InvitationsWindow : Window
         catch (Exception ex)
         {
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
+                $"An error occurred: {ex.Message}\nStack trace: {ex.StackTrace}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -120,7 +134,7 @@ public partial class InvitationsWindow : Window
 
         var communityText = new TextBlock
         {
-            Text = invitation.Community.Name,
+            Text = invitation.Community?.Name ?? "Unknown Community",
             FontFamily = new FontFamily("Bahnschrift"),
             FontSize = 18,
             FontWeight = FontWeights.Bold,
@@ -130,7 +144,7 @@ public partial class InvitationsWindow : Window
 
         var fromText = new TextBlock
         {
-            Text = $"From: {invitation.SenderUsername}",
+            Text = $"From: {invitation.SenderUsername ?? "Unknown"}",
             FontFamily = new FontFamily("Bahnschrift"),
             FontSize = 14,
             Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#999999")),

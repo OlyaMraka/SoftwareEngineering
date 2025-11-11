@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="Add User to Community"
         Icon="Images/logo.png"
-        Height="400"
-        Width="500"
+        Height="500"
+        Width="550"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"
@@ -42,7 +42,7 @@
 
                     <!-- Icon -->
                     <Image Grid.Column="0"
-                           Source="Images/plus.png"
+                           Source="Images/Teams/admin.png"
                            Width="24"
                            Height="24"
                            HorizontalAlignment="Center"
@@ -78,71 +78,162 @@
             <!-- Main Content -->
             <StackPanel Grid.Row="1"
                         Margin="30,20,30,20">
-                <!-- Username Field -->
-                <TextBlock Text="Username"
+                <!-- Community Name Display -->
+                <TextBlock Text="Community"
                            FontFamily="Bahnschrift"
                            FontSize="14"
                            FontWeight="SemiBold"
                            Foreground="White"
                            Margin="0,0,0,8"/>
 
-                <Border x:Name="UsernameBorder"
-                        Background="#0E121B"
+                <Border Background="#0E121B"
                         BorderBrush="#222A39"
                         BorderThickness="2"
                         CornerRadius="10"
                         Height="45"
-                        Margin="0,0,0,5">
-                    <TextBox x:Name="UsernameTextBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="14"
-                             VerticalAlignment="Center"
-                             VerticalContentAlignment="Center"
-                             Padding="15,0"
-                             MaxLength="50"
-                             TextChanged="UsernameTextBox_TextChanged"/>
+                        Margin="0,0,0,20">
+                    <TextBlock x:Name="CommunityNameTextBlock"
+                               FontFamily="Bahnschrift"
+                               FontSize="14"
+                               Foreground="#999999"
+                               VerticalAlignment="Center"
+                               Padding="15,0"/>
                 </Border>
 
-                <!-- Status Message -->
-                <TextBlock x:Name="StatusTextBlock"
+                <!-- Username Search Field -->
+                <TextBlock Text="Search Username"
+                           FontFamily="Bahnschrift"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           Margin="0,0,0,8"/>
+
+                <Grid>
+                    <Border x:Name="UsernameSearchBorder"
+                            Background="#0E121B"
+                            BorderBrush="#222A39"
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Height="45"
+                            Margin="0,0,0,0">
+                        <TextBox x:Name="UsernameSearchTextBox"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="White"
+                                 FontFamily="Bahnschrift"
+                                 FontSize="14"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Padding="15,0"
+                                 TextChanged="UsernameSearchTextBox_TextChanged"
+                                 PreviewKeyDown="UsernameSearchTextBox_PreviewKeyDown"/>
+                    </Border>
+
+                    <!-- Suggestions Popup -->
+                    <Popup x:Name="SuggestionsPopup"
+                           PlacementTarget="{Binding ElementName=UsernameSearchBorder}"
+                           Placement="Bottom"
+                           AllowsTransparency="True"
+                           StaysOpen="False"
+                           PopupAnimation="Fade">
+                        <Border Background="#0E121B"
+                                BorderBrush="#222A39"
+                                BorderThickness="2"
+                                CornerRadius="10"
+                                MaxHeight="200"
+                                Width="{Binding ElementName=UsernameSearchBorder, Path=ActualWidth}">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                          HorizontalScrollBarVisibility="Disabled">
+                                <ListBox x:Name="SuggestionsListBox"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Foreground="White"
+                                         FontFamily="Bahnschrift"
+                                         FontSize="14"
+                                         SelectionChanged="SuggestionsListBox_SelectionChanged"
+                                         MouseLeftButtonUp="SuggestionsListBox_MouseLeftButtonUp">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="Background"
+                                                    Value="Transparent"/>
+                                            <Setter Property="Foreground"
+                                                    Value="White"/>
+                                            <Setter Property="Padding"
+                                                    Value="15,10"/>
+                                            <Setter Property="Cursor"
+                                                    Value="Hand"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <Border x:Name="ItemBorder"
+                                                                Background="{TemplateBinding Background}"
+                                                                Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver"
+                                                                    Value="True">
+                                                                <Setter TargetName="ItemBorder"
+                                                                        Property="Background"
+                                                                        Value="#222A39"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsSelected"
+                                                                    Value="True">
+                                                                <Setter TargetName="ItemBorder"
+                                                                        Property="Background"
+                                                                        Value="#2A3547"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                            </ScrollViewer>
+                        </Border>
+                    </Popup>
+                </Grid>
+
+                <!-- Search Status -->
+                <TextBlock x:Name="SearchStatusTextBlock"
                            FontFamily="Bahnschrift"
                            FontSize="12"
-                           Margin="5,5,0,10"
+                           Foreground="#666666"
+                           Margin="5,5,0,15"
                            Visibility="Collapsed"/>
 
+                <!-- Selected User Info Panel -->
+                <Border x:Name="UserInfoPanel"
+                        Background="#0E121B"
+                        BorderBrush="#1B5E40"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Padding="15"
+                        Margin="0,10,0,0"
+                        Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock Text="Selected User"
+                                   FontFamily="Bahnschrift"
+                                   FontSize="12"
+                                   FontWeight="SemiBold"
+                                   Foreground="#999999"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock x:Name="SelectedUsernameTextBlock"
+                                   FontFamily="Bahnschrift"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                    </StackPanel>
+                </Border>
+
                 <!-- Info Text -->
-                <TextBlock Text="Enter the username of the user you want to add to the community."
+                <TextBlock Text="Type to search for users. Select a user from the dropdown to add them to the community."
                            FontFamily="Bahnschrift"
                            FontSize="13"
                            Foreground="#999999"
                            TextWrapping="Wrap"
-                           Margin="0,10,0,20"/>
-
-                <!-- User Info Panel (shown when user is found) -->
-                <Border x:Name="UserInfoPanel"
-                        Background="#0E121B"
-                        BorderBrush="#222A39"
-                        BorderThickness="2"
-                        CornerRadius="10"
-                        Padding="15"
-                        Visibility="Collapsed"
-                        Margin="0,0,0,10">
-                    <StackPanel>
-                        <TextBlock Text="User Found:"
-                                   FontFamily="Bahnschrift"
-                                   FontSize="12"
-                                   Foreground="#999999"
-                                   Margin="0,0,0,5"/>
-                        <TextBlock x:Name="FoundUsernameTextBlock"
-                                   FontFamily="Bahnschrift"
-                                   FontSize="16"
-                                   FontWeight="SemiBold"
-                                   Foreground="White"/>
-                    </StackPanel>
-                </Border>
+                           Margin="0,20,0,0"/>
             </StackPanel>
 
             <!-- Bottom Buttons -->
@@ -210,7 +301,7 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsEnabled"
-                                                    Value="False">
+                                                     Value="False">
                                                 <Setter TargetName="border"
                                                         Property="Background"
                                                         Value="#0E121B"/>

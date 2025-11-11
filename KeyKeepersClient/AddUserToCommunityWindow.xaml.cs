@@ -1,6 +1,7 @@
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Threading;
 using KeyKeepers.BLL.Commands.JoinRequests.Create;
 using KeyKeepers.BLL.DTOs.JoinRequests;
 using KeyKeepers.BLL.DTOs.Users;
@@ -13,26 +14,27 @@ namespace KeyKeepersClient;
 public partial class AddUserToCommunityWindow : Window
 {
     private readonly CommunityItem community;
-    private readonly long currentUserId;
+    private readonly long senderId;
     private readonly IMediator mediator;
-    private UserResponseDto? foundUser = null;
-    private System.Timers.Timer? debounceTimer;
+    private DispatcherTimer searchDebounceTimer;
+    private UserResponseDto? selectedUser;
+    private List<UserResponseDto> currentSuggestions = new();
 
-    public AddUserToCommunityWindow(CommunityItem communityItem, long userId)
+    public AddUserToCommunityWindow(CommunityItem communityItem, long currentUserId)
     {
         InitializeComponent();
         community = communityItem;
-        currentUserId = userId;
+        senderId = currentUserId;
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
 
-        UsernameTextBox.Focus();
-    }
+        CommunityNameTextBlock.Text = community.Name;
 
-    protected override void OnClosed(EventArgs e)
-    {
-        debounceTimer?.Stop();
-        debounceTimer?.Dispose();
-        base.OnClosed(e);
+        // Initialize debounce timer for search
+        searchDebounceTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromMilliseconds(300),
+        };
+        searchDebounceTimer.Tick += SearchDebounceTimer_Tick;
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -53,97 +55,133 @@ public partial class AddUserToCommunityWindow : Window
         this.Close();
     }
 
-    private void UsernameTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    private void UsernameSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        // Cancel existing timer
-        debounceTimer?.Stop();
-        debounceTimer?.Dispose();
+        // Reset debounce timer
+        searchDebounceTimer.Stop();
+        searchDebounceTimer.Start();
 
-        var username = UsernameTextBox.Text.Trim();
-
-        if (string.IsNullOrWhiteSpace(username))
+        // Clear selection if text changed
+        if (selectedUser != null && UsernameSearchTextBox.Text.Trim() != selectedUser.UserName)
         {
-            ResetUI();
-            return;
-        }
-
-        // Create new timer for debouncing (wait 500ms after user stops typing)
-        debounceTimer = new System.Timers.Timer(500);
-        debounceTimer.Elapsed += async (s, ev) =>
-        {
-            debounceTimer.Stop();
-            await Dispatcher.InvokeAsync(async () => await SearchUserAsync(username));
-        };
-        debounceTimer.Start();
-    }
-
-    private async Task SearchUserAsync(string username)
-    {
-        try
-        {
-            var query = new GetByUsernameQuery(username);
-            var result = await mediator.Send(query);
-
-            if (result.IsSuccess && result.Value.Any())
-            {
-                // User found
-                foundUser = result.Value.First();
-
-                // Update UI - Green border
-                UsernameBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CAF50"));
-                UsernameBorder.BorderThickness = new Thickness(2);
-
-                // Show status
-                StatusTextBlock.Text = "✓ User found";
-                StatusTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4CAF50"));
-                StatusTextBlock.Visibility = Visibility.Visible;
-
-                // Show user info
-                FoundUsernameTextBlock.Text = foundUser.UserName;
-                UserInfoPanel.Visibility = Visibility.Visible;
-
-                // Enable add button
-                AddButton.IsEnabled = true;
-            }
-            else
-            {
-                // User not found - Red border
-                foundUser = null;
-
-                UsernameBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6B6B"));
-                UsernameBorder.BorderThickness = new Thickness(2);
-
-                StatusTextBlock.Text = "✗ User not found";
-                StatusTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6B6B"));
-                StatusTextBlock.Visibility = Visibility.Visible;
-
-                UserInfoPanel.Visibility = Visibility.Collapsed;
-                AddButton.IsEnabled = false;
-            }
-        }
-        catch (Exception ex)
-        {
-            StatusTextBlock.Text = $"Error: {ex.Message}";
-            StatusTextBlock.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6B6B"));
-            StatusTextBlock.Visibility = Visibility.Visible;
+            selectedUser = null;
+            UserInfoPanel.Visibility = Visibility.Collapsed;
             AddButton.IsEnabled = false;
         }
     }
 
-    private void ResetUI()
+    private async void SearchDebounceTimer_Tick(object? sender, EventArgs e)
     {
-        foundUser = null;
-        UsernameBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#222A39"));
-        UsernameBorder.BorderThickness = new Thickness(2);
-        StatusTextBlock.Visibility = Visibility.Collapsed;
-        UserInfoPanel.Visibility = Visibility.Collapsed;
-        AddButton.IsEnabled = false;
+        searchDebounceTimer.Stop();
+
+        string searchText = UsernameSearchTextBox.Text.Trim();
+
+        if (string.IsNullOrEmpty(searchText))
+        {
+            SuggestionsPopup.IsOpen = false;
+            SearchStatusTextBlock.Visibility = Visibility.Collapsed;
+            return;
+        }
+
+        try
+        {
+            SearchStatusTextBlock.Text = "Searching...";
+            SearchStatusTextBlock.Visibility = Visibility.Visible;
+
+            var query = new GetByUsernameQuery(searchText);
+            var result = await mediator.Send(query);
+
+            if (result.IsSuccess)
+            {
+                currentSuggestions = result.Value.ToList();
+
+                if (currentSuggestions.Any())
+                {
+                    SuggestionsListBox.ItemsSource = currentSuggestions.Select(u => u.UserName).ToList();
+                    SuggestionsPopup.IsOpen = true;
+                    SearchStatusTextBlock.Text = $"{currentSuggestions.Count} user(s) found";
+                }
+                else
+                {
+                    SuggestionsPopup.IsOpen = false;
+                    SearchStatusTextBlock.Text = "No users found";
+                }
+            }
+            else
+            {
+                SuggestionsPopup.IsOpen = false;
+                SearchStatusTextBlock.Text = "Search failed";
+            }
+        }
+        catch (Exception ex)
+        {
+            SearchStatusTextBlock.Text = $"Error: {ex.Message}";
+            SuggestionsPopup.IsOpen = false;
+        }
+    }
+
+    private void SuggestionsListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (SuggestionsListBox.SelectedItem is string selectedUsername)
+        {
+            selectedUser = currentSuggestions.FirstOrDefault(u => u.UserName == selectedUsername);
+
+            if (selectedUser != null)
+            {
+                UsernameSearchTextBox.Text = selectedUser.UserName;
+                SelectedUsernameTextBlock.Text = selectedUser.UserName;
+                UserInfoPanel.Visibility = Visibility.Visible;
+                AddButton.IsEnabled = true;
+                SuggestionsPopup.IsOpen = false;
+                SearchStatusTextBlock.Visibility = Visibility.Collapsed;
+            }
+        }
+    }
+
+    private void SuggestionsListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        // Handle selection on mouse click
+        if (SuggestionsListBox.SelectedItem != null)
+        {
+            SuggestionsListBox_SelectionChanged(sender, null!);
+        }
+    }
+
+    private void UsernameSearchTextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Down && SuggestionsPopup.IsOpen)
+        {
+            // Move focus to suggestions list
+            if (SuggestionsListBox.Items.Count > 0)
+            {
+                SuggestionsListBox.SelectedIndex = 0;
+                SuggestionsListBox.Focus();
+                e.Handled = true;
+            }
+        }
+        else if (e.Key == Key.Enter && selectedUser != null)
+        {
+            // Add user on Enter key
+            AddButton_Click(sender, e);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            // Close popup on Escape
+            SuggestionsPopup.IsOpen = false;
+            e.Handled = true;
+        }
     }
 
     private async void AddButton_Click(object sender, RoutedEventArgs e)
     {
-        if (foundUser == null)
+        if (selectedUser == null)
         {
+            MessageBox.Show(
+                "Please select a user from the suggestions.",
+                "No User Selected",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
             return;
         }
 
@@ -154,9 +192,8 @@ public partial class AddUserToCommunityWindow : Window
             var dto = new CreateRequestDto
             {
                 CommunityId = community.Id,
-                SenderId = currentUserId,
-                RecipientId = foundUser.Id,
-                Comment = $"Invitation to join {community.Name}",
+                RecipientId = selectedUser.Id,
+                SenderId = senderId,
             };
 
             var command = new CreateJoinRequestCommand(dto);
@@ -165,7 +202,7 @@ public partial class AddUserToCommunityWindow : Window
             if (result.IsSuccess)
             {
                 MessageBox.Show(
-                    $"Join request sent to user '{foundUser.UserName}' successfully!",
+                    $"Invitation sent to {selectedUser.UserName} successfully!",
                     "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -175,7 +212,7 @@ public partial class AddUserToCommunityWindow : Window
             else
             {
                 MessageBox.Show(
-                    $"Error sending join request: {result.Errors.FirstOrDefault()?.Message}",
+                    $"Error sending invitation: {result.Errors.FirstOrDefault()?.Message}",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);

@@ -35,7 +35,7 @@
     <Resource Include="Images\Teams\admin.png"/>
     <Resource Include="Images\Teams\bust_0.png"/>
     <Resource Include="Images\Teams\bust_2.png"/>
-    <Resource Include="Images\Teams\mail_0.png"/><!-- Icons folder -->
+    <Resource Include="Images\Teams\mail_0.png"/>
     <Resource Include="Images\Icons\cell-phone_1.png"/>
     <Resource Include="Images\Icons\cell-phone_2.png"/>
     <Resource Include="Images\Icons\credit-card_1.png"/>
