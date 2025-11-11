@@ -19,6 +19,7 @@ using KeyKeepers.BLL.Queries.CommunityUsers.GetByUserId;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.BLL.Queries.Users.GetById;
+using KeyKeepers.DAL.Enums;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -933,6 +934,7 @@ public partial class MainWindow : Window
                     {
                         Id = communityUser.Community.Id,
                         Name = communityUser.Community.Name,
+                        UserRole = communityUser.UserRole,
                     };
 
                     communities.Add(communityItem);
@@ -1084,8 +1086,15 @@ public partial class MainWindow : Window
             favBtn.Content = favContent;
             CategoriesPanel.Children.Add(favBtn);
 
-            // Show admin panel button
-            AdminPanelButton.Visibility = Visibility.Visible;
+            // Show admin panel button only if user is Owner
+            if (community.UserRole == CommunityRole.Owner)
+            {
+                AdminPanelButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AdminPanelButton.Visibility = Visibility.Collapsed;
+            }
         }
     }
 
