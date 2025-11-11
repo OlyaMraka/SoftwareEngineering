@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using KeyKeepers.BLL.Commands.Communities.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Delete;
@@ -16,6 +17,7 @@ using KeyKeepers.BLL.DTOs.PasswordCategories;
 using KeyKeepers.BLL.DTOs.Passwords;
 using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.BLL.Queries.CommunityUsers.GetByUserId;
+using KeyKeepers.BLL.Queries.JoinRequests.GetByRecipientId;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.BLL.Queries.Users.GetById;
@@ -48,6 +50,7 @@ public partial class MainWindow : Window
     private string selectedPasswordIcon = "Images/Icons/internet_2.png";
     private Border? currentEditingPasswordCard = null;
     private PasswordData? currentEditingPassword = null;
+    private DispatcherTimer? invitationCheckTimer;
 
     public MainWindow(long userId)
     {
@@ -236,6 +239,12 @@ public partial class MainWindow : Window
         // Load all passwords by default (category ID = 0 means "All items")
         await LoadPasswordsAsync(0);
         await LoadCurrentUser();
+
+        // Start invitation check timer
+        StartInvitationCheckTimer();
+
+        // Check invitations immediately on load
+        await CheckForInvitationsAsync();
     }
 
     private async Task LoadCurrentUser()
@@ -2203,5 +2212,54 @@ public partial class MainWindow : Window
         }
 
         return null;
+    }
+
+    private void StartInvitationCheckTimer()
+    {
+        invitationCheckTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(15),
+        };
+        invitationCheckTimer.Tick += async (s, e) => await CheckForInvitationsAsync();
+        invitationCheckTimer.Start();
+    }
+
+    private async Task CheckForInvitationsAsync()
+    {
+        try
+        {
+            var query = new GetByRecipientIdQuery(userId);
+            var result = await mediator.Send(query);
+
+            if (result.IsSuccess && result.Value.Any())
+            {
+                // Show invitations button if there are pending invitations
+                InvitationsButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                // Hide button if no invitations
+                InvitationsButton.Visibility = Visibility.Collapsed;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error checking invitations: {ex.Message}");
+        }
+    }
+
+    private void InvitationsButton_Click(object sender, RoutedEventArgs e)
+    {
+        var invitationsWindow = new InvitationsWindow(userId, async () =>
+        {
+            // Refresh communities after accepting/declining invitations
+            await LoadCommunitiesAsync();
+            await CheckForInvitationsAsync();
+        })
+        {
+            Owner = this,
+        };
+
+        invitationsWindow.ShowDialog();
     }
 }

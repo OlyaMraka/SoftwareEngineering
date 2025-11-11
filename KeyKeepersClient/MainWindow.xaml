@@ -616,12 +616,34 @@
             <Grid Margin="15">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
+                <!-- Invitations Button (Semi-transparent, above title) -->
+                <Button x:Name="InvitationsButton"
+                        Grid.Row="0"
+                        Style="{StaticResource AddButtonStyle}"
+                        Margin="0,0,0,10"
+                        Opacity="0.7"
+                        Visibility="Collapsed"
+                        Click="InvitationsButton_Click">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <Image Source="Images/Teams/mail_0.png"
+                               Width="20"
+                               Height="20"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"/>
+                        <TextBlock Text="Invites"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
                 <!-- Title -->
-                <TextBlock Grid.Row="0"
+                <TextBlock Grid.Row="1"
                            Text="Communities"
                            FontFamily="Bahnschrift"
                            FontSize="18"
@@ -630,7 +652,7 @@
                            Margin="10,10,0,20"/>
 
                 <!-- Communities ScrollViewer -->
-                <ScrollViewer Grid.Row="1"
+                <ScrollViewer Grid.Row="2"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled"
                               Style="{StaticResource CustomScrollViewer}"
@@ -647,7 +669,7 @@
 
                 <!-- Settings Button -->
                 <Button x:Name="SettingsButton"
-                        Grid.Row="2"
+                        Grid.Row="3"
                         Style="{StaticResource AddButtonStyle}"
                         Margin="0"
                         Click="SettingsButton_Click">
