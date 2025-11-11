@@ -19,6 +19,7 @@ using KeyKeepers.BLL.Queries.CommunityUsers.GetByUserId;
 using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.BLL.Queries.Users.GetById;
+using KeyKeepers.DAL.Enums;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,6 +35,7 @@ public partial class MainWindow : Window
     private Button? currentActiveCommunityButton;
     private ObservableCollection<CategoryItem> customCategories;
     private ObservableCollection<CommunityItem> communities;
+    private CommunityItem? currentCommunity = null;
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
     private long currentCategoryId = 0; // 0 means "All items"
@@ -932,6 +934,7 @@ public partial class MainWindow : Window
                     {
                         Id = communityUser.Community.Id,
                         Name = communityUser.Community.Name,
+                        UserRole = communityUser.UserRole,
                     };
 
                     communities.Add(communityItem);
@@ -970,11 +973,165 @@ public partial class MainWindow : Window
 
     private void CommunityButton_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show(
-            $"Цей функціонал ще в розробці!",
-            "Інформація",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        try
+        {
+            if (sender is Button btn)
+            {
+                CommunityItem community;
+
+                // Handle Private button (has string tag "0")
+                if (btn.Tag is string tagStr && tagStr == "0")
+                {
+                    community = new CommunityItem { Id = 0, Name = "Private" };
+                }
+                else if (btn.Tag is CommunityItem commItem)
+                {
+                    community = commItem;
+                }
+                else
+                {
+                    return;
+                }
+
+                _ = EnterCommunityAsync(community);
+                SetActiveCommunity(btn);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error opening community: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async Task EnterCommunityAsync(CommunityItem community)
+    {
+        // Set current community
+        currentCommunity = community;
+
+        // Check if this is Private community
+        bool isPrivate = string.Equals(community.Name, "Private", StringComparison.OrdinalIgnoreCase);
+
+        if (isPrivate)
+        {
+            // For Private community, reload the full category list
+            await LoadCategoriesAsync();
+
+            // Hide admin panel button
+            AdminPanelButton.Visibility = Visibility.Collapsed;
+        }
+        else
+        {
+            // For other communities, show only placeholder categories
+            CategoriesPanel.Children.Clear();
+
+            // All items (active)
+            var allBtn = new Button
+            {
+                Style = (Style)FindResource("ActiveCategoryButtonStyle"),
+                Tag = "AllItems",
+            };
+            allBtn.Click += CategoryButton_Click;
+
+            var allContent = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+            };
+
+            var allIcon = new Border
+            {
+                Width = 30,
+                Height = 20,
+                Margin = new Thickness(0, 0, 10, 0),
+            };
+
+            var allText = new TextBlock
+            {
+                Text = "All items",
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            allContent.Children.Add(allIcon);
+            allContent.Children.Add(allText);
+            allBtn.Content = allContent;
+            CategoriesPanel.Children.Add(allBtn);
+
+            // Favorite
+            var favBtn = new Button
+            {
+                Style = (Style)FindResource("CategoryButtonStyle"),
+                Tag = "Favorite",
+            };
+            favBtn.Click += CategoryButton_Click;
+
+            var favContent = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+            };
+
+            var favIcon = new Border
+            {
+                Width = 30,
+                Height = 20,
+                Margin = new Thickness(0, 0, 10, 0),
+            };
+
+            var favText = new TextBlock
+            {
+                Text = "Favorite",
+                VerticalAlignment = VerticalAlignment.Center,
+            };
+
+            favContent.Children.Add(favIcon);
+            favContent.Children.Add(favText);
+            favBtn.Content = favContent;
+            CategoriesPanel.Children.Add(favBtn);
+
+            // Show admin panel button only if user is Owner
+            if (community.UserRole == CommunityRole.Owner)
+            {
+                AdminPanelButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AdminPanelButton.Visibility = Visibility.Collapsed;
+            }
+        }
+    }
+
+    private void AdminPanelButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (currentCommunity != null)
+        {
+            var adminWindow = new AdminPanelWindow(
+                currentCommunity,
+                onDeleted: async () =>
+                {
+                    // Reload communities after deletion
+                    await LoadCommunitiesAsync();
+
+                    // Return to Private view
+                    CommunityButton_Click(PrivateCommunityButton, new RoutedEventArgs());
+                },
+                onUpdated: async () =>
+                {
+                    // Reload communities to reflect name change
+                    await LoadCommunitiesAsync();
+
+                    // Update current community button text
+                    if (currentActiveCommunityButton != null)
+                    {
+                        var textBlock = FindTextBlockInButton(currentActiveCommunityButton);
+                        if (textBlock != null)
+                        {
+                            textBlock.Text = currentCommunity.Name;
+                        }
+                    }
+                })
+            {
+                Owner = this,
+            };
+            adminWindow.ShowDialog();
+        }
     }
 
     private Button CreateCategoryButton(CategoryItem category)
@@ -2029,5 +2186,21 @@ public partial class MainWindow : Window
                 }
             }
         }
+    }
+
+    private TextBlock? FindTextBlockInButton(Button button)
+    {
+        if (button.Content is Grid grid)
+        {
+            foreach (var child in grid.Children)
+            {
+                if (child is TextBlock textBlock)
+                {
+                    return textBlock;
+                }
+            }
+        }
+
+        return null;
     }
 }

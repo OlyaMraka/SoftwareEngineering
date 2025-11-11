@@ -31,7 +31,10 @@
     <Resource Include="Images\star.png"/>
     <Resource Include="Images\search.png"/>
     <Resource Include="Images\edit 1.png"/>
-    <Resource Include="Images\hide.png"/><!-- Icons folder -->
+    <Resource Include="Images\hide.png"/>
+    <Resource Include="Images\Teams\admin.png"/>
+    <Resource Include="Images\Teams\bust_0.png"/>
+    <Resource Include="Images\Teams\bust_2.png"/>
     <Resource Include="Images\Icons\cell-phone_1.png"/>
     <Resource Include="Images\Icons\cell-phone_2.png"/>
     <Resource Include="Images\Icons\credit-card_1.png"/>

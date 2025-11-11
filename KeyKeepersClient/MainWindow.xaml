@@ -216,6 +216,49 @@
             </Setter>
         </Style>
 
+        <!-- Menu Button Style (copied from Settings window) -->
+        <Style x:Key="MenuButtonStyle"
+               TargetType="Button">
+            <Setter Property="Background"
+                    Value="#0E121B"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="16"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+            <Setter Property="Height"
+                    Value="60"/>
+            <Setter Property="Margin"
+                    Value="0,0,0,10"/>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="10">
+                            <ContentPresenter Margin="20,0,20,0"
+                                              HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#222A39"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- Delete Button Style with Gradient -->
         <Style x:Key="DeleteButtonStyle"
                TargetType="Button">
@@ -772,6 +815,26 @@
                         </Button>
                     </StackPanel>
                 </ScrollViewer>
+
+                <!-- Admin Panel Button (shown for non-private communities) -->
+                <Button x:Name="AdminPanelButton"
+                        Grid.Row="4"
+                        Style="{StaticResource AddButtonStyle}"
+                        Margin="0"
+                        Visibility="Collapsed"
+                        Click="AdminPanelButton_Click">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                        <Image Source="Images/Teams/admin.png"
+                               Width="20"
+                               Height="20"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"/>
+                        <TextBlock Text="Admin Panel"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
 
                 <!-- Edit Mode Panels (Hidden by default) -->
                 <Grid x:Name="EditButtonsPanel"

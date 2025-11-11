@@ -4,7 +4,7 @@ using KeyKeepers.BLL.Validators.PasswordCategories;
 using KeyKeepers.BLL.Constants;
 using Xunit;
 
-namespace KeyKeepers.UnitTests.Validators.PasswordCategories
+namespace KeyKeepers.UnitTests.ValidatorTests
 {
     public class PrivateCategoryValidatorTests
     {
