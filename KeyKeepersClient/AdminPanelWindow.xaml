@@ -146,6 +146,20 @@
                         </StackPanel>
                     </Button>
 
+                    <!-- Add User Button -->
+                    <Button Style="{StaticResource MenuButtonStyle}"
+                            Click="AddUserButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Images/plus.png"
+                                   Width="24"
+                                   Height="24"
+                                   Margin="0,0,15,0"
+                                   VerticalAlignment="Center"/>
+                            <TextBlock Text="Add User to Community"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
                     <!-- Delete Community Button -->
                     <Button Style="{StaticResource MenuButtonStyle}"
                             Background="#2A1010"

@@ -9,14 +9,16 @@ namespace KeyKeepersClient;
 public partial class AdminPanelWindow : Window
 {
     private readonly CommunityItem community;
+    private readonly long userId;
     private readonly IMediator mediator;
     private readonly Action onCommunityDeleted;
     private readonly Action onCommunityUpdated;
 
-    public AdminPanelWindow(CommunityItem communityItem, Action onDeleted, Action onUpdated)
+    public AdminPanelWindow(CommunityItem communityItem, long currentUserId, Action onDeleted, Action onUpdated)
     {
         InitializeComponent();
         community = communityItem;
+        userId = currentUserId;
         onCommunityDeleted = onDeleted;
         onCommunityUpdated = onUpdated;
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
@@ -94,5 +96,15 @@ public partial class AdminPanelWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
+    }
+
+    private void AddUserButton_Click(object sender, RoutedEventArgs e)
+    {
+        var addUserWindow = new AddUserToCommunityWindow(community, userId)
+        {
+            Owner = this,
+        };
+
+        addUserWindow.ShowDialog();
     }
 }

@@ -1104,6 +1104,7 @@ public partial class MainWindow : Window
         {
             var adminWindow = new AdminPanelWindow(
                 currentCommunity,
+                userId,
                 onDeleted: async () =>
                 {
                     // Reload communities after deletion
