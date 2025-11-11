@@ -39,6 +39,7 @@ public class UpdateCommunityHandler : IRequestHandler<UpdateCommunityCommand, Re
         QueryOptions<Community> options = new QueryOptions<Community>
         {
             Filter = community => community.Id == request.RequestDto.CommunityId,
+            AsNoTracking = false,
         };
 
         Community? entity = await repositoryWrapper.CommunityRepository.GetFirstOrDefaultAsync(options);
