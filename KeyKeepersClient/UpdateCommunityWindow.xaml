@@ -1,0 +1,216 @@
+<Window x:Class="KeyKeepersClient.UpdateCommunityWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KeyKeepersClient"
+        mc:Ignorable="d"
+        Title="Update Community"
+        Icon="Images/logo.png"
+        Height="350"
+        Width="500"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Border Background="#171C26"
+            BorderBrush="#FDE053"
+            BorderThickness="3"
+            CornerRadius="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Top Panel -->
+            <Border Grid.Row="0"
+                    Background="#0E121B"
+                    BorderBrush="#222A39"
+                    BorderThickness="0,0,0,2"
+                    CornerRadius="12,12,0,0"
+                    MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Icon -->
+                    <Image Grid.Column="0"
+                           Source="Images/edit 1.png"
+                           Width="24"
+                           Height="24"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                    <!-- Title -->
+                    <TextBlock Grid.Column="1"
+                               Text="Edit Community"
+                               FontFamily="Bahnschrift"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Foreground="White"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="10,0,0,0"/>
+
+                    <!-- Close button -->
+                    <Button Grid.Column="2"
+                            Content="×"
+                            Width="30"
+                            Height="30"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="White"
+                            FontFamily="Bahnschrift"
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Cursor="Hand"
+                            Click="CloseButton_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <StackPanel Grid.Row="1"
+                        Margin="30,20,30,20">
+                <!-- Community Name Field -->
+                <TextBlock Text="Community Name"
+                           FontFamily="Bahnschrift"
+                           FontSize="14"
+                           FontWeight="SemiBold"
+                           Foreground="White"
+                           Margin="0,0,0,8"/>
+
+                <Border Background="#0E121B"
+                        BorderBrush="#222A39"
+                        BorderThickness="2"
+                        CornerRadius="10"
+                        Height="45"
+                        Margin="0,0,0,5">
+                    <TextBox x:Name="CommunityNameTextBox"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="White"
+                             FontFamily="Bahnschrift"
+                             FontSize="14"
+                             VerticalAlignment="Center"
+                             VerticalContentAlignment="Center"
+                             Padding="15,0"
+                             MaxLength="50"
+                             TextChanged="CommunityNameTextBox_TextChanged"/>
+                </Border>
+
+                <!-- Error Message -->
+                <TextBlock x:Name="NameErrorTextBlock"
+                           FontFamily="Bahnschrift"
+                           FontSize="12"
+                           Foreground="#FF6B6B"
+                           Margin="5,0,0,10"
+                           Visibility="Collapsed"/>
+
+                <!-- Character Counter -->
+                <TextBlock x:Name="CharacterCountTextBlock"
+                           Text="0 / 50 characters"
+                           FontFamily="Bahnschrift"
+                           FontSize="12"
+                           Foreground="#666666"
+                           Margin="5,0,0,20"
+                           HorizontalAlignment="Right"/>
+
+                <!-- Info Text -->
+                <TextBlock Text="Enter a new name for your community."
+                           FontFamily="Bahnschrift"
+                           FontSize="13"
+                           Foreground="#999999"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20"/>
+            </StackPanel>
+
+            <!-- Bottom Buttons -->
+            <Grid Grid.Row="2"
+                  Margin="30,0,30,30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Cancel Button -->
+                <Button Grid.Column="0"
+                        Content="Cancel"
+                        Height="45"
+                        Background="#2A1010"
+                        Foreground="#FF6B6B"
+                        BorderThickness="0"
+                        FontFamily="Bahnschrift"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        Click="CancelButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Save Button -->
+                <Button x:Name="SaveButton"
+                        Grid.Column="2"
+                        Content="Save"
+                        Height="45"
+                        Background="#1B5E40"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontFamily="Bahnschrift"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Cursor="Hand"
+                        IsEnabled="False"
+                        Click="SaveButton_Click">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="border"
+                                                Background="{TemplateBinding Background}"
+                                                CornerRadius="10">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsEnabled"
+                                                     Value="False">
+                                                <Setter TargetName="border"
+                                                        Property="Background"
+                                                        Value="#0E121B"/>
+                                                <Setter Property="Foreground"
+                                                        Value="#666666"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
