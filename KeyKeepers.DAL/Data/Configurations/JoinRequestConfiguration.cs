@@ -43,6 +43,6 @@ public class JoinRequestConfiguration : IEntityTypeConfiguration<JoinRequest>
         builder.HasOne(x => x.Sender)
             .WithMany(x => x.Requests)
             .HasForeignKey(x => x.SenderId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

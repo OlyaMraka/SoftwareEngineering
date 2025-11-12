@@ -36,6 +36,6 @@ public class CommunityUserConfiguration : IEntityTypeConfiguration<CommunityUser
         builder.HasMany(x => x.Requests)
             .WithOne(x => x.Sender)
             .HasForeignKey(x => x.SenderId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
