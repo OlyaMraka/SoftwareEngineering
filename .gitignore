@@ -33,6 +33,6 @@ Desktop.ini
 # Others
 *.swp
 
-# Configuration files with sensitive data
+# Configuration files for db connection
 appsettings.json
 appsettings.*.json
