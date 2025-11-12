@@ -28,6 +28,7 @@ public class AcceptOrDeclineHandler : IRequestHandler<AcceptOrDeclineCommand, Re
         QueryOptions<JoinRequest> options = new QueryOptions<JoinRequest>
         {
             Filter = r => r.Id == request.RequestDto.Id,
+            AsNoTracking = false,
         };
 
         JoinRequest? joinRequest = await repositoryWrapper.JoinRequestRepository.GetFirstOrDefaultAsync(options);

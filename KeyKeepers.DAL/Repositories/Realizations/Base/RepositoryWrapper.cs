@@ -62,4 +62,9 @@ public class RepositoryWrapper : IRepositoryWrapper
     {
         return await dbContext.SaveChangesAsync();
     }
+
+    public void ClearChangeTracker()
+    {
+        dbContext.ChangeTracker.Clear();
+    }
 }

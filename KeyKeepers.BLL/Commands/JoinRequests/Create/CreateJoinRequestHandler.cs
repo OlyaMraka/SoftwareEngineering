@@ -52,7 +52,7 @@ public class CreateJoinRequestHandler : IRequestHandler<CreateJoinRequestCommand
 
         QueryOptions<CommunityUser> communityUserOptions = new QueryOptions<CommunityUser>
         {
-            Filter = x => x.Id == request.RequestDto.CommunityId,
+            Filter = x => x.Id == request.RequestDto.SenderId,
             Include = x => x.Include(x => x.User),
         };
 

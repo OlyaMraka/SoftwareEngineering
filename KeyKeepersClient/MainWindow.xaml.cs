@@ -873,7 +873,8 @@ public partial class MainWindow : Window
             {
                 var communityItem = new CommunityItem
                 {
-                    Id = result.Value.NewCommunity.Id,
+                    CommunityId = result.Value.NewCommunity.Id,
+                    CommunityUserId = result.Value.Owner.Id,
                     Name = result.Value.NewCommunity.Name,
                 };
 
@@ -941,7 +942,8 @@ public partial class MainWindow : Window
                 {
                     var communityItem = new CommunityItem
                     {
-                        Id = communityUser.Community.Id,
+                        CommunityUserId = communityUser.Id,
+                        CommunityId = communityUser.Community.Id,
                         Name = communityUser.Community.Name,
                         UserRole = communityUser.UserRole,
                     };
@@ -991,7 +993,7 @@ public partial class MainWindow : Window
                 // Handle Private button (has string tag "0")
                 if (btn.Tag is string tagStr && tagStr == "0")
                 {
-                    community = new CommunityItem { Id = 0, Name = "Private" };
+                    community = new CommunityItem { CommunityId = 0, Name = "Private" };
                 }
                 else if (btn.Tag is CommunityItem commItem)
                 {

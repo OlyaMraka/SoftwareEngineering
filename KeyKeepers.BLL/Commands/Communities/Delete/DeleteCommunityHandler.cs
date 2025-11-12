@@ -21,6 +21,7 @@ public class DeleteCommunityHandler : IRequestHandler<DeleteCommunityCommand, Re
         QueryOptions<Community> options = new QueryOptions<Community>
         {
             Filter = c => c.Id == request.CommunityId,
+            AsNoTracking = false,
         };
 
         Community? entity = await repositoryWrapper.CommunityRepository.GetFirstOrDefaultAsync(options);
@@ -36,6 +37,8 @@ public class DeleteCommunityHandler : IRequestHandler<DeleteCommunityCommand, Re
         {
             return Result.Fail<long>(CommunityConstants.DbSaveError);
         }
+
+        repositoryWrapper.ClearChangeTracker();
 
         return Result.Ok(entity.Id);
     }

@@ -191,9 +191,9 @@ public partial class AddUserToCommunityWindow : Window
 
             var dto = new CreateRequestDto
             {
-                CommunityId = community.Id,
+                CommunityId = community.CommunityId,
                 RecipientId = selectedUser.Id,
-                SenderId = senderId,
+                SenderId = community.CommunityUserId,
             };
 
             var command = new CreateJoinRequestCommand(dto);

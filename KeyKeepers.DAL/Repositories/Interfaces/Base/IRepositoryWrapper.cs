@@ -27,4 +27,6 @@ public interface IRepositoryWrapper
     int SaveChanges();
 
     Task<int> SaveChangesAsync();
+
+    void ClearChangeTracker();
 }

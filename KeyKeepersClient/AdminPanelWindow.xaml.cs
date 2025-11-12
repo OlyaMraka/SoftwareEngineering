@@ -65,7 +65,7 @@ public partial class AdminPanelWindow : Window
 
         try
         {
-            var command = new DeleteCommunityCommand(community.Id);
+            var command = new DeleteCommunityCommand(community.CommunityId);
             var deleteResult = await mediator.Send(command);
 
             if (deleteResult.IsSuccess)

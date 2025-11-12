@@ -66,7 +66,7 @@ public partial class InvitationsWindow : Window
                     DeclineAllButton.IsEnabled = false;
 
                     // Notify parent to hide the button
-                    onInvitationHandled?.Invoke();
+                    // onInvitationHandled?.Invoke();
                 }
                 else
                 {
@@ -301,7 +301,10 @@ public partial class InvitationsWindow : Window
                 await LoadInvitationsAsync();
 
                 // Notify parent window
-                onInvitationHandled?.Invoke();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    onInvitationHandled?.Invoke();
+                });
             }
             else
             {

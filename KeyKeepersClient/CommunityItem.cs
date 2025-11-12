@@ -4,7 +4,9 @@ namespace KeyKeepersClient;
 
 public class CommunityItem
 {
-    public long Id { get; set; }
+    public long CommunityId { get; set; }
+
+    public long CommunityUserId { get; set; }
 
     public string Name { get; set; } = string.Empty;
 

@@ -109,7 +109,7 @@ public partial class UpdateCommunityWindow : Window
 
             var dto = new UpdateCommunityRequestDto
             {
-                CommunityId = community.Id,
+                CommunityId = community.CommunityId,
                 Name = newName,
             };
 
