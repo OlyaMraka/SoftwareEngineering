@@ -948,6 +948,9 @@ public partial class MainWindow : Window
                         UserRole = communityUser.UserRole,
                     };
 
+                    // Debug: Log the role for each community
+                    System.Diagnostics.Debug.WriteLine($"Community: {communityItem.Name}, Role: {communityItem.UserRole}");
+
                     communities.Add(communityItem);
 
                     var button = CreateCommunityButton(communityItem);
@@ -993,7 +996,13 @@ public partial class MainWindow : Window
                 // Handle Private button (has string tag "0")
                 if (btn.Tag is string tagStr && tagStr == "0")
                 {
-                    community = new CommunityItem { CommunityId = 0, Name = "Private" };
+                    // Private community - no role, treated specially
+                    community = new CommunityItem
+                    {
+                        CommunityId = 0,
+                        Name = "Private",
+                        UserRole = CommunityRole.Member, // Set to Member to ensure Admin Panel is hidden
+                    };
                 }
                 else if (btn.Tag is CommunityItem commItem)
                 {
@@ -1018,6 +1027,9 @@ public partial class MainWindow : Window
     {
         // Set current community
         currentCommunity = community;
+
+        // Debug: Log community info
+        System.Diagnostics.Debug.WriteLine($"Entering community: {community.Name}, Role: {community.UserRole}");
 
         // Check if this is Private community
         bool isPrivate = string.Equals(community.Name, "Private", StringComparison.OrdinalIgnoreCase);
@@ -1097,10 +1109,13 @@ public partial class MainWindow : Window
             favBtn.Content = favContent;
             CategoriesPanel.Children.Add(favBtn);
 
-            // Show admin panel button only if user is Owner
+            // Show admin panel button ONLY for Owner
+            // For Admin and Member: button should not exist (Collapsed)
             if (community.UserRole == CommunityRole.Owner)
             {
                 AdminPanelButton.Visibility = Visibility.Visible;
+                AdminPanelButton.Opacity = 1.0;
+                AdminPanelButton.IsEnabled = true;
             }
             else
             {
@@ -2233,20 +2248,36 @@ public partial class MainWindow : Window
             var query = new GetByRecipientIdQuery(userId);
             var result = await mediator.Send(query);
 
-            if (result.IsSuccess && result.Value.Any())
+            // Show button only if there are PENDING invitations
+            // If result fails (no data) or is empty, hide the button
+            if (result.IsSuccess && result.Value != null)
             {
-                // Show invitations button if there are pending invitations
-                InvitationsButton.Visibility = Visibility.Visible;
+                // Filter only PENDING invitations
+                var pendingInvitations = result.Value.Where(x => x.Status == RequestStatus.Pending).ToList();
+
+                if (pendingInvitations.Any())
+                {
+                    InvitationsButton.Visibility = Visibility.Visible;
+                    System.Diagnostics.Debug.WriteLine($"Pending invitations found: {pendingInvitations.Count}");
+                }
+                else
+                {
+                    InvitationsButton.Visibility = Visibility.Collapsed;
+                    System.Diagnostics.Debug.WriteLine("No pending invitations - button hidden");
+                }
             }
             else
             {
-                // Hide button if no invitations
                 InvitationsButton.Visibility = Visibility.Collapsed;
+                System.Diagnostics.Debug.WriteLine("No invitations - button hidden");
             }
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error checking invitations: {ex.Message}");
+
+            // Hide button on error
+            InvitationsButton.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -2263,5 +2294,8 @@ public partial class MainWindow : Window
         };
 
         invitationsWindow.ShowDialog();
+
+        // Check invitations again after window closes in case user closed without action
+        _ = CheckForInvitationsAsync();
     }
 }

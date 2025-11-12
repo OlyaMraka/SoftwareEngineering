@@ -15,10 +15,10 @@ public partial class InvitationsWindow : Window
 {
     private readonly long userId;
     private readonly IMediator mediator;
-    private readonly Action onInvitationHandled;
+    private readonly Func<Task> onInvitationHandled;
     private List<JoinRequestResponseDto> invitations = new();
 
-    public InvitationsWindow(long currentUserId, Action onHandled)
+    public InvitationsWindow(long currentUserId, Func<Task> onHandled)
     {
         InitializeComponent();
         userId = currentUserId;
@@ -66,7 +66,10 @@ public partial class InvitationsWindow : Window
                     DeclineAllButton.IsEnabled = false;
 
                     // Notify parent to hide the button
-                    // onInvitationHandled?.Invoke();
+                    if (onInvitationHandled != null)
+                    {
+                        await onInvitationHandled();
+                    }
                 }
                 else
                 {
@@ -301,10 +304,10 @@ public partial class InvitationsWindow : Window
                 await LoadInvitationsAsync();
 
                 // Notify parent window
-                Application.Current.Dispatcher.Invoke(() =>
+                if (onInvitationHandled != null)
                 {
-                    onInvitationHandled?.Invoke();
-                });
+                    await onInvitationHandled();
+                }
             }
             else
             {
@@ -329,44 +332,81 @@ public partial class InvitationsWindow : Window
     {
         try
         {
-            var tasks = invitations.Select(inv =>
+            // Disable buttons during processing
+            AcceptAllButton.IsEnabled = false;
+            DeclineAllButton.IsEnabled = false;
+
+            int successCount = 0;
+            int failedCount = 0;
+            List<string> errors = new List<string>();
+
+            // Process invitations sequentially to avoid DbContext conflicts
+            foreach (var inv in invitations)
             {
-                var dto = new AcceptOrDeclineDto
+                try
                 {
-                    Id = inv.Id,
-                    Status = status,
-                };
-                var command = new AcceptOrDeclineCommand(dto);
-                return mediator.Send(command);
-            });
+                    var dto = new AcceptOrDeclineDto
+                    {
+                        Id = inv.Id,
+                        Status = status,
+                    };
 
-            var results = await Task.WhenAll(tasks);
+                    var command = new AcceptOrDeclineCommand(dto);
+                    var result = await mediator.Send(command);
 
-            var failedCount = results.Count(r => !r.IsSuccess);
+                    if (result.IsSuccess)
+                    {
+                        successCount++;
+                    }
+                    else
+                    {
+                        failedCount++;
+                        var errorMsg = result.Errors.FirstOrDefault()?.Message ?? "Unknown error";
+                        errors.Add($"Invitation {inv.Id}: {errorMsg}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    failedCount++;
+                    errors.Add($"Invitation {inv.Id}: {ex.Message}");
+                }
+            }
 
             if (failedCount == 0)
             {
                 var actionText = status == RequestStatus.Accepted ? "accepted" : "declined";
                 MessageBox.Show(
-                    $"All invitations {actionText} successfully!",
+                    $"All {successCount} invitations {actionText} successfully!",
                     "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
+            else if (successCount > 0)
+            {
+                var actionText = status == RequestStatus.Accepted ? "accepted" : "declined";
+                MessageBox.Show(
+                    $"{successCount} invitation(s) {actionText} successfully.\n{failedCount} invitation(s) failed.\n\nErrors:\n{string.Join("\n", errors.Take(5))}",
+                    "Partial Success",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
             else
             {
                 MessageBox.Show(
-                    $"{failedCount} invitation(s) failed to process. Please try again.",
-                    "Warning",
+                    $"All {failedCount} invitation(s) failed to process.\n\nErrors:\n{string.Join("\n", errors.Take(5))}",
+                    "Error",
                     MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                    MessageBoxImage.Error);
             }
 
             // Reload invitations
             await LoadInvitationsAsync();
 
             // Notify parent window
-            onInvitationHandled?.Invoke();
+            if (onInvitationHandled != null)
+            {
+                await onInvitationHandled();
+            }
         }
         catch (Exception ex)
         {
@@ -375,6 +415,13 @@ public partial class InvitationsWindow : Window
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
+
+            // Re-enable buttons on error
+            if (invitations.Any())
+            {
+                AcceptAllButton.IsEnabled = true;
+                DeclineAllButton.IsEnabled = true;
+            }
         }
     }
 }
