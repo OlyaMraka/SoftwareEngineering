@@ -93,24 +93,26 @@
         <Grid Grid.Row="1"
               Margin="40">
             <Grid.RowDefinitions>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="15"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="12"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="15"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="15"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="15"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="15"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="10"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
@@ -118,8 +120,8 @@
             <!-- User Avatar -->
             <Image Grid.Row="1"
                    Source="Images/SignIn_LogUp/user.png"
-                   Width="80"
-                   Height="80"
+                   Width="70"
+                   Height="70"
                    Stretch="Uniform"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
@@ -364,6 +366,25 @@
                     </Button.Template>
                 </Button>
             </Border>
+
+            <!-- Log In Link -->
+            <TextBlock Grid.Row="21"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Margin="0,0,0,0">
+                <Run Text="Already have an account? "
+                     Foreground="#B0B0B0"
+                     FontFamily="Bahnschrift"
+                     FontSize="13"/>
+                <Hyperlink Click="LogInLink_Click"
+                           TextDecorations="None">
+                    <Run Text="Log In"
+                         Foreground="#FDE053"
+                         FontFamily="Bahnschrift"
+                         FontSize="13"
+                         FontWeight="SemiBold"/>
+                </Hyperlink>
+            </TextBlock>
         </Grid>
     </Grid>
 </Window>

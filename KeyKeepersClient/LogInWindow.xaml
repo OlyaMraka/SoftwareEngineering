@@ -234,6 +234,25 @@
                     </Button.Template>
                 </Button>
             </Border>
+
+            <!-- Sign Up Link -->
+            <TextBlock Grid.Row="10"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Top"
+                       Margin="0,15,0,0">
+                <Run Text="Don't have an account? "
+                     Foreground="#B0B0B0"
+                     FontFamily="Bahnschrift"
+                     FontSize="13"/>
+                <Hyperlink Click="SignUpLink_Click"
+                           TextDecorations="None">
+                    <Run Text="Sign Up"
+                         Foreground="#FDE053"
+                         FontFamily="Bahnschrift"
+                         FontSize="13"
+                         FontWeight="SemiBold"/>
+                </Hyperlink>
+            </TextBlock>
         </Grid>
     </Grid>
 </Window>

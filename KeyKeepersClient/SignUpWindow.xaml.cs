@@ -386,4 +386,13 @@ public partial class SignUpWindow : Window
             this.Close();
         }
     }
+
+    private void LogInLink_Click(object sender, RoutedEventArgs e)
+    {
+        var logInWindow = new LogInWindow();
+        logInWindow.Left = this.Left;
+        logInWindow.Top = this.Top;
+        logInWindow.Show();
+        this.Close();
+    }
 }
