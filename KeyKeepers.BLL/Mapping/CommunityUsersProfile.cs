@@ -10,6 +10,7 @@ public class CommunityUsersProfile : Profile
     public CommunityUsersProfile()
     {
         CreateMap<CommunityUser, CommunityUserResponseDto>();
-        CreateMap<CommunityUser, GetByUserIdResponseDto>();
+        CreateMap<CommunityUser, GetByUserIdResponseDto>()
+            .ForMember(dest => dest.UserRole, opt => opt.MapFrom(src => src.Role));
     }
 }

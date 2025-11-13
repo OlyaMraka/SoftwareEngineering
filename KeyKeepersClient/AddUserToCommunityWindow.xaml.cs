@@ -61,12 +61,15 @@ public partial class AddUserToCommunityWindow : Window
         searchDebounceTimer.Stop();
         searchDebounceTimer.Start();
 
+        // Enable/disable Add button based on text input
+        string searchText = UsernameSearchTextBox.Text.Trim();
+        AddButton.IsEnabled = !string.IsNullOrEmpty(searchText);
+
         // Clear selection if text changed
-        if (selectedUser != null && UsernameSearchTextBox.Text.Trim() != selectedUser.UserName)
+        if (selectedUser != null && searchText != selectedUser.UserName)
         {
             selectedUser = null;
             UserInfoPanel.Visibility = Visibility.Collapsed;
-            AddButton.IsEnabled = false;
         }
     }
 
@@ -159,11 +162,14 @@ public partial class AddUserToCommunityWindow : Window
                 e.Handled = true;
             }
         }
-        else if (e.Key == Key.Enter && selectedUser != null)
+        else if (e.Key == Key.Enter)
         {
-            // Add user on Enter key
-            AddButton_Click(sender, e);
-            e.Handled = true;
+            // Add user on Enter key (works even if no user selected from list)
+            if (!string.IsNullOrEmpty(UsernameSearchTextBox.Text.Trim()))
+            {
+                AddButton_Click(sender, e);
+                e.Handled = true;
+            }
         }
         else if (e.Key == Key.Escape)
         {
@@ -175,11 +181,13 @@ public partial class AddUserToCommunityWindow : Window
 
     private async void AddButton_Click(object sender, RoutedEventArgs e)
     {
-        if (selectedUser == null)
+        string searchText = UsernameSearchTextBox.Text.Trim();
+
+        if (string.IsNullOrEmpty(searchText))
         {
             MessageBox.Show(
-                "Please select a user from the suggestions.",
-                "No User Selected",
+                "Please enter a username.",
+                "No Username Entered",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -189,6 +197,40 @@ public partial class AddUserToCommunityWindow : Window
         {
             AddButton.IsEnabled = false;
 
+            // If no user is selected from suggestions, search for the user by username
+            if (selectedUser == null || selectedUser.UserName != searchText)
+            {
+                var query = new GetByUsernameQuery(searchText);
+                var result = await mediator.Send(query);
+
+                if (result.IsSuccess && result.Value.Any())
+                {
+                    // Find exact match
+                    selectedUser = result.Value.FirstOrDefault(u => u.UserName.Equals(searchText, StringComparison.OrdinalIgnoreCase));
+
+                    if (selectedUser == null)
+                    {
+                        MessageBox.Show(
+                            $"User '{searchText}' not found.",
+                            "User Not Found",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+                        AddButton.IsEnabled = true;
+                        return;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(
+                        $"User '{searchText}' not found.",
+                        "User Not Found",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                    AddButton.IsEnabled = true;
+                    return;
+                }
+            }
+
             var dto = new CreateRequestDto
             {
                 CommunityId = community.CommunityId,
@@ -197,9 +239,9 @@ public partial class AddUserToCommunityWindow : Window
             };
 
             var command = new CreateJoinRequestCommand(dto);
-            var result = await mediator.Send(command);
+            var createResult = await mediator.Send(command);
 
-            if (result.IsSuccess)
+            if (createResult.IsSuccess)
             {
                 MessageBox.Show(
                     $"Invitation sent to {selectedUser.UserName} successfully!",
@@ -212,7 +254,7 @@ public partial class AddUserToCommunityWindow : Window
             else
             {
                 MessageBox.Show(
-                    $"Error sending invitation: {result.Errors.FirstOrDefault()?.Message}",
+                    $"Error sending invitation: {createResult.Errors.FirstOrDefault()?.Message}",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
