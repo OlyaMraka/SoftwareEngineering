@@ -191,7 +191,6 @@ public partial class InvitationsWindow : Window
         acceptTemplate.VisualTree = acceptBorder;
         acceptButton.Template = acceptTemplate;
 
-
         var declineButton = new Button
         {
             Content = "Decline",
@@ -297,9 +296,7 @@ public partial class InvitationsWindow : Window
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-
                 await LoadInvitationsAsync();
-
 
                 if (onInvitationHandled != null)
                 {
@@ -329,14 +326,12 @@ public partial class InvitationsWindow : Window
     {
         try
         {
-
             AcceptAllButton.IsEnabled = false;
             DeclineAllButton.IsEnabled = false;
 
             int successCount = 0;
             int failedCount = 0;
             List<string> errors = new List<string>();
-
 
             foreach (var inv in invitations)
             {
@@ -396,9 +391,7 @@ public partial class InvitationsWindow : Window
                     MessageBoxImage.Error);
             }
 
-
             await LoadInvitationsAsync();
-
 
             if (onInvitationHandled != null)
             {
@@ -412,7 +405,6 @@ public partial class InvitationsWindow : Window
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
-
 
             if (invitations.Any())
             {

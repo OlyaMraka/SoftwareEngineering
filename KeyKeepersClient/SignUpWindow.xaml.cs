@@ -92,11 +92,9 @@ public partial class SignUpWindow : Window
     {
         if (!string.IsNullOrWhiteSpace(email))
         {
-
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             if (System.Text.RegularExpressions.Regex.IsMatch(email.Trim(), emailPattern))
             {
-
             }
         }
     }
@@ -141,14 +139,12 @@ public partial class SignUpWindow : Window
 
         try
         {
-
             if (this.mediator == null)
             {
                 MessageBox
                     .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-
 
             var registerDto = new UserRegisterDto
             {
@@ -159,9 +155,7 @@ public partial class SignUpWindow : Window
                 Password = password,
             };
 
-
             var createUserCommand = new CreateUserCommand(registerDto);
-
 
             var result = await this.mediator.Send(createUserCommand);
 
@@ -188,7 +182,6 @@ public partial class SignUpWindow : Window
     private bool ValidateRegistrationData(out string errorMessage)
     {
         errorMessage = string.Empty;
-
 
         if (string.IsNullOrWhiteSpace(this.FirstNameTextBox.Text))
         {
@@ -219,7 +212,6 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-
         if (string.IsNullOrWhiteSpace(this.LastNameTextBox.Text))
         {
             errorMessage = "Прізвище є обов'язковим.";
@@ -248,7 +240,6 @@ public partial class SignUpWindow : Window
             this.LastNameTextBox.Focus();
             return false;
         }
-
 
         if (string.IsNullOrWhiteSpace(this.EmailTextBox.Text))
         {
@@ -280,7 +271,6 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-
         if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text))
         {
             errorMessage = "Ім'я користувача є обов'язковим.";
@@ -310,7 +300,6 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-
         if (string.IsNullOrEmpty(this.PasswordTextBox.Password))
         {
             errorMessage = "Пароль є обов'язковим.";
@@ -325,7 +314,6 @@ public partial class SignUpWindow : Window
             this.PasswordTextBox.Focus();
             return false;
         }
-
 
         bool hasUpper = System.Text.RegularExpressions.Regex.IsMatch(password, @"[A-Z]");
         bool hasDigit = System.Text.RegularExpressions.Regex.IsMatch(password, @"[0-9]");
@@ -357,20 +345,17 @@ public partial class SignUpWindow : Window
 
     private void ClearForm()
     {
-
         this.FirstNameTextBox.Text = string.Empty;
         this.LastNameTextBox.Text = string.Empty;
         this.EmailTextBox.Text = string.Empty;
         this.UsernameTextBox.Text = string.Empty;
         this.PasswordTextBox.Password = string.Empty;
 
-
         this.FirstNamePlaceholder.Visibility = Visibility.Visible;
         this.LastNamePlaceholder.Visibility = Visibility.Visible;
         this.EmailPlaceholder.Visibility = Visibility.Visible;
         this.UsernamePlaceholder.Visibility = Visibility.Visible;
         this.PasswordPlaceholder.Visibility = Visibility.Visible;
-
 
         this.FirstNameTextBox.Focus();
     }

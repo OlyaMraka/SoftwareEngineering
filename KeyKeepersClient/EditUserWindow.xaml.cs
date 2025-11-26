@@ -11,9 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyKeepersClient
 {
-
-
-
     public partial class EditUserWindow : Window
     {
         private readonly IMediator mediator;
@@ -70,7 +67,6 @@ namespace KeyKeepersClient
             {
                 SaveButton.IsEnabled = false;
                 SaveButton.Content = "Збереження...";
-
 
                 string password = string.IsNullOrWhiteSpace(PasswordBox.Password)
                     ? string.Empty
@@ -161,30 +157,25 @@ namespace KeyKeepersClient
         {
             bool isValid = true;
 
-
             if (!ValidateName(NameTextBox.Text))
             {
                 isValid = false;
             }
-
 
             if (!ValidateSurname(SurnameTextBox.Text))
             {
                 isValid = false;
             }
 
-
             if (!ValidateEmail(EmailTextBox.Text))
             {
                 isValid = false;
             }
 
-
             if (!ValidateUsername(UsernameTextBox.Text))
             {
                 isValid = false;
             }
-
 
             string password = isPasswordVisible ? PasswordTextBox.Text : PasswordBox.Password;
             if (!string.IsNullOrWhiteSpace(password))
@@ -296,7 +287,6 @@ namespace KeyKeepersClient
 
         private bool ValidatePassword(string password)
         {
-
             if (string.IsNullOrWhiteSpace(password))
             {
                 HideError(PasswordErrorText);

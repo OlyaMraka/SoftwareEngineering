@@ -87,7 +87,6 @@ public partial class LogInWindow : Window
 
             if (result.IsSuccess)
             {
-
                 var mainWindow = new MainWindow(result.Value.Id);
                 mainWindow.Left = this.Left;
                 mainWindow.Top = this.Top;
@@ -117,14 +116,12 @@ public partial class LogInWindow : Window
     {
         errorMessage = string.Empty;
 
-
         if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text))
         {
             errorMessage = "Username is required.";
             this.UsernameTextBox.Focus();
             return false;
         }
-
 
         string username = this.UsernameTextBox.Text.Trim();
         if (username.Length < 4)
@@ -141,7 +138,6 @@ public partial class LogInWindow : Window
             return false;
         }
 
-
         if (!System.Text.RegularExpressions.Regex.IsMatch(username, @"^[a-zA-Z0-9_.-]+$"))
         {
             errorMessage = "Username can only contain letters, numbers, dots, hyphens, and underscores.";
@@ -149,14 +145,12 @@ public partial class LogInWindow : Window
             return false;
         }
 
-
         if (string.IsNullOrEmpty(this.PasswordTextBox.Password))
         {
             errorMessage = "Password is required.";
             this.PasswordTextBox.Focus();
             return false;
         }
-
 
         if (this.PasswordTextBox.Password.Length < 6)
         {

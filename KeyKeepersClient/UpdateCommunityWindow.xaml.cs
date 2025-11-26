@@ -21,7 +21,6 @@ public partial class UpdateCommunityWindow : Window
         onUpdateSuccess = onSuccess;
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
 
-
         CommunityNameTextBox.Text = community.Name;
         CommunityNameTextBox.Focus();
         CommunityNameTextBox.SelectAll();
@@ -50,10 +49,8 @@ public partial class UpdateCommunityWindow : Window
         var text = CommunityNameTextBox.Text.Trim();
         CharacterCountTextBlock.Text = $"{text.Length} / 50 characters";
 
-
         bool isValid = ValidateName(text);
         SaveButton.IsEnabled = isValid && text != community.Name;
-
 
         if (text.Length >= 45)
         {
@@ -124,9 +121,7 @@ public partial class UpdateCommunityWindow : Window
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-
                 community.Name = newName;
-
 
                 onUpdateSuccess?.Invoke();
 

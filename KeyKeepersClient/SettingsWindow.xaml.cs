@@ -29,35 +29,30 @@ public partial class SettingsWindow : Window
 
     private void AddPasswordButton_Click(object sender, RoutedEventArgs e)
     {
-
         mainWindow.OpenAddPasswordMode();
         this.Close();
     }
 
     private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
     {
-
         mainWindow.OpenAddCategoryMode();
         this.Close();
     }
 
     private void AddCommunityButton_Click(object sender, RoutedEventArgs e)
     {
-
         mainWindow.OpenAddCommunityMode();
         this.Close();
     }
 
     private void AccountSettingsButton_Click(object sender, RoutedEventArgs e)
     {
-
         mainWindow.OpenEditUserMode();
         this.Close();
     }
 
     private void LogOutButton_Click(object sender, RoutedEventArgs e)
     {
-
         mainWindow.LogOutButton_Click(sender, e);
         this.Close();
     }

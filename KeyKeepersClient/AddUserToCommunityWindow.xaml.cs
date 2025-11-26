@@ -29,7 +29,6 @@ public partial class AddUserToCommunityWindow : Window
 
         CommunityNameTextBlock.Text = community.Name;
 
-
         searchDebounceTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromMilliseconds(300),
@@ -57,7 +56,6 @@ public partial class AddUserToCommunityWindow : Window
 
     private void UsernameSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-
         searchDebounceTimer.Stop();
         searchDebounceTimer.Start();
 
@@ -141,7 +139,6 @@ public partial class AddUserToCommunityWindow : Window
 
     private void SuggestionsListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-
         if (SuggestionsListBox.SelectedItem != null)
         {
             SuggestionsListBox_SelectionChanged(sender, null!);
@@ -152,7 +149,6 @@ public partial class AddUserToCommunityWindow : Window
     {
         if (e.Key == Key.Down && SuggestionsPopup.IsOpen)
         {
-
             if (SuggestionsListBox.Items.Count > 0)
             {
                 SuggestionsListBox.SelectedIndex = 0;
@@ -162,7 +158,6 @@ public partial class AddUserToCommunityWindow : Window
         }
         else if (e.Key == Key.Enter)
         {
-
             if (!string.IsNullOrEmpty(UsernameSearchTextBox.Text.Trim()))
             {
                 AddButton_Click(sender, e);
@@ -171,7 +166,6 @@ public partial class AddUserToCommunityWindow : Window
         }
         else if (e.Key == Key.Escape)
         {
-
             SuggestionsPopup.IsOpen = false;
             e.Handled = true;
         }
@@ -195,7 +189,6 @@ public partial class AddUserToCommunityWindow : Window
         {
             AddButton.IsEnabled = false;
 
-
             if (selectedUser == null || selectedUser.UserName != searchText)
             {
                 var query = new GetByUsernameQuery(searchText);
@@ -203,7 +196,6 @@ public partial class AddUserToCommunityWindow : Window
 
                 if (result.IsSuccess && result.Value.Any())
                 {
-
                     selectedUser = result.Value.FirstOrDefault(u => u.UserName.Equals(searchText, StringComparison.OrdinalIgnoreCase));
 
                     if (selectedUser == null)
