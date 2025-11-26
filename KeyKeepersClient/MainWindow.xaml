@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeyKeepersClient"
+        xmlns:converters="clr-namespace:KeyKeepersClient.Converters"
+        xmlns:ext="clr-namespace:KeyKeepersClient.Extensions"
         mc:Ignorable="d"
         Title="FamilyPass Manager"
         Icon="Images/logo.png"
@@ -15,6 +17,8 @@
         Background="#171C26">
 
         <Window.Resources>
+                <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
                 <Style x:Key="CommunityButtonStyle"
                        TargetType="Button">
                         <Setter Property="Background"
@@ -848,13 +852,11 @@
                                         </Button>
                                 </Grid>
 
-                                <!-- TODO: Використати Data Binding для Visibility -->
                                 <Grid x:Name="PasswordEditButtonsPanel"
                                       Grid.Row="4"
-                                      Visibility="Collapsed">
-                                        <!-- TODO: Використати Command замість Click event handler -->
+                                      Visibility="{Binding IsPasswordEditButtonsPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Button Style="{StaticResource ExitButtonStyle}"
-                                                Click="ExitPasswordEditMode_Click">
+                                                Command="{Binding ExitPasswordEditModeCommand}">
                                                 <TextBlock Text="Exit"
                                                            HorizontalAlignment="Center"
                                                            VerticalAlignment="Center"/>
@@ -873,7 +875,6 @@
                                       Style="{StaticResource CustomScrollViewer}"
                                       Margin="30,30,30,30">
                                 <StackPanel>
-                                        <!-- TODO: Використати Data Binding для Visibility -->
                                         <Border x:Name="PasswordEditPanel"
                                                 Background="#0E121B"
                                                 BorderBrush="#222A39"
@@ -881,7 +882,7 @@
                                                 CornerRadius="15"
                                                 Padding="30"
                                                 Margin="0,0,0,20"
-                                                Visibility="Collapsed">
+                                                Visibility="{Binding IsPasswordEditPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                 <Grid>
                                                         <Grid.RowDefinitions>
                                                                 <RowDefinition Height="Auto"/>
@@ -905,7 +906,6 @@
                                                                         <ColumnDefinition Width="*"/>
                                                                 </Grid.ColumnDefinitions>
 
-                                                                <!-- TODO: Використати Command замість Click event handler -->
                                                                 <Button x:Name="PasswordIconButton"
                                                                         Grid.Column="0"
                                                                         Width="80"
@@ -915,7 +915,7 @@
                                                                         Background="Transparent"
                                                                         BorderThickness="0"
                                                                         Cursor="Hand"
-                                                                        Click="PasswordIconButton_Click">
+                                                                        Command="{Binding SelectPasswordIconCommand}">
                                                                         <Border Width="80"
                                                                                 Height="80"
                                                                                 CornerRadius="15">
@@ -943,7 +943,6 @@
                                                                                    FontWeight="SemiBold"
                                                                                    Foreground="White"
                                                                                    Margin="0,0,0,5"/>
-                                                                        <!-- TODO: Використати Data Binding для Text -->
                                                                         <TextBox x:Name="PasswordNameTextBox"
                                                                                  Background="#171C26"
                                                                                  Foreground="White"
@@ -955,7 +954,8 @@
                                                                                  Height="50"
                                                                                  VerticalContentAlignment="Center"
                                                                                  TextWrapping="Wrap"
-                                                                                 AcceptsReturn="False"/>
+                                                                                 AcceptsReturn="False"
+                                                                                 Text="{Binding PasswordName, UpdateSourceTrigger=PropertyChanged}"/>
 
                                                                         <TextBlock Text="Login:"
                                                                                    FontFamily="Bahnschrift"
@@ -963,7 +963,6 @@
                                                                                    FontWeight="SemiBold"
                                                                                    Foreground="White"
                                                                                    Margin="0,15,0,5"/>
-                                                                        <!-- TODO: Використати Data Binding для Text -->
                                                                         <TextBox x:Name="PasswordLoginTextBox"
                                                                                  Background="#171C26"
                                                                                  Foreground="White"
@@ -975,7 +974,8 @@
                                                                                  Height="50"
                                                                                  VerticalContentAlignment="Center"
                                                                                  TextWrapping="Wrap"
-                                                                                 AcceptsReturn="False"/>
+                                                                                 AcceptsReturn="False"
+                                                                                 Text="{Binding PasswordLogin, UpdateSourceTrigger=PropertyChanged}"/>
 
                                                                         <TextBlock Text="Password:"
                                                                                    FontFamily="Bahnschrift"
@@ -989,8 +989,6 @@
                                                                                         <ColumnDefinition Width="50"/>
                                                                                 </Grid.ColumnDefinitions>
 
-                                                                                <!-- TODO: Використати Data Binding для Password/Text -->
-                                                                                <!-- TODO: Використати Data Binding для Visibility -->
                                                                                 <PasswordBox x:Name="PasswordValueBox"
                                                                                              Grid.Column="0"
                                                                                              Background="#171C26"
@@ -1001,10 +999,10 @@
                                                                                              Padding="15"
                                                                                              Height="50"
                                                                                              VerticalContentAlignment="Center"
-                                                                                             Visibility="Visible"/>
+                                                                                             Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Invert}"
+                                                                                             ext:PasswordBoxHelper.BindPassword="True"
+                                                                                             ext:PasswordBoxHelper.BoundPassword="{Binding PasswordValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                                                                <!-- TODO: Використати Data Binding для Text -->
-                                                                                <!-- TODO: Використати Data Binding для Visibility -->
                                                                                 <TextBox x:Name="PasswordValueTextBox"
                                                                                          Grid.Column="0"
                                                                                          Background="#171C26"
@@ -1015,9 +1013,9 @@
                                                                                          Padding="15"
                                                                                          Height="50"
                                                                                          VerticalContentAlignment="Center"
-                                                                                         Visibility="Collapsed"/>
+                                                                                         Visibility="{Binding IsPasswordVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                                                         Text="{Binding PasswordValue, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                                                                <!-- TODO: Використати Command замість Click event handler -->
                                                                                 <Button Grid.Column="1"
                                                                                         Background="Transparent"
                                                                                         BorderThickness="0"
@@ -1026,7 +1024,7 @@
                                                                                         Cursor="Hand"
                                                                                         HorizontalAlignment="Center"
                                                                                         VerticalAlignment="Center"
-                                                                                        Click="TogglePasswordVisibility_Click">
+                                                                                        Command="{Binding TogglePasswordVisibilityCommand}">
                                                                                         <Image Source="Images/hide.png"
                                                                                                Width="24"
                                                                                                Height="24"/>
@@ -1042,21 +1040,19 @@
                                                                         <ColumnDefinition Width="*"/>
                                                                 </Grid.ColumnDefinitions>
 
-                                                                <!-- TODO: Використати Command замість Click event handler -->
                                                                 <Button Grid.Column="0"
                                                                         Style="{StaticResource AddButtonStyle}"
                                                                         Height="50"
-                                                                        Click="SavePasswordButton_Click">
+                                                                        Command="{Binding SavePasswordCommand}">
                                                                         <TextBlock Text="Save"
                                                                                    FontSize="16"
                                                                                    FontWeight="Bold"/>
                                                                 </Button>
 
-                                                                <!-- TODO: Використати Command замість Click event handler -->
                                                                 <Button Grid.Column="2"
                                                                         Style="{StaticResource DeleteButtonStyle}"
                                                                         Height="50"
-                                                                        Click="DeletePasswordButton_Click">
+                                                                        Command="{Binding DeletePasswordCommand}">
                                                                         <TextBlock Text="Delete"
                                                                                    FontSize="16"
                                                                                    FontWeight="Bold"/>

@@ -25,6 +25,7 @@ using KeyKeepers.DAL.Enums;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using KeyKeepersClient.ViewModels;
 
 namespace KeyKeepersClient;
 
@@ -33,6 +34,7 @@ public partial class MainWindow : Window
     private readonly IMediator mediator;
     private readonly IRepositoryWrapper repositoryWrapper;
     private readonly long userId;
+    private readonly MainWindowViewModel viewModel;
     private Button? currentActiveButton;
     private Button? currentActiveCommunityButton;
     private ObservableCollection<CategoryItem> customCategories;
@@ -42,12 +44,6 @@ public partial class MainWindow : Window
     private CategoryItem? currentEditingCategory = null;
     private long currentCategoryId = 0;
 
-
-#pragma warning disable CS0414
-    private bool isPasswordEditMode = false;
-#pragma warning restore CS0414
-
-    private string selectedPasswordIcon = "Images/Icons/internet_2.png";
     private Border? currentEditingPasswordCard = null;
     private PasswordData? currentEditingPassword = null;
     private DispatcherTimer? invitationCheckTimer;
@@ -61,6 +57,12 @@ public partial class MainWindow : Window
         customCategories = new ObservableCollection<CategoryItem>();
         communities = new ObservableCollection<CommunityItem>();
 
+        viewModel = new MainWindowViewModel(
+            mediator,
+            async () => await LoadPasswordsForCategory(currentCategoryId),
+            UpdatePasswordCardsButtons);
+        DataContext = viewModel;
+
         this.Loaded += MainWindow_Loaded;
 
         SetActiveCategory((Button)CategoriesPanel.Children[0]);
@@ -69,30 +71,13 @@ public partial class MainWindow : Window
 
     public void OpenAddPasswordMode()
     {
-
         if (isEditMode)
         {
             ExitEditMode();
         }
 
-        isPasswordEditMode = true;
-        PasswordEditPanel.Visibility = Visibility.Visible;
         CategoryEditPanel.Visibility = Visibility.Collapsed;
-        PasswordEditButtonsPanel.Visibility = Visibility.Visible;
-
-
-        PasswordNameTextBox.Text = string.Empty;
-        PasswordLoginTextBox.Text = string.Empty;
-        PasswordValueBox.Password = string.Empty;
-        PasswordValueTextBox.Text = string.Empty;
-        PasswordValueBox.Visibility = Visibility.Visible;
-        PasswordValueTextBox.Visibility = Visibility.Collapsed;
-        selectedPasswordIcon = "Images/Icons/internet_2.png";
-        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
-
-
-        UpdatePasswordCardsButtons(true);
-
+        viewModel.OpenAddPasswordMode(currentCategoryId);
 
         if (PasswordsScrollViewer != null)
         {
@@ -102,12 +87,10 @@ public partial class MainWindow : Window
 
     public void OpenAddCategoryMode()
     {
-
-        if (isPasswordEditMode)
+        if (viewModel.IsPasswordEditPanelVisible)
         {
-            ExitPasswordEditMode();
+            viewModel.ExitPasswordEditModeCommand.Execute(null);
         }
-
 
         isEditMode = true;
         currentEditingCategory = null;
@@ -140,7 +123,6 @@ public partial class MainWindow : Window
     {
         try
         {
-
             var query = new GetUserByIdQuery(userId);
             var result = await mediator.Send(query);
 
@@ -153,7 +135,6 @@ public partial class MainWindow : Window
 
                 if (editUserWindow.ShowDialog() == true)
                 {
-
                     await LoadCurrentUser();
                 }
             }
@@ -236,13 +217,10 @@ public partial class MainWindow : Window
         await LoadCommunitiesAsync();
         await LoadCategoriesAsync();
 
-
         await LoadPasswordsAsync(0);
         await LoadCurrentUser();
 
-
         StartInvitationCheckTimer();
-
 
         await CheckForInvitationsAsync();
     }
@@ -269,7 +247,6 @@ public partial class MainWindow : Window
             if (result.IsSuccess)
             {
                 var userDto = result.Value;
-
 
                 UserContainer.Children.Clear();
 
@@ -355,7 +332,6 @@ public partial class MainWindow : Window
 
         button.Content = panel;
 
-
         var container = new StackPanel
         {
             Orientation = Orientation.Vertical,
@@ -386,7 +362,6 @@ public partial class MainWindow : Window
             StartPoint = new Point(0, 0),
             EndPoint = new Point(0, 1),
         };
-
 
         brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF81C784"), 0.0));
         brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF4CAF50"), 0.5));
@@ -442,7 +417,6 @@ public partial class MainWindow : Window
                 return;
             }
 
-
             PasswordsPanel.Children.Clear();
 
             var query = new GetCredentialsByIdQuery(categoryId);
@@ -474,6 +448,11 @@ public partial class MainWindow : Window
         }
     }
 
+    private async Task LoadPasswordsForCategory(long categoryId)
+    {
+        await LoadPasswordsAsync(categoryId);
+    }
+
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         if (e.ButtonState == MouseButtonState.Pressed)
@@ -498,7 +477,6 @@ public partial class MainWindow : Window
         {
             SetActiveCategory(clickedButton);
 
-
             if (clickedButton.Tag is CategoryItem category)
             {
                 currentCategoryId = category.Id;
@@ -506,7 +484,6 @@ public partial class MainWindow : Window
             }
             else
             {
-
                 currentCategoryId = 0;
                 _ = LoadPasswordsAsync(0);
             }
@@ -515,12 +492,10 @@ public partial class MainWindow : Window
 
     private void SetActiveCategory(Button button)
     {
-
         if (currentActiveButton != null)
         {
             currentActiveButton.Style = (Style)FindResource("CategoryButtonStyle");
         }
-
 
         currentActiveButton = button;
         button.Style = (Style)FindResource("ActiveCategoryButtonStyle");
@@ -528,12 +503,10 @@ public partial class MainWindow : Window
 
     private void SetActiveCommunity(Button button)
     {
-
         if (currentActiveCommunityButton != null)
         {
             currentActiveCommunityButton.Style = (Style)FindResource("CommunityButtonStyle");
         }
-
 
         currentActiveCommunityButton = button;
         button.Style = (Style)FindResource("ActiveCommunityButtonStyle");
@@ -541,7 +514,6 @@ public partial class MainWindow : Window
 
     private void SettingsButton_Click(object sender, RoutedEventArgs e)
     {
-
         var settingsWindow = new SettingsWindow(this);
         settingsWindow.ShowDialog();
     }
@@ -553,19 +525,15 @@ public partial class MainWindow : Window
 
     private void CategoryNameTextBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
-
         var textBox = sender as TextBox;
         if (textBox != null)
         {
-
             if (e.Delta > 0)
             {
-
                 textBox.ScrollToHorizontalOffset(textBox.HorizontalOffset - 20);
             }
             else
             {
-
                 textBox.ScrollToHorizontalOffset(textBox.HorizontalOffset + 20);
             }
 
@@ -584,15 +552,12 @@ public partial class MainWindow : Window
         {
             if (currentEditingCategory == null)
             {
-
                 await AddCustomCategoryAsync(CategoryNameTextBox.Text.Trim());
             }
             else
             {
-
                 await UpdateCategoryAsync(currentEditingCategory, CategoryNameTextBox.Text.Trim());
             }
-
 
             CategoryNameTextBox.Text = string.Empty;
             currentEditingCategory = null;
@@ -615,21 +580,17 @@ public partial class MainWindow : Window
             return;
         }
 
-
         if (!string.IsNullOrWhiteSpace(CategoryNameTextBox.Text))
         {
             if (currentEditingCategory == null)
             {
-
                 await AddCustomCategoryAsync(CategoryNameTextBox.Text.Trim());
             }
             else
             {
-
                 await UpdateCategoryAsync(currentEditingCategory, CategoryNameTextBox.Text.Trim());
             }
         }
-
 
         ExitEditMode();
     }
@@ -646,12 +607,10 @@ public partial class MainWindow : Window
 
     private void UpdateAllCategoryButtonsVisibility()
     {
-
         foreach (var child in CategoriesPanel.Children)
         {
             if (child is Button btn && btn.Content is Grid grid)
             {
-
                 if (grid.Children.Count >= 3 && grid.Children[2] is StackPanel buttonPanel)
                 {
                     buttonPanel.Visibility = isEditMode ? Visibility.Visible : Visibility.Collapsed;
@@ -664,7 +623,6 @@ public partial class MainWindow : Window
     {
         if (sender is Button editButton && editButton.Tag is CategoryItem category)
         {
-
             isEditMode = true;
             currentEditingCategory = category;
             CategoryNameTextBox.Text = category.Name;
@@ -723,12 +681,10 @@ public partial class MainWindow : Window
 
     private void UpdateCategoryButton(CategoryItem category)
     {
-
         foreach (var child in CategoriesPanel.Children)
         {
             if (child is Button btn && btn.Tag is CategoryItem tag && tag.Id == category.Id)
             {
-
                 var index = CategoriesPanel.Children.IndexOf(btn);
                 CategoriesPanel.Children.Remove(btn);
                 var newButton = CreateCategoryButton(category);
@@ -755,7 +711,6 @@ public partial class MainWindow : Window
 
             if (result.IsSuccess)
             {
-
                 Button? buttonToRemove = null;
                 foreach (var child in CategoriesPanel.Children)
                 {
@@ -768,7 +723,6 @@ public partial class MainWindow : Window
 
                 if (buttonToRemove != null)
                 {
-
                     if (buttonToRemove == currentActiveButton)
                     {
                         SetActiveCategory((Button)CategoriesPanel.Children[0]);
@@ -889,7 +843,6 @@ public partial class MainWindow : Window
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-
                 button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
             else
@@ -932,7 +885,6 @@ public partial class MainWindow : Window
             {
                 communities.Clear();
 
-
                 for (int i = CommunitiesPanel.Children.Count - 1; i >= 1; i--)
                 {
                     CommunitiesPanel.Children.RemoveAt(i);
@@ -948,7 +900,6 @@ public partial class MainWindow : Window
                         UserRole = communityUser.UserRole,
                     };
 
-
                     System.Diagnostics.Debug.WriteLine($"Community: {communityItem.Name}, Role: {communityItem.UserRole}");
 
                     communities.Add(communityItem);
@@ -959,7 +910,6 @@ public partial class MainWindow : Window
             }
             else
             {
-
                 string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Невідома помилка";
                 System.Diagnostics.Debug.WriteLine($"LoadCommunitiesAsync failed: {errorMsg}");
             }
@@ -993,10 +943,8 @@ public partial class MainWindow : Window
             {
                 CommunityItem community;
 
-
                 if (btn.Tag is string tagStr && tagStr == "0")
                 {
-
                     community = new CommunityItem
                     {
                         CommunityId = 0,
@@ -1025,28 +973,21 @@ public partial class MainWindow : Window
 
     private async Task EnterCommunityAsync(CommunityItem community)
     {
-
         currentCommunity = community;
 
-
         System.Diagnostics.Debug.WriteLine($"Entering community: {community.Name}, Role: {community.UserRole}");
-
 
         bool isPrivate = string.Equals(community.Name, "Private", StringComparison.OrdinalIgnoreCase);
 
         if (isPrivate)
         {
-
             await LoadCategoriesAsync();
-
 
             AdminPanelButton.Visibility = Visibility.Collapsed;
         }
         else
         {
-
             CategoriesPanel.Children.Clear();
-
 
             var allBtn = new Button
             {
@@ -1078,7 +1019,6 @@ public partial class MainWindow : Window
             allBtn.Content = allContent;
             CategoriesPanel.Children.Add(allBtn);
 
-
             var favBtn = new Button
             {
                 Style = (Style)FindResource("CategoryButtonStyle"),
@@ -1109,8 +1049,6 @@ public partial class MainWindow : Window
             favBtn.Content = favContent;
             CategoriesPanel.Children.Add(favBtn);
 
-
-
             if (community.UserRole == CommunityRole.Owner)
             {
                 AdminPanelButton.Visibility = Visibility.Visible;
@@ -1133,17 +1071,13 @@ public partial class MainWindow : Window
                 userId,
                 onDeleted: async () =>
                 {
-
                     await LoadCommunitiesAsync();
-
 
                     CommunityButton_Click(PrivateCommunityButton, new RoutedEventArgs());
                 },
                 onUpdated: async () =>
                 {
-
                     await LoadCommunitiesAsync();
-
 
                     if (currentActiveCommunityButton != null)
                     {
@@ -1174,7 +1108,6 @@ public partial class MainWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-
         var iconSpace = new Border
         {
             Width = 30,
@@ -1188,7 +1121,6 @@ public partial class MainWindow : Window
             VerticalAlignment = VerticalAlignment.Center,
         };
 
-
         var buttonPanel = new StackPanel
         {
             Orientation = Orientation.Horizontal,
@@ -1196,7 +1128,6 @@ public partial class MainWindow : Window
             VerticalAlignment = VerticalAlignment.Center,
             Visibility = isEditMode ? Visibility.Visible : Visibility.Collapsed,
         };
-
 
         var editButton = new Button
         {
@@ -1213,7 +1144,6 @@ public partial class MainWindow : Window
             Tag = category,
         };
         editButton.Click += EditCategoryButton_Click;
-
 
         var deleteButton = new Button
         {
@@ -1281,13 +1211,11 @@ public partial class MainWindow : Window
     {
         try
         {
-
             var button = sender as Button;
             if (button == null)
             {
                 return;
             }
-
 
             var grid = button.Parent as Grid;
             if (grid == null)
@@ -1295,20 +1223,17 @@ public partial class MainWindow : Window
                 return;
             }
 
-
             var border = grid.Parent as Border;
             if (border == null || border.Tag == null)
             {
                 return;
             }
 
-
             var passwordData = border.Tag as PasswordData;
             if (passwordData == null)
             {
                 return;
             }
-
 
             Clipboard.SetText(passwordData.Password);
 
@@ -1339,13 +1264,11 @@ public partial class MainWindow : Window
 
     private void EditPasswordButton_Click(object sender, RoutedEventArgs e)
     {
-
         var button = sender as Button;
         if (button == null)
         {
             return;
         }
-
 
         var grid = button.Parent as Grid;
         if (grid == null)
@@ -1359,282 +1282,21 @@ public partial class MainWindow : Window
             return;
         }
 
-
         var passwordData = border.Tag as PasswordData;
         if (passwordData == null)
         {
             return;
         }
 
-
-        if (!isPasswordEditMode)
-        {
-            isPasswordEditMode = true;
-            CategoryEditPanel.Visibility = Visibility.Collapsed;
-            PasswordEditButtonsPanel.Visibility = Visibility.Visible;
-
-
-            UpdatePasswordCardsButtons(true);
-        }
-
-
+        CategoryEditPanel.Visibility = Visibility.Collapsed;
         currentEditingPasswordCard = border;
         currentEditingPassword = passwordData;
 
-
-        PasswordNameTextBox.Text = passwordData.Name;
-        PasswordLoginTextBox.Text = passwordData.Login;
-        PasswordValueBox.Password = passwordData.Password;
-        PasswordValueTextBox.Text = passwordData.Password;
-        selectedPasswordIcon = passwordData.IconPath;
-        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + passwordData.IconPath));
-
-
-        PasswordEditPanel.Visibility = Visibility.Visible;
-
+        viewModel.OpenEditPasswordMode(passwordData, currentCategoryId);
 
         if (PasswordsScrollViewer != null)
         {
             PasswordsScrollViewer.ScrollToTop();
-        }
-    }
-
-    private void PasswordIconButton_Click(object sender, RoutedEventArgs e)
-    {
-
-        MessageBox.Show(
-            "Вибір іконки буде реалізовано в майбутньому.",
-            "Вибір іконки",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
-    }
-
-    private void TogglePasswordVisibility_Click(object sender, RoutedEventArgs e)
-    {
-        if (PasswordValueBox.Visibility == Visibility.Visible)
-        {
-
-            PasswordValueTextBox.Text = PasswordValueBox.Password;
-            PasswordValueBox.Visibility = Visibility.Collapsed;
-            PasswordValueTextBox.Visibility = Visibility.Visible;
-        }
-        else
-        {
-
-            PasswordValueBox.Password = PasswordValueTextBox.Text;
-            PasswordValueTextBox.Visibility = Visibility.Collapsed;
-            PasswordValueBox.Visibility = Visibility.Visible;
-        }
-    }
-
-    private async void SavePasswordButton_Click(object sender, RoutedEventArgs e)
-    {
-
-        string name = PasswordNameTextBox.Text.Trim();
-        string login = PasswordLoginTextBox.Text.Trim();
-        string password = PasswordValueBox.Visibility == Visibility.Visible
-            ? PasswordValueBox.Password
-            : PasswordValueTextBox.Text;
-
-
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            MessageBox.Show(
-                "Ім'я додатку обов'язкове!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (name.Length < 3)
-        {
-            MessageBox.Show(
-                "Мінімальна довжина назви додатку 3 символів!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (name.Length > 30)
-        {
-            MessageBox.Show(
-                "Максимальна довжина назви додатку 30 символів!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(login))
-        {
-            MessageBox.Show(
-                "Логін обов'язковий!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (login.Length > 50)
-        {
-            MessageBox.Show(
-                "Максимальна довжина логіну 50 символів!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(password))
-        {
-            MessageBox.Show(
-                "Пароль обов'язковий!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (password.Length > 30)
-        {
-            MessageBox.Show(
-                "Максимальна довжина паролю 30 символів!",
-                "Помилка валідації",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        if (currentCategoryId == 0)
-        {
-            MessageBox.Show(
-                "Будь ласка, оберіть категорію для паролю!",
-                "Помилка",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
-            return;
-        }
-
-        try
-        {
-            if (this.mediator == null)
-            {
-                MessageBox.Show(
-                    "База даних не налаштована.",
-                    "Помилка",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
-                return;
-            }
-
-
-            string strength = CalculatePasswordStrength(password);
-
-
-            if (currentEditingPasswordCard != null && currentEditingPassword != null)
-            {
-
-                var updateRequest = new UpdatePasswordRequest
-                {
-                    Id = currentEditingPassword.Id,
-                    AppName = name,
-                    Login = login,
-                    Password = password,
-                    LogoUrl = selectedPasswordIcon,
-                    CategoryId = currentCategoryId,
-                };
-
-                var updateCommand = new UpdatePasswordCommand(updateRequest);
-                var updateResult = await this.mediator.Send(updateCommand);
-
-                if (updateResult.IsSuccess)
-                {
-
-                    UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
-
-                    MessageBox.Show(
-                        "Пароль успішно оновлено!",
-                        "Успіх",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-
-                    UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
-
-
-                    currentEditingPasswordCard = null;
-                    currentEditingPassword = null;
-                }
-                else
-                {
-                    MessageBox.Show(
-                        $"Помилка оновлення паролю: {string.Join(", ", updateResult.Errors.Select(e => e.Message))}",
-                        "Помилка",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return;
-                }
-            }
-            else
-            {
-
-                var createRequest = new CreatePasswordRequest
-                {
-                    AppName = name,
-                    Login = login,
-                    Password = password,
-                    LogoUrl = selectedPasswordIcon,
-                    CategoryId = currentCategoryId,
-                };
-
-                var createCommand = new CreatePasswordCommand(createRequest);
-                var createResult = await this.mediator.Send(createCommand);
-
-                if (createResult.IsSuccess)
-                {
-
-                    CreatePasswordCard(
-                        createResult.Value.Id,
-                        createResult.Value.AppName,
-                        createResult.Value.Login,
-                        createResult.Value.Password,
-                        createResult.Value.LogoUrl ?? "Images/Icons/internet_2.png",
-                        strength,
-                        createResult.Value.CategoryId);
-
-                    MessageBox.Show(
-                        "Пароль успішно збережено!",
-                        "Успіх",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                }
-                else
-                {
-                    MessageBox.Show(
-                        $"Помилка збереження паролю: {string.Join(", ", createResult.Errors.Select(e => e.Message))}",
-                        "Помилка",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                    return;
-                }
-            }
-
-
-            PasswordNameTextBox.Text = string.Empty;
-            PasswordLoginTextBox.Text = string.Empty;
-            PasswordValueBox.Password = string.Empty;
-            PasswordValueTextBox.Text = string.Empty;
-            selectedPasswordIcon = "Images/Icons/internet_2.png";
-            PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"Помилка: {ex.Message}",
-                "Помилка",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
         }
     }
 
@@ -1647,7 +1309,6 @@ public partial class MainWindow : Window
 
         int score = 0;
 
-
         if (password.Length >= 8)
         {
             score++;
@@ -1658,24 +1319,20 @@ public partial class MainWindow : Window
             score++;
         }
 
-
         if (password.Any(char.IsLower))
         {
             score++;
         }
-
 
         if (password.Any(char.IsUpper))
         {
             score++;
         }
 
-
         if (password.Any(char.IsDigit))
         {
             score++;
         }
-
 
         if (password.Any(ch => !char.IsLetterOrDigit(ch)))
         {
@@ -1711,7 +1368,6 @@ public partial class MainWindow : Window
             Height = 100
         };
 
-
         var passwordData = new PasswordData
         {
             Id = id,
@@ -1724,14 +1380,12 @@ public partial class MainWindow : Window
         };
         border.Tag = passwordData;
 
-
         var grid = new Grid();
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
-
 
         var iconBorder = new Border
         {
@@ -1760,7 +1414,6 @@ public partial class MainWindow : Window
         iconBorder.Child = iconImage;
         Grid.SetColumn(iconBorder, 0);
 
-
         var stackPanel = new StackPanel
         {
             VerticalAlignment = VerticalAlignment.Center,
@@ -1788,7 +1441,6 @@ public partial class MainWindow : Window
         stackPanel.Children.Add(nameText);
         stackPanel.Children.Add(loginText);
         Grid.SetColumn(stackPanel, 1);
-
 
         if (strength != "none")
         {
@@ -1839,7 +1491,6 @@ public partial class MainWindow : Window
             grid.Children.Add(strengthBorder);
         }
 
-
         var copyButton = new Button
         {
             Style = (Style)FindResource("IconButtonStyle"),
@@ -1856,15 +1507,13 @@ public partial class MainWindow : Window
         copyButton.Content = copyImage;
         Grid.SetColumn(copyButton, 3);
 
-
         var actionButton = new Button
         {
             Style = (Style)FindResource("IconButtonStyle")
         };
 
-        if (isPasswordEditMode)
+        if (viewModel.IsPasswordEditPanelVisible)
         {
-
             actionButton.Click += EditPasswordButton_Click;
             var editImage = new Image
             {
@@ -1876,7 +1525,6 @@ public partial class MainWindow : Window
         }
         else
         {
-
             actionButton.Click += FavoriteButton_Click;
             var starImage = new Image
             {
@@ -1889,7 +1537,6 @@ public partial class MainWindow : Window
 
         Grid.SetColumn(actionButton, 4);
 
-
         grid.Children.Add(iconBorder);
         grid.Children.Add(stackPanel);
         grid.Children.Add(copyButton);
@@ -1897,14 +1544,12 @@ public partial class MainWindow : Window
 
         border.Child = grid;
 
-
         PasswordsPanel.Children.Add(border);
 #pragma warning restore SA1413
     }
 
     private void UpdatePasswordCard(Border border, string name, string login, string password, string iconPath, string strength)
     {
-
         var passwordData = new PasswordData
         {
             Name = name,
@@ -1915,13 +1560,11 @@ public partial class MainWindow : Window
         };
         border.Tag = passwordData;
 
-
         var grid = border.Child as Grid;
         if (grid == null)
         {
             return;
         }
-
 
         var iconBorder = grid.Children[0] as Border;
         if (iconBorder != null)
@@ -1932,7 +1575,6 @@ public partial class MainWindow : Window
                 iconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + iconPath));
             }
         }
-
 
         var stackPanel = grid.Children[1] as StackPanel;
         if (stackPanel != null && stackPanel.Children.Count >= 2)
@@ -1950,8 +1592,6 @@ public partial class MainWindow : Window
             }
         }
 
-
-
         UIElement? oldStrengthBadge = null;
         foreach (UIElement child in grid.Children)
         {
@@ -1966,7 +1606,6 @@ public partial class MainWindow : Window
         {
             grid.Children.Remove(oldStrengthBadge);
         }
-
 
         if (strength != "none")
         {
@@ -2018,150 +1657,12 @@ public partial class MainWindow : Window
         }
     }
 
-    private async void DeletePasswordButton_Click(object sender, RoutedEventArgs e)
-    {
-        var result = MessageBox.Show(
-            "Ви впевнені, що хочете видалити цей пароль?",
-            "Підтвердження",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
-
-        if (result == MessageBoxResult.Yes)
-        {
-
-            if (currentEditingPasswordCard != null && currentEditingPassword != null)
-            {
-                try
-                {
-                    if (this.mediator == null)
-                    {
-                        MessageBox.Show(
-                            "База даних не налаштована.",
-                            "Помилка",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                        return;
-                    }
-
-                    var deleteCommand = new DeletePasswordCommand(currentEditingPassword.Id);
-                    var deleteResult = await this.mediator.Send(deleteCommand);
-
-                    if (deleteResult.IsSuccess)
-                    {
-                        PasswordsPanel.Children.Remove(currentEditingPasswordCard);
-                        currentEditingPasswordCard = null;
-                        currentEditingPassword = null;
-
-
-                        PasswordNameTextBox.Text = string.Empty;
-                        PasswordLoginTextBox.Text = string.Empty;
-                        PasswordValueBox.Password = string.Empty;
-                        PasswordValueTextBox.Text = string.Empty;
-                        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
-
-                        MessageBox.Show(
-                            "Пароль успішно видалено!",
-                            "Успіх",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            $"Помилка видалення паролю: {string.Join(", ", deleteResult.Errors.Select(e => e.Message))}",
-                            "Помилка",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(
-                        $"Помилка: {ex.Message}",
-                        "Помилка",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-                }
-            }
-        }
-    }
-
-    private void ExitPasswordEditMode()
-    {
-
-        isPasswordEditMode = false;
-        PasswordEditPanel.Visibility = Visibility.Collapsed;
-        PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
-
-
-        UpdatePasswordCardsButtons(false);
-
-
-        currentEditingPasswordCard = null;
-        currentEditingPassword = null;
-
-
-        PasswordNameTextBox.Text = string.Empty;
-        PasswordLoginTextBox.Text = string.Empty;
-        PasswordValueBox.Password = string.Empty;
-        PasswordValueTextBox.Text = string.Empty;
-        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
-    }
-
-    private void ExitPasswordEditMode_Click(object sender, RoutedEventArgs e)
-    {
-
-        bool hasChanges = !string.IsNullOrWhiteSpace(PasswordNameTextBox.Text) ||
-                          !string.IsNullOrWhiteSpace(PasswordLoginTextBox.Text) ||
-                          !string.IsNullOrWhiteSpace(PasswordValueBox.Password) ||
-                          !string.IsNullOrWhiteSpace(PasswordValueTextBox.Text);
-
-        if (hasChanges)
-        {
-            var result = MessageBox.Show(
-                "У вас є незбережені зміни. Зберегти їх перед виходом?",
-                "Незбережені зміни",
-                MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                SavePasswordButton_Click(sender, e);
-            }
-            else if (result == MessageBoxResult.Cancel)
-            {
-                return;
-            }
-        }
-
-
-        isPasswordEditMode = false;
-        PasswordEditPanel.Visibility = Visibility.Collapsed;
-        PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
-
-
-        UpdatePasswordCardsButtons(false);
-
-
-        currentEditingPasswordCard = null;
-        currentEditingPassword = null;
-
-
-        PasswordNameTextBox.Text = string.Empty;
-        PasswordLoginTextBox.Text = string.Empty;
-        PasswordValueBox.Password = string.Empty;
-        PasswordValueTextBox.Text = string.Empty;
-        PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/Images/Icons/internet_2.png"));
-    }
-
     private void UpdatePasswordCardsButtons(bool showEditButton)
     {
-
         foreach (var child in PasswordsPanel.Children)
         {
             if (child is Border border && border.Child is Grid grid)
             {
-
                 Button? actionButton = null;
                 foreach (UIElement element in grid.Children)
                 {
@@ -2174,9 +1675,7 @@ public partial class MainWindow : Window
 
                 if (actionButton != null)
                 {
-
                     grid.Children.Remove(actionButton);
-
 
                     var newButton = new Button
                     {
@@ -2185,7 +1684,6 @@ public partial class MainWindow : Window
 
                     if (showEditButton)
                     {
-
                         newButton.Click += EditPasswordButton_Click;
                         var editImage = new Image
                         {
@@ -2197,7 +1695,6 @@ public partial class MainWindow : Window
                     }
                     else
                     {
-
                         newButton.Click += FavoriteButton_Click;
                         var starImage = new Image
                         {
@@ -2248,11 +1745,8 @@ public partial class MainWindow : Window
             var query = new GetByRecipientIdQuery(userId);
             var result = await mediator.Send(query);
 
-
-
             if (result.IsSuccess && result.Value != null)
             {
-
                 var pendingInvitations = result.Value.Where(x => x.Status == RequestStatus.Pending).ToList();
 
                 if (pendingInvitations.Any())
@@ -2276,7 +1770,6 @@ public partial class MainWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Error checking invitations: {ex.Message}");
 
-
             InvitationsButton.Visibility = Visibility.Collapsed;
         }
     }
@@ -2285,7 +1778,6 @@ public partial class MainWindow : Window
     {
         var invitationsWindow = new InvitationsWindow(userId, async () =>
         {
-
             await LoadCommunitiesAsync();
             await CheckForInvitationsAsync();
         })
@@ -2294,7 +1786,6 @@ public partial class MainWindow : Window
         };
 
         invitationsWindow.ShowDialog();
-
 
         _ = CheckForInvitationsAsync();
     }
