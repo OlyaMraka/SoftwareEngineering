@@ -40,10 +40,10 @@ public partial class MainWindow : Window
     private CommunityItem? currentCommunity = null;
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
-    private long currentCategoryId = 0; // 0 means "All items"
+    private long currentCategoryId = 0;
 
-    // private long currentCommunityId = 0; // 0 means "Private"
-#pragma warning disable CS0414 // Field is assigned but its value is never used
+
+#pragma warning disable CS0414
     private bool isPasswordEditMode = false;
 #pragma warning restore CS0414
 
@@ -69,7 +69,7 @@ public partial class MainWindow : Window
 
     public void OpenAddPasswordMode()
     {
-        // Exit category edit mode if active
+
         if (isEditMode)
         {
             ExitEditMode();
@@ -80,7 +80,7 @@ public partial class MainWindow : Window
         CategoryEditPanel.Visibility = Visibility.Collapsed;
         PasswordEditButtonsPanel.Visibility = Visibility.Visible;
 
-        // Clear form
+
         PasswordNameTextBox.Text = string.Empty;
         PasswordLoginTextBox.Text = string.Empty;
         PasswordValueBox.Password = string.Empty;
@@ -90,10 +90,10 @@ public partial class MainWindow : Window
         selectedPasswordIcon = "Images/Icons/internet_2.png";
         PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + selectedPasswordIcon));
 
-        // Update all password cards to show edit button
+
         UpdatePasswordCardsButtons(true);
 
-        // Scroll to top
+
         if (PasswordsScrollViewer != null)
         {
             PasswordsScrollViewer.ScrollToTop();
@@ -102,13 +102,13 @@ public partial class MainWindow : Window
 
     public void OpenAddCategoryMode()
     {
-        // Exit password edit mode if active
+
         if (isPasswordEditMode)
         {
             ExitPasswordEditMode();
         }
 
-        // Enter edit mode for creating new category
+
         isEditMode = true;
         currentEditingCategory = null;
         CategoryNameTextBox.Text = string.Empty;
@@ -140,7 +140,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            // Get current user data
+
             var query = new GetUserByIdQuery(userId);
             var result = await mediator.Send(query);
 
@@ -153,7 +153,7 @@ public partial class MainWindow : Window
 
                 if (editUserWindow.ShowDialog() == true)
                 {
-                    // Reload user data after successful update
+
                     await LoadCurrentUser();
                 }
             }
@@ -236,14 +236,14 @@ public partial class MainWindow : Window
         await LoadCommunitiesAsync();
         await LoadCategoriesAsync();
 
-        // Load all passwords by default (category ID = 0 means "All items")
+
         await LoadPasswordsAsync(0);
         await LoadCurrentUser();
 
-        // Start invitation check timer
+
         StartInvitationCheckTimer();
 
-        // Check invitations immediately on load
+
         await CheckForInvitationsAsync();
     }
 
@@ -270,7 +270,7 @@ public partial class MainWindow : Window
             {
                 var userDto = result.Value;
 
-                // Remove old user profile if exists
+
                 UserContainer.Children.Clear();
 
                 UIElement userProfilePanel = CreateUserProfilePanel(userDto.Name, userDto.Surname, userDto.Email);
@@ -355,7 +355,7 @@ public partial class MainWindow : Window
 
         button.Content = panel;
 
-        // Create a container with button and separator separate
+
         var container = new StackPanel
         {
             Orientation = Orientation.Vertical,
@@ -384,13 +384,13 @@ public partial class MainWindow : Window
         var brush = new LinearGradientBrush
         {
             StartPoint = new Point(0, 0),
-            EndPoint = new Point(0, 1), // Вертикальний градієнт
+            EndPoint = new Point(0, 1),
         };
 
-        // Ніжний зелений/м'ятний градієнт
-        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF81C784"), 0.0)); // Світлий, м'який зелений (верх)
-        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF4CAF50"), 0.5)); // Середній зелений (центр)
-        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF1B5E20"), 1.0)); // Темний зелений (низ)
+
+        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF81C784"), 0.0));
+        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF4CAF50"), 0.5));
+        brush.GradientStops.Add(new GradientStop((Color)ColorConverter.ConvertFromString("#FF1B5E20"), 1.0));
 
         return brush;
     }
@@ -442,7 +442,7 @@ public partial class MainWindow : Window
                 return;
             }
 
-            // Clear current passwords
+
             PasswordsPanel.Children.Clear();
 
             var query = new GetCredentialsByIdQuery(categoryId);
@@ -498,7 +498,7 @@ public partial class MainWindow : Window
         {
             SetActiveCategory(clickedButton);
 
-            // Load passwords for this category
+
             if (clickedButton.Tag is CategoryItem category)
             {
                 currentCategoryId = category.Id;
@@ -506,7 +506,7 @@ public partial class MainWindow : Window
             }
             else
             {
-                // "All items" button
+
                 currentCategoryId = 0;
                 _ = LoadPasswordsAsync(0);
             }
@@ -515,33 +515,33 @@ public partial class MainWindow : Window
 
     private void SetActiveCategory(Button button)
     {
-        // Reset previous active button to normal style
+
         if (currentActiveButton != null)
         {
             currentActiveButton.Style = (Style)FindResource("CategoryButtonStyle");
         }
 
-        // Set new active button
+
         currentActiveButton = button;
         button.Style = (Style)FindResource("ActiveCategoryButtonStyle");
     }
 
     private void SetActiveCommunity(Button button)
     {
-        // Reset previous active community button to normal style
+
         if (currentActiveCommunityButton != null)
         {
             currentActiveCommunityButton.Style = (Style)FindResource("CommunityButtonStyle");
         }
 
-        // Set new active community button
+
         currentActiveCommunityButton = button;
         button.Style = (Style)FindResource("ActiveCommunityButtonStyle");
     }
 
     private void SettingsButton_Click(object sender, RoutedEventArgs e)
     {
-        // Open settings window
+
         var settingsWindow = new SettingsWindow(this);
         settingsWindow.ShowDialog();
     }
@@ -553,19 +553,19 @@ public partial class MainWindow : Window
 
     private void CategoryNameTextBox_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
     {
-        // Allow scrolling in the TextBox without showing scrollbar
+
         var textBox = sender as TextBox;
         if (textBox != null)
         {
-            // Scroll the text horizontally
+
             if (e.Delta > 0)
             {
-                // Scroll left
+
                 textBox.ScrollToHorizontalOffset(textBox.HorizontalOffset - 20);
             }
             else
             {
-                // Scroll right
+
                 textBox.ScrollToHorizontalOffset(textBox.HorizontalOffset + 20);
             }
 
@@ -584,16 +584,16 @@ public partial class MainWindow : Window
         {
             if (currentEditingCategory == null)
             {
-                // Create new category
+
                 await AddCustomCategoryAsync(CategoryNameTextBox.Text.Trim());
             }
             else
             {
-                // Update existing category
+
                 await UpdateCategoryAsync(currentEditingCategory, CategoryNameTextBox.Text.Trim());
             }
 
-            // Clear the textbox and reset currentEditingCategory, but stay in edit mode
+
             CategoryNameTextBox.Text = string.Empty;
             currentEditingCategory = null;
             CategoryNameTextBox.Focus();
@@ -615,22 +615,22 @@ public partial class MainWindow : Window
             return;
         }
 
-        // If there's text in the textbox, save it
+
         if (!string.IsNullOrWhiteSpace(CategoryNameTextBox.Text))
         {
             if (currentEditingCategory == null)
             {
-                // Create new category
+
                 await AddCustomCategoryAsync(CategoryNameTextBox.Text.Trim());
             }
             else
             {
-                // Update existing category
+
                 await UpdateCategoryAsync(currentEditingCategory, CategoryNameTextBox.Text.Trim());
             }
         }
 
-        // Always exit edit mode when Save is clicked
+
         ExitEditMode();
     }
 
@@ -646,12 +646,12 @@ public partial class MainWindow : Window
 
     private void UpdateAllCategoryButtonsVisibility()
     {
-        // Update visibility of edit/delete buttons on all custom categories
+
         foreach (var child in CategoriesPanel.Children)
         {
             if (child is Button btn && btn.Content is Grid grid)
             {
-                // Find the button panel (third child in grid)
+
                 if (grid.Children.Count >= 3 && grid.Children[2] is StackPanel buttonPanel)
                 {
                     buttonPanel.Visibility = isEditMode ? Visibility.Visible : Visibility.Collapsed;
@@ -664,7 +664,7 @@ public partial class MainWindow : Window
     {
         if (sender is Button editButton && editButton.Tag is CategoryItem category)
         {
-            // Enter edit mode for existing category
+
             isEditMode = true;
             currentEditingCategory = category;
             CategoryNameTextBox.Text = category.Name;
@@ -723,12 +723,12 @@ public partial class MainWindow : Window
 
     private void UpdateCategoryButton(CategoryItem category)
     {
-        // Find and update the category button
+
         foreach (var child in CategoriesPanel.Children)
         {
             if (child is Button btn && btn.Tag is CategoryItem tag && tag.Id == category.Id)
             {
-                // Recreate the button with updated name
+
                 var index = CategoriesPanel.Children.IndexOf(btn);
                 CategoriesPanel.Children.Remove(btn);
                 var newButton = CreateCategoryButton(category);
@@ -755,7 +755,7 @@ public partial class MainWindow : Window
 
             if (result.IsSuccess)
             {
-                // Find and remove the category button
+
                 Button? buttonToRemove = null;
                 foreach (var child in CategoriesPanel.Children)
                 {
@@ -768,7 +768,7 @@ public partial class MainWindow : Window
 
                 if (buttonToRemove != null)
                 {
-                    // If the deleted category was active, set "All items" as active
+
                     if (buttonToRemove == currentActiveButton)
                     {
                         SetActiveCategory((Button)CategoriesPanel.Children[0]);
@@ -889,7 +889,7 @@ public partial class MainWindow : Window
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                // Automatically select the newly created community
+
                 button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
             else
@@ -932,7 +932,7 @@ public partial class MainWindow : Window
             {
                 communities.Clear();
 
-                // Remove all community buttons except the Private button (first child)
+
                 for (int i = CommunitiesPanel.Children.Count - 1; i >= 1; i--)
                 {
                     CommunitiesPanel.Children.RemoveAt(i);
@@ -948,7 +948,7 @@ public partial class MainWindow : Window
                         UserRole = communityUser.UserRole,
                     };
 
-                    // Debug: Log the role for each community
+
                     System.Diagnostics.Debug.WriteLine($"Community: {communityItem.Name}, Role: {communityItem.UserRole}");
 
                     communities.Add(communityItem);
@@ -959,7 +959,7 @@ public partial class MainWindow : Window
             }
             else
             {
-                // Log error details
+
                 string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Невідома помилка";
                 System.Diagnostics.Debug.WriteLine($"LoadCommunitiesAsync failed: {errorMsg}");
             }
@@ -993,15 +993,15 @@ public partial class MainWindow : Window
             {
                 CommunityItem community;
 
-                // Handle Private button (has string tag "0")
+
                 if (btn.Tag is string tagStr && tagStr == "0")
                 {
-                    // Private community - no role, treated specially
+
                     community = new CommunityItem
                     {
                         CommunityId = 0,
                         Name = "Private",
-                        UserRole = CommunityRole.Member, // Set to Member to ensure Admin Panel is hidden
+                        UserRole = CommunityRole.Member,
                     };
                 }
                 else if (btn.Tag is CommunityItem commItem)
@@ -1025,29 +1025,29 @@ public partial class MainWindow : Window
 
     private async Task EnterCommunityAsync(CommunityItem community)
     {
-        // Set current community
+
         currentCommunity = community;
 
-        // Debug: Log community info
+
         System.Diagnostics.Debug.WriteLine($"Entering community: {community.Name}, Role: {community.UserRole}");
 
-        // Check if this is Private community
+
         bool isPrivate = string.Equals(community.Name, "Private", StringComparison.OrdinalIgnoreCase);
 
         if (isPrivate)
         {
-            // For Private community, reload the full category list
+
             await LoadCategoriesAsync();
 
-            // Hide admin panel button
+
             AdminPanelButton.Visibility = Visibility.Collapsed;
         }
         else
         {
-            // For other communities, show only placeholder categories
+
             CategoriesPanel.Children.Clear();
 
-            // All items (active)
+
             var allBtn = new Button
             {
                 Style = (Style)FindResource("ActiveCategoryButtonStyle"),
@@ -1078,7 +1078,7 @@ public partial class MainWindow : Window
             allBtn.Content = allContent;
             CategoriesPanel.Children.Add(allBtn);
 
-            // Favorite
+
             var favBtn = new Button
             {
                 Style = (Style)FindResource("CategoryButtonStyle"),
@@ -1109,8 +1109,8 @@ public partial class MainWindow : Window
             favBtn.Content = favContent;
             CategoriesPanel.Children.Add(favBtn);
 
-            // Show admin panel button ONLY for Owner
-            // For Admin and Member: button should not exist (Collapsed)
+
+
             if (community.UserRole == CommunityRole.Owner)
             {
                 AdminPanelButton.Visibility = Visibility.Visible;
@@ -1133,18 +1133,18 @@ public partial class MainWindow : Window
                 userId,
                 onDeleted: async () =>
                 {
-                    // Reload communities after deletion
+
                     await LoadCommunitiesAsync();
 
-                    // Return to Private view
+
                     CommunityButton_Click(PrivateCommunityButton, new RoutedEventArgs());
                 },
                 onUpdated: async () =>
                 {
-                    // Reload communities to reflect name change
+
                     await LoadCommunitiesAsync();
 
-                    // Update current community button text
+
                     if (currentActiveCommunityButton != null)
                     {
                         var textBlock = FindTextBlockInButton(currentActiveCommunityButton);
@@ -1174,7 +1174,7 @@ public partial class MainWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-        // Empty space for icon (instead of actual icon)
+
         var iconSpace = new Border
         {
             Width = 30,
@@ -1188,7 +1188,7 @@ public partial class MainWindow : Window
             VerticalAlignment = VerticalAlignment.Center,
         };
 
-        // Container for edit/delete buttons (on the right)
+
         var buttonPanel = new StackPanel
         {
             Orientation = Orientation.Horizontal,
@@ -1197,7 +1197,7 @@ public partial class MainWindow : Window
             Visibility = isEditMode ? Visibility.Visible : Visibility.Collapsed,
         };
 
-        // Edit button
+
         var editButton = new Button
         {
             Content = "✏",
@@ -1214,7 +1214,7 @@ public partial class MainWindow : Window
         };
         editButton.Click += EditCategoryButton_Click;
 
-        // Delete button
+
         var deleteButton = new Button
         {
             Content = "×",
@@ -1251,7 +1251,7 @@ public partial class MainWindow : Window
 
     private async void DeleteCategoryButton_Click(object sender, RoutedEventArgs e)
     {
-        e.Handled = true; // Prevent category button click
+        e.Handled = true;
 
         if (sender is Button deleteButton && deleteButton.Tag is CategoryItem category)
         {
@@ -1281,35 +1281,35 @@ public partial class MainWindow : Window
     {
         try
         {
-            // Find the password card (Border) that contains this button
+
             var button = sender as Button;
             if (button == null)
             {
                 return;
             }
 
-            // Navigate up to find the Grid that contains the button
+
             var grid = button.Parent as Grid;
             if (grid == null)
             {
                 return;
             }
 
-            // Navigate up to find the Border (password card)
+
             var border = grid.Parent as Border;
             if (border == null || border.Tag == null)
             {
                 return;
             }
 
-            // Extract password data from Tag
+
             var passwordData = border.Tag as PasswordData;
             if (passwordData == null)
             {
                 return;
             }
 
-            // Copy password to clipboard
+
             Clipboard.SetText(passwordData.Password);
 
             MessageBox.Show(
@@ -1339,14 +1339,14 @@ public partial class MainWindow : Window
 
     private void EditPasswordButton_Click(object sender, RoutedEventArgs e)
     {
-        // Find the password card (Border) that contains this button
+
         var button = sender as Button;
         if (button == null)
         {
             return;
         }
 
-        // Navigate up to find the Border (password card)
+
         var grid = button.Parent as Grid;
         if (grid == null)
         {
@@ -1359,29 +1359,29 @@ public partial class MainWindow : Window
             return;
         }
 
-        // Extract password data from Tag
+
         var passwordData = border.Tag as PasswordData;
         if (passwordData == null)
         {
             return;
         }
 
-        // Enter edit mode if not already in it
+
         if (!isPasswordEditMode)
         {
             isPasswordEditMode = true;
             CategoryEditPanel.Visibility = Visibility.Collapsed;
             PasswordEditButtonsPanel.Visibility = Visibility.Visible;
 
-            // Update all password cards to show edit button
+
             UpdatePasswordCardsButtons(true);
         }
 
-        // Store reference to the card being edited
+
         currentEditingPasswordCard = border;
         currentEditingPassword = passwordData;
 
-        // Populate form fields
+
         PasswordNameTextBox.Text = passwordData.Name;
         PasswordLoginTextBox.Text = passwordData.Login;
         PasswordValueBox.Password = passwordData.Password;
@@ -1389,10 +1389,10 @@ public partial class MainWindow : Window
         selectedPasswordIcon = passwordData.IconPath;
         PasswordIconImage.Source = new System.Windows.Media.Imaging.BitmapImage(new Uri("pack://application:,,,/" + passwordData.IconPath));
 
-        // Show edit panel
+
         PasswordEditPanel.Visibility = Visibility.Visible;
 
-        // Scroll to top to show the edit panel
+
         if (PasswordsScrollViewer != null)
         {
             PasswordsScrollViewer.ScrollToTop();
@@ -1401,7 +1401,7 @@ public partial class MainWindow : Window
 
     private void PasswordIconButton_Click(object sender, RoutedEventArgs e)
     {
-        // TODO: Open icon selection dialog
+
         MessageBox.Show(
             "Вибір іконки буде реалізовано в майбутньому.",
             "Вибір іконки",
@@ -1413,14 +1413,14 @@ public partial class MainWindow : Window
     {
         if (PasswordValueBox.Visibility == Visibility.Visible)
         {
-            // Show password
+
             PasswordValueTextBox.Text = PasswordValueBox.Password;
             PasswordValueBox.Visibility = Visibility.Collapsed;
             PasswordValueTextBox.Visibility = Visibility.Visible;
         }
         else
         {
-            // Hide password
+
             PasswordValueBox.Password = PasswordValueTextBox.Text;
             PasswordValueTextBox.Visibility = Visibility.Collapsed;
             PasswordValueBox.Visibility = Visibility.Visible;
@@ -1429,14 +1429,14 @@ public partial class MainWindow : Window
 
     private async void SavePasswordButton_Click(object sender, RoutedEventArgs e)
     {
-        // Check if all fields are filled
+
         string name = PasswordNameTextBox.Text.Trim();
         string login = PasswordLoginTextBox.Text.Trim();
         string password = PasswordValueBox.Visibility == Visibility.Visible
             ? PasswordValueBox.Password
             : PasswordValueTextBox.Text;
 
-        // Validation
+
         if (string.IsNullOrWhiteSpace(name))
         {
             MessageBox.Show(
@@ -1529,13 +1529,13 @@ public partial class MainWindow : Window
                 return;
             }
 
-            // Calculate password strength
+
             string strength = CalculatePasswordStrength(password);
 
-            // Check if editing existing password or creating new one
+
             if (currentEditingPasswordCard != null && currentEditingPassword != null)
             {
-                // Update existing password
+
                 var updateRequest = new UpdatePasswordRequest
                 {
                     Id = currentEditingPassword.Id,
@@ -1551,7 +1551,7 @@ public partial class MainWindow : Window
 
                 if (updateResult.IsSuccess)
                 {
-                    // Update the password card in UI
+
                     UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
 
                     MessageBox.Show(
@@ -1562,7 +1562,7 @@ public partial class MainWindow : Window
 
                     UpdatePasswordCard(currentEditingPasswordCard, name, login, password, selectedPasswordIcon, strength);
 
-                    // Clear editing references
+
                     currentEditingPasswordCard = null;
                     currentEditingPassword = null;
                 }
@@ -1578,7 +1578,7 @@ public partial class MainWindow : Window
             }
             else
             {
-                // Create new password
+
                 var createRequest = new CreatePasswordRequest
                 {
                     AppName = name,
@@ -1593,7 +1593,7 @@ public partial class MainWindow : Window
 
                 if (createResult.IsSuccess)
                 {
-                    // Create new password card in UI
+
                     CreatePasswordCard(
                         createResult.Value.Id,
                         createResult.Value.AppName,
@@ -1620,7 +1620,7 @@ public partial class MainWindow : Window
                 }
             }
 
-            // Clear fields
+
             PasswordNameTextBox.Text = string.Empty;
             PasswordLoginTextBox.Text = string.Empty;
             PasswordValueBox.Password = string.Empty;
@@ -1647,7 +1647,7 @@ public partial class MainWindow : Window
 
         int score = 0;
 
-        // Length
+
         if (password.Length >= 8)
         {
             score++;
@@ -1658,25 +1658,25 @@ public partial class MainWindow : Window
             score++;
         }
 
-        // Contains lowercase
+
         if (password.Any(char.IsLower))
         {
             score++;
         }
 
-        // Contains uppercase
+
         if (password.Any(char.IsUpper))
         {
             score++;
         }
 
-        // Contains digits
+
         if (password.Any(char.IsDigit))
         {
             score++;
         }
 
-        // Contains special characters
+
         if (password.Any(ch => !char.IsLetterOrDigit(ch)))
         {
             score++;
@@ -1698,8 +1698,8 @@ public partial class MainWindow : Window
 
     private void CreatePasswordCard(long id, string name, string login, string password, string iconPath, string strength, long categoryId)
     {
-#pragma warning disable SA1413 // Use trailing comma in multi-line initializers
-        // Create main border
+#pragma warning disable SA1413
+
         var border = new Border
         {
             Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0E121B")),
@@ -1711,7 +1711,7 @@ public partial class MainWindow : Window
             Height = 100
         };
 
-        // Store password data in Tag
+
         var passwordData = new PasswordData
         {
             Id = id,
@@ -1724,7 +1724,7 @@ public partial class MainWindow : Window
         };
         border.Tag = passwordData;
 
-        // Create grid
+
         var grid = new Grid();
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(70) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
@@ -1732,7 +1732,7 @@ public partial class MainWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60) });
 
-        // Icon with gradient background
+
         var iconBorder = new Border
         {
             Width = 60,
@@ -1760,7 +1760,7 @@ public partial class MainWindow : Window
         iconBorder.Child = iconImage;
         Grid.SetColumn(iconBorder, 0);
 
-        // Name and Login
+
         var stackPanel = new StackPanel
         {
             VerticalAlignment = VerticalAlignment.Center,
@@ -1789,7 +1789,7 @@ public partial class MainWindow : Window
         stackPanel.Children.Add(loginText);
         Grid.SetColumn(stackPanel, 1);
 
-        // Strength badge
+
         if (strength != "none")
         {
             var strengthBorder = new Border
@@ -1839,7 +1839,7 @@ public partial class MainWindow : Window
             grid.Children.Add(strengthBorder);
         }
 
-        // Copy button
+
         var copyButton = new Button
         {
             Style = (Style)FindResource("IconButtonStyle"),
@@ -1856,7 +1856,7 @@ public partial class MainWindow : Window
         copyButton.Content = copyImage;
         Grid.SetColumn(copyButton, 3);
 
-        // Edit or Favorite button (depending on mode)
+
         var actionButton = new Button
         {
             Style = (Style)FindResource("IconButtonStyle")
@@ -1864,7 +1864,7 @@ public partial class MainWindow : Window
 
         if (isPasswordEditMode)
         {
-            // Edit button
+
             actionButton.Click += EditPasswordButton_Click;
             var editImage = new Image
             {
@@ -1876,7 +1876,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            // Favorite button
+
             actionButton.Click += FavoriteButton_Click;
             var starImage = new Image
             {
@@ -1889,7 +1889,7 @@ public partial class MainWindow : Window
 
         Grid.SetColumn(actionButton, 4);
 
-        // Add all elements to grid
+
         grid.Children.Add(iconBorder);
         grid.Children.Add(stackPanel);
         grid.Children.Add(copyButton);
@@ -1897,14 +1897,14 @@ public partial class MainWindow : Window
 
         border.Child = grid;
 
-        // Add to passwords panel
+
         PasswordsPanel.Children.Add(border);
 #pragma warning restore SA1413
     }
 
     private void UpdatePasswordCard(Border border, string name, string login, string password, string iconPath, string strength)
     {
-        // Update the Tag with new data
+
         var passwordData = new PasswordData
         {
             Name = name,
@@ -1915,14 +1915,14 @@ public partial class MainWindow : Window
         };
         border.Tag = passwordData;
 
-        // Get the grid inside the border
+
         var grid = border.Child as Grid;
         if (grid == null)
         {
             return;
         }
 
-        // Update icon (column 0)
+
         var iconBorder = grid.Children[0] as Border;
         if (iconBorder != null)
         {
@@ -1933,7 +1933,7 @@ public partial class MainWindow : Window
             }
         }
 
-        // Update name and login (column 1)
+
         var stackPanel = grid.Children[1] as StackPanel;
         if (stackPanel != null && stackPanel.Children.Count >= 2)
         {
@@ -1950,8 +1950,8 @@ public partial class MainWindow : Window
             }
         }
 
-        // Update strength badge (column 2) - might need to be recreated if strength changed
-        // Find and remove old strength badge if exists
+
+
         UIElement? oldStrengthBadge = null;
         foreach (UIElement child in grid.Children)
         {
@@ -1967,7 +1967,7 @@ public partial class MainWindow : Window
             grid.Children.Remove(oldStrengthBadge);
         }
 
-        // Add new strength badge if needed
+
         if (strength != "none")
         {
             var strengthBorder = new Border
@@ -2028,7 +2028,7 @@ public partial class MainWindow : Window
 
         if (result == MessageBoxResult.Yes)
         {
-            // Delete password card if editing existing password
+
             if (currentEditingPasswordCard != null && currentEditingPassword != null)
             {
                 try
@@ -2052,7 +2052,7 @@ public partial class MainWindow : Window
                         currentEditingPasswordCard = null;
                         currentEditingPassword = null;
 
-                        // Clear fields
+
                         PasswordNameTextBox.Text = string.Empty;
                         PasswordLoginTextBox.Text = string.Empty;
                         PasswordValueBox.Password = string.Empty;
@@ -2088,19 +2088,19 @@ public partial class MainWindow : Window
 
     private void ExitPasswordEditMode()
     {
-        // Exit password edit mode without asking for confirmation
+
         isPasswordEditMode = false;
         PasswordEditPanel.Visibility = Visibility.Collapsed;
         PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
 
-        // Update all password cards to show favorite button
+
         UpdatePasswordCardsButtons(false);
 
-        // Clear editing references
+
         currentEditingPasswordCard = null;
         currentEditingPassword = null;
 
-        // Clear fields
+
         PasswordNameTextBox.Text = string.Empty;
         PasswordLoginTextBox.Text = string.Empty;
         PasswordValueBox.Password = string.Empty;
@@ -2110,7 +2110,7 @@ public partial class MainWindow : Window
 
     private void ExitPasswordEditMode_Click(object sender, RoutedEventArgs e)
     {
-        // Check if there are unsaved changes
+
         bool hasChanges = !string.IsNullOrWhiteSpace(PasswordNameTextBox.Text) ||
                           !string.IsNullOrWhiteSpace(PasswordLoginTextBox.Text) ||
                           !string.IsNullOrWhiteSpace(PasswordValueBox.Password) ||
@@ -2134,19 +2134,19 @@ public partial class MainWindow : Window
             }
         }
 
-        // Exit password edit mode
+
         isPasswordEditMode = false;
         PasswordEditPanel.Visibility = Visibility.Collapsed;
         PasswordEditButtonsPanel.Visibility = Visibility.Collapsed;
 
-        // Update all password cards to show favorite button
+
         UpdatePasswordCardsButtons(false);
 
-        // Clear editing references
+
         currentEditingPasswordCard = null;
         currentEditingPassword = null;
 
-        // Clear fields
+
         PasswordNameTextBox.Text = string.Empty;
         PasswordLoginTextBox.Text = string.Empty;
         PasswordValueBox.Password = string.Empty;
@@ -2156,12 +2156,12 @@ public partial class MainWindow : Window
 
     private void UpdatePasswordCardsButtons(bool showEditButton)
     {
-        // Iterate through all password cards in PasswordsPanel
+
         foreach (var child in PasswordsPanel.Children)
         {
             if (child is Border border && border.Child is Grid grid)
             {
-                // Find the action button (column 4)
+
                 Button? actionButton = null;
                 foreach (UIElement element in grid.Children)
                 {
@@ -2174,10 +2174,10 @@ public partial class MainWindow : Window
 
                 if (actionButton != null)
                 {
-                    // Remove old button
+
                     grid.Children.Remove(actionButton);
 
-                    // Create new button
+
                     var newButton = new Button
                     {
                         Style = (Style)FindResource("IconButtonStyle"),
@@ -2185,7 +2185,7 @@ public partial class MainWindow : Window
 
                     if (showEditButton)
                     {
-                        // Edit button
+
                         newButton.Click += EditPasswordButton_Click;
                         var editImage = new Image
                         {
@@ -2197,7 +2197,7 @@ public partial class MainWindow : Window
                     }
                     else
                     {
-                        // Favorite button
+
                         newButton.Click += FavoriteButton_Click;
                         var starImage = new Image
                         {
@@ -2248,11 +2248,11 @@ public partial class MainWindow : Window
             var query = new GetByRecipientIdQuery(userId);
             var result = await mediator.Send(query);
 
-            // Show button only if there are PENDING invitations
-            // If result fails (no data) or is empty, hide the button
+
+
             if (result.IsSuccess && result.Value != null)
             {
-                // Filter only PENDING invitations
+
                 var pendingInvitations = result.Value.Where(x => x.Status == RequestStatus.Pending).ToList();
 
                 if (pendingInvitations.Any())
@@ -2276,7 +2276,7 @@ public partial class MainWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Error checking invitations: {ex.Message}");
 
-            // Hide button on error
+
             InvitationsButton.Visibility = Visibility.Collapsed;
         }
     }
@@ -2285,7 +2285,7 @@ public partial class MainWindow : Window
     {
         var invitationsWindow = new InvitationsWindow(userId, async () =>
         {
-            // Refresh communities after accepting/declining invitations
+
             await LoadCommunitiesAsync();
             await CheckForInvitationsAsync();
         })
@@ -2295,7 +2295,7 @@ public partial class MainWindow : Window
 
         invitationsWindow.ShowDialog();
 
-        // Check invitations again after window closes in case user closed without action
+
         _ = CheckForInvitationsAsync();
     }
 }

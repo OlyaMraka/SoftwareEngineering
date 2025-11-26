@@ -22,7 +22,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top Panel -->
         <Border Grid.Row="0"
                 Background="#0E121B"
                 BorderBrush="#222A39"
@@ -35,7 +34,6 @@
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo/Icon -->
                 <Image Grid.Column="0"
                        Source="Images/logo.png"
                        Width="30"
@@ -44,7 +42,6 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
 
-                <!-- Title -->
                 <TextBlock Grid.Column="1"
                            Text="FamilyPass Manager"
                            FontFamily="Bahnschrift"
@@ -55,7 +52,7 @@
                            HorizontalAlignment="Left"
                            Margin="10,0,0,0"/>
 
-                <!-- Minimize/Close buttons -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
@@ -89,7 +86,6 @@
             </Grid>
         </Border>
 
-        <!-- Main Content -->
         <Grid Grid.Row="1"
               Margin="40">
             <Grid.RowDefinitions>
@@ -106,7 +102,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- User Avatar -->
             <Image Grid.Row="1"
                    Source="Images/SignIn_LogUp/user.png"
                    Width="160"
@@ -115,7 +110,6 @@
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"/>
 
-            <!-- Username Label -->
             <TextBlock Grid.Row="3"
                        Text="Username"
                        FontFamily="Bahnschrift"
@@ -125,7 +119,7 @@
                        HorizontalAlignment="Left"
                        Margin="0,0,0,5"/>
 
-            <!-- Username TextBox -->
+            <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
             <Border x:Name="UsernameBorder"
                     Grid.Row="4"
                     Height="50"
@@ -144,6 +138,7 @@
                              HorizontalAlignment="Stretch"
                              Margin="20,0"
                              TextChanged="UsernameTextBox_TextChanged"/>
+                    <!-- TODO: Використати Data Binding для Visibility placeholder -->
                     <TextBlock x:Name="UsernamePlaceholder"
                                Text="username"
                                Foreground="#808080"
@@ -156,7 +151,6 @@
                 </Grid>
             </Border>
 
-            <!-- Password Label -->
             <TextBlock Grid.Row="6"
                        Text="Password"
                        FontFamily="Bahnschrift"
@@ -166,7 +160,7 @@
                        HorizontalAlignment="Left"
                        Margin="0,5,0,5"/>
 
-            <!-- Password TextBox -->
+            <!-- TODO: Використати Data Binding для Password (через helper behavior) замість PasswordChanged event -->
             <Border Grid.Row="7"
                     Height="50"
                     Background="#2A2F3A"
@@ -184,6 +178,7 @@
                                  HorizontalAlignment="Stretch"
                                  Margin="20,0"
                                  PasswordChanged="PasswordTextBox_PasswordChanged"/>
+                    <!-- TODO: Використати Data Binding для Visibility placeholder -->
                     <TextBlock x:Name="PasswordPlaceholder"
                                Text="password"
                                Foreground="#808080"
@@ -196,7 +191,7 @@
                 </Grid>
             </Border>
 
-            <!-- Accept Button -->
+            <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="9"
                     Height="50"
                     CornerRadius="27"
@@ -235,7 +230,6 @@
                 </Button>
             </Border>
 
-            <!-- Sign Up Link -->
             <TextBlock Grid.Row="10"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Top"

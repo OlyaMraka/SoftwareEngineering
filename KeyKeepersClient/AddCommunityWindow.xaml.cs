@@ -4,9 +4,6 @@ using System.Windows.Input;
 
 namespace KeyKeepersClient
 {
-    /// <summary>
-    /// Interaction logic for AddCommunityWindow.xaml.
-    /// </summary>
     public partial class AddCommunityWindow : Window
     {
         public AddCommunityWindow()
@@ -50,10 +47,8 @@ namespace KeyKeepersClient
             var text = CommunityNameTextBox.Text;
             CharacterCountTextBlock.Text = $"{text.Length} / 50 characters";
 
-            // Enable Create button only if there's text
             CreateButton.IsEnabled = !string.IsNullOrWhiteSpace(text);
 
-            // Change counter color if approaching limit
             if (text.Length >= 45)
             {
                 CharacterCountTextBlock.Foreground = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FDE053"));

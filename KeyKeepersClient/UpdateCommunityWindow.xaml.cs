@@ -21,7 +21,7 @@ public partial class UpdateCommunityWindow : Window
         onUpdateSuccess = onSuccess;
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
 
-        // Load current community name
+
         CommunityNameTextBox.Text = community.Name;
         CommunityNameTextBox.Focus();
         CommunityNameTextBox.SelectAll();
@@ -50,11 +50,11 @@ public partial class UpdateCommunityWindow : Window
         var text = CommunityNameTextBox.Text.Trim();
         CharacterCountTextBlock.Text = $"{text.Length} / 50 characters";
 
-        // Validate and enable/disable save button
+
         bool isValid = ValidateName(text);
         SaveButton.IsEnabled = isValid && text != community.Name;
 
-        // Change counter color if approaching limit
+
         if (text.Length >= 45)
         {
             CharacterCountTextBlock.Foreground = new System.Windows.Media.SolidColorBrush(
@@ -124,10 +124,10 @@ public partial class UpdateCommunityWindow : Window
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                // Update the community item
+
                 community.Name = newName;
 
-                // Call success callback to refresh UI
+
                 onUpdateSuccess?.Invoke();
 
                 this.Close();

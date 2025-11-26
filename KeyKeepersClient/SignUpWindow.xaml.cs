@@ -92,11 +92,11 @@ public partial class SignUpWindow : Window
     {
         if (!string.IsNullOrWhiteSpace(email))
         {
-            // Базова перевірка формату email
+
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             if (System.Text.RegularExpressions.Regex.IsMatch(email.Trim(), emailPattern))
             {
-                // Email виглядає правильно
+
             }
         }
     }
@@ -141,7 +141,7 @@ public partial class SignUpWindow : Window
 
         try
         {
-            // Перевірка чи налаштований mediator (база даних та DI)
+
             if (this.mediator == null)
             {
                 MessageBox
@@ -149,7 +149,7 @@ public partial class SignUpWindow : Window
                 return;
             }
 
-            // Створюємо DTO для реєстрації користувача
+
             var registerDto = new UserRegisterDto
             {
                 Name = firstName,
@@ -159,10 +159,10 @@ public partial class SignUpWindow : Window
                 Password = password,
             };
 
-            // Створюємо команду для реєстрації користувача
+
             var createUserCommand = new CreateUserCommand(registerDto);
 
-            // Виконуємо команду через mediator
+
             var result = await this.mediator.Send(createUserCommand);
 
             if (result.IsSuccess)
@@ -189,7 +189,7 @@ public partial class SignUpWindow : Window
     {
         errorMessage = string.Empty;
 
-        // Валідація First Name
+
         if (string.IsNullOrWhiteSpace(this.FirstNameTextBox.Text))
         {
             errorMessage = "Ім'я є обов'язковим.";
@@ -219,7 +219,7 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-        // Валідація Last Name
+
         if (string.IsNullOrWhiteSpace(this.LastNameTextBox.Text))
         {
             errorMessage = "Прізвище є обов'язковим.";
@@ -249,7 +249,7 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-        // Валідація Email
+
         if (string.IsNullOrWhiteSpace(this.EmailTextBox.Text))
         {
             errorMessage = "Email є обов'язковим.";
@@ -280,7 +280,7 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-        // Валідація Username
+
         if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text))
         {
             errorMessage = "Ім'я користувача є обов'язковим.";
@@ -310,7 +310,7 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-        // Валідація Password
+
         if (string.IsNullOrEmpty(this.PasswordTextBox.Password))
         {
             errorMessage = "Пароль є обов'язковим.";
@@ -326,7 +326,7 @@ public partial class SignUpWindow : Window
             return false;
         }
 
-        // Перевірка обов'язкових елементів паролю згідно з бекенд валідатором
+
         bool hasUpper = System.Text.RegularExpressions.Regex.IsMatch(password, @"[A-Z]");
         bool hasDigit = System.Text.RegularExpressions.Regex.IsMatch(password, @"[0-9]");
         bool hasSpecial = System.Text.RegularExpressions.Regex.IsMatch(password, @"[^a-zA-Z0-9]");
@@ -357,21 +357,21 @@ public partial class SignUpWindow : Window
 
     private void ClearForm()
     {
-        // Очищуємо всі поля форми
+
         this.FirstNameTextBox.Text = string.Empty;
         this.LastNameTextBox.Text = string.Empty;
         this.EmailTextBox.Text = string.Empty;
         this.UsernameTextBox.Text = string.Empty;
         this.PasswordTextBox.Password = string.Empty;
 
-        // Показуємо placeholder'и знову
+
         this.FirstNamePlaceholder.Visibility = Visibility.Visible;
         this.LastNamePlaceholder.Visibility = Visibility.Visible;
         this.EmailPlaceholder.Visibility = Visibility.Visible;
         this.UsernamePlaceholder.Visibility = Visibility.Visible;
         this.PasswordPlaceholder.Visibility = Visibility.Visible;
 
-        // Встановлюємо фокус на перше поле
+
         this.FirstNameTextBox.Focus();
     }
 

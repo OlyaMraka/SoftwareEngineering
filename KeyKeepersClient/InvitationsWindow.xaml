@@ -26,7 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Panel -->
             <Border Grid.Row="0"
                     Background="#0E121B"
                     BorderBrush="#222A39"
@@ -40,7 +39,6 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Logo/Icon -->
                     <Image Grid.Column="0"
                            Source="Images/Teams/mail_0.png"
                            Width="24"
@@ -49,7 +47,6 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                    <!-- Title -->
                     <TextBlock Grid.Column="1"
                                Text="Community Invitations"
                                FontFamily="Bahnschrift"
@@ -60,7 +57,6 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- Close button -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -76,12 +72,11 @@
                 </Grid>
             </Border>
 
-            <!-- Main Content -->
             <ScrollViewer Grid.Row="1"
                           VerticalScrollBarVisibility="Auto"
                           Padding="30">
                 <StackPanel x:Name="InvitationsPanel">
-                    <!-- Invitations will be added here dynamically -->
+                    <!-- TODO: Використати Data Binding для Visibility -->
                     <TextBlock x:Name="NoInvitationsText"
                                Text="No pending invitations"
                                FontFamily="Bahnschrift"
@@ -94,7 +89,6 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <!-- Bottom Buttons -->
             <Grid Grid.Row="2"
                   Margin="30,0,30,30">
                 <Grid.ColumnDefinitions>
@@ -103,7 +97,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Decline All Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <Button x:Name="DeclineAllButton"
                         Grid.Column="0"
                         Content="Decline All"
@@ -133,7 +127,7 @@
                     </Button.Style>
                 </Button>
 
-                <!-- Accept All Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <Button x:Name="AcceptAllButton"
                         Grid.Column="2"
                         Content="Accept All"

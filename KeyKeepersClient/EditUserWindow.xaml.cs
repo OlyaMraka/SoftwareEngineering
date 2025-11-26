@@ -11,9 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace KeyKeepersClient
 {
-    /// <summary>
-    /// Interaction logic for EditUserWindow.xaml.
-    /// </summary>
+
+
+
     public partial class EditUserWindow : Window
     {
         private readonly IMediator mediator;
@@ -71,7 +71,7 @@ namespace KeyKeepersClient
                 SaveButton.IsEnabled = false;
                 SaveButton.Content = "Збереження...";
 
-                // If password is empty, use a special marker that backend will recognize
+
                 string password = string.IsNullOrWhiteSpace(PasswordBox.Password)
                     ? string.Empty
                     : PasswordBox.Password;
@@ -161,31 +161,31 @@ namespace KeyKeepersClient
         {
             bool isValid = true;
 
-            // Validate Name
+
             if (!ValidateName(NameTextBox.Text))
             {
                 isValid = false;
             }
 
-            // Validate Surname
+
             if (!ValidateSurname(SurnameTextBox.Text))
             {
                 isValid = false;
             }
 
-            // Validate Email
+
             if (!ValidateEmail(EmailTextBox.Text))
             {
                 isValid = false;
             }
 
-            // Validate Username
+
             if (!ValidateUsername(UsernameTextBox.Text))
             {
                 isValid = false;
             }
 
-            // Validate Password (only if user entered something)
+
             string password = isPasswordVisible ? PasswordTextBox.Text : PasswordBox.Password;
             if (!string.IsNullOrWhiteSpace(password))
             {
@@ -296,7 +296,7 @@ namespace KeyKeepersClient
 
         private bool ValidatePassword(string password)
         {
-            // If password is empty, it's valid (means no change)
+
             if (string.IsNullOrWhiteSpace(password))
             {
                 HideError(PasswordErrorText);

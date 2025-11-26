@@ -29,7 +29,7 @@ public partial class AddUserToCommunityWindow : Window
 
         CommunityNameTextBlock.Text = community.Name;
 
-        // Initialize debounce timer for search
+
         searchDebounceTimer = new DispatcherTimer
         {
             Interval = TimeSpan.FromMilliseconds(300),
@@ -57,15 +57,13 @@ public partial class AddUserToCommunityWindow : Window
 
     private void UsernameSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
-        // Reset debounce timer
+
         searchDebounceTimer.Stop();
         searchDebounceTimer.Start();
 
-        // Enable/disable Add button based on text input
         string searchText = UsernameSearchTextBox.Text.Trim();
         AddButton.IsEnabled = !string.IsNullOrEmpty(searchText);
 
-        // Clear selection if text changed
         if (selectedUser != null && searchText != selectedUser.UserName)
         {
             selectedUser = null;
@@ -143,7 +141,7 @@ public partial class AddUserToCommunityWindow : Window
 
     private void SuggestionsListBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        // Handle selection on mouse click
+
         if (SuggestionsListBox.SelectedItem != null)
         {
             SuggestionsListBox_SelectionChanged(sender, null!);
@@ -154,7 +152,7 @@ public partial class AddUserToCommunityWindow : Window
     {
         if (e.Key == Key.Down && SuggestionsPopup.IsOpen)
         {
-            // Move focus to suggestions list
+
             if (SuggestionsListBox.Items.Count > 0)
             {
                 SuggestionsListBox.SelectedIndex = 0;
@@ -164,7 +162,7 @@ public partial class AddUserToCommunityWindow : Window
         }
         else if (e.Key == Key.Enter)
         {
-            // Add user on Enter key (works even if no user selected from list)
+
             if (!string.IsNullOrEmpty(UsernameSearchTextBox.Text.Trim()))
             {
                 AddButton_Click(sender, e);
@@ -173,7 +171,7 @@ public partial class AddUserToCommunityWindow : Window
         }
         else if (e.Key == Key.Escape)
         {
-            // Close popup on Escape
+
             SuggestionsPopup.IsOpen = false;
             e.Handled = true;
         }
@@ -197,7 +195,7 @@ public partial class AddUserToCommunityWindow : Window
         {
             AddButton.IsEnabled = false;
 
-            // If no user is selected from suggestions, search for the user by username
+
             if (selectedUser == null || selectedUser.UserName != searchText)
             {
                 var query = new GetByUsernameQuery(searchText);
@@ -205,7 +203,7 @@ public partial class AddUserToCommunityWindow : Window
 
                 if (result.IsSuccess && result.Value.Any())
                 {
-                    // Find exact match
+
                     selectedUser = result.Value.FirstOrDefault(u => u.UserName.Equals(searchText, StringComparison.OrdinalIgnoreCase));
 
                     if (selectedUser == null)

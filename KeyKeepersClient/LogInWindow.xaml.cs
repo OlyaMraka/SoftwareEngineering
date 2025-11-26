@@ -87,7 +87,7 @@ public partial class LogInWindow : Window
 
             if (result.IsSuccess)
             {
-                // Успішний логін - переходимо до головного вікна
+
                 var mainWindow = new MainWindow(result.Value.Id);
                 mainWindow.Left = this.Left;
                 mainWindow.Top = this.Top;
@@ -117,7 +117,7 @@ public partial class LogInWindow : Window
     {
         errorMessage = string.Empty;
 
-        // Перевірка наявності username
+
         if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text))
         {
             errorMessage = "Username is required.";
@@ -125,7 +125,7 @@ public partial class LogInWindow : Window
             return false;
         }
 
-        // Перевірка довжини username
+
         string username = this.UsernameTextBox.Text.Trim();
         if (username.Length < 4)
         {
@@ -141,7 +141,7 @@ public partial class LogInWindow : Window
             return false;
         }
 
-        // Перевірка валідних символів в username
+
         if (!System.Text.RegularExpressions.Regex.IsMatch(username, @"^[a-zA-Z0-9_.-]+$"))
         {
             errorMessage = "Username can only contain letters, numbers, dots, hyphens, and underscores.";
@@ -149,7 +149,7 @@ public partial class LogInWindow : Window
             return false;
         }
 
-        // Перевірка наявності password
+
         if (string.IsNullOrEmpty(this.PasswordTextBox.Password))
         {
             errorMessage = "Password is required.";
@@ -157,7 +157,7 @@ public partial class LogInWindow : Window
             return false;
         }
 
-        // Перевірка довжини password
+
         if (this.PasswordTextBox.Password.Length < 6)
         {
             errorMessage = "Password must be at least 6 characters long.";

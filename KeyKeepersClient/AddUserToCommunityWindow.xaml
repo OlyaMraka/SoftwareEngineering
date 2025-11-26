@@ -26,7 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Panel -->
             <Border Grid.Row="0"
                     Background="#0E121B"
                     BorderBrush="#222A39"
@@ -40,7 +39,6 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Icon -->
                     <Image Grid.Column="0"
                            Source="Images/Teams/admin.png"
                            Width="24"
@@ -48,7 +46,6 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                    <!-- Title -->
                     <TextBlock Grid.Column="1"
                                Text="Add User to Community"
                                FontFamily="Bahnschrift"
@@ -59,7 +56,7 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- Close button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -75,10 +72,8 @@
                 </Grid>
             </Border>
 
-            <!-- Main Content -->
             <StackPanel Grid.Row="1"
                         Margin="30,20,30,20">
-                <!-- Community Name Display -->
                 <TextBlock Text="Community"
                            FontFamily="Bahnschrift"
                            FontSize="14"
@@ -86,6 +81,7 @@
                            Foreground="White"
                            Margin="0,0,0,8"/>
 
+                <!-- TODO: Використати Data Binding для Text -->
                 <Border Background="#0E121B"
                         BorderBrush="#222A39"
                         BorderThickness="2"
@@ -100,7 +96,6 @@
                                Padding="15,0"/>
                 </Border>
 
-                <!-- Username Search Field -->
                 <TextBlock Text="Search Username"
                            FontFamily="Bahnschrift"
                            FontSize="14"
@@ -109,6 +104,7 @@
                            Margin="0,0,0,8"/>
 
                 <Grid>
+                    <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
                     <Border x:Name="UsernameSearchBorder"
                             Background="#0E121B"
                             BorderBrush="#222A39"
@@ -129,7 +125,6 @@
                                  PreviewKeyDown="UsernameSearchTextBox_PreviewKeyDown"/>
                     </Border>
 
-                    <!-- Suggestions Popup -->
                     <Popup x:Name="SuggestionsPopup"
                            PlacementTarget="{Binding ElementName=UsernameSearchBorder}"
                            Placement="Bottom"
@@ -172,13 +167,13 @@
                                                         </Border>
                                                         <ControlTemplate.Triggers>
                                                             <Trigger Property="IsMouseOver"
-                                                                    Value="True">
+                                                                     Value="True">
                                                                 <Setter TargetName="ItemBorder"
                                                                         Property="Background"
                                                                         Value="#222A39"/>
                                                             </Trigger>
                                                             <Trigger Property="IsSelected"
-                                                                    Value="True">
+                                                                     Value="True">
                                                                 <Setter TargetName="ItemBorder"
                                                                         Property="Background"
                                                                         Value="#2A3547"/>
@@ -195,7 +190,7 @@
                     </Popup>
                 </Grid>
 
-                <!-- Search Status -->
+                <!-- TODO: Використати Data Binding для Text та Visibility -->
                 <TextBlock x:Name="SearchStatusTextBlock"
                            FontFamily="Bahnschrift"
                            FontSize="12"
@@ -203,7 +198,7 @@
                            Margin="5,5,0,15"
                            Visibility="Collapsed"/>
 
-                <!-- Selected User Info Panel -->
+                <!-- TODO: Використати Data Binding для Visibility -->
                 <Border x:Name="UserInfoPanel"
                         Background="#0E121B"
                         BorderBrush="#1B5E40"
@@ -219,6 +214,7 @@
                                    FontWeight="SemiBold"
                                    Foreground="#999999"
                                    Margin="0,0,0,8"/>
+                        <!-- TODO: Використати Data Binding для Text -->
                         <TextBlock x:Name="SelectedUsernameTextBlock"
                                    FontFamily="Bahnschrift"
                                    FontSize="16"
@@ -227,7 +223,6 @@
                     </StackPanel>
                 </Border>
 
-                <!-- Info Text -->
                 <TextBlock Text="Type to search for users. Select a user from the dropdown to add them to the community."
                            FontFamily="Bahnschrift"
                            FontSize="13"
@@ -236,7 +231,6 @@
                            Margin="0,20,0,0"/>
             </StackPanel>
 
-            <!-- Bottom Buttons -->
             <Grid Grid.Row="2"
                   Margin="30,0,30,30">
                 <Grid.ColumnDefinitions>
@@ -245,7 +239,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Cancel Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <Button Grid.Column="0"
                         Content="Cancel"
                         Height="45"
@@ -274,7 +268,8 @@
                     </Button.Style>
                 </Button>
 
-                <!-- Add Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
+                <!-- TODO: Використати Data Binding для IsEnabled -->
                 <Button x:Name="AddButton"
                         Grid.Column="2"
                         Content="Add User"

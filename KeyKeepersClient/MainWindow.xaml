@@ -14,1086 +14,1062 @@
         AllowsTransparency="False"
         Background="#171C26">
 
-    <Window.Resources>
-        <!-- Community Button Template -->
-        <Style x:Key="CommunityButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background"
-                    Value="#171C26"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="Height"
-                    Value="55"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,8"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                                Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                CornerRadius="10">
-                            <ContentPresenter Margin="20,0,20,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter TargetName="border"
-                                        Property="Background"
-                                        Value="#222A39"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <Window.Resources>
+                <Style x:Key="CommunityButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="#171C26"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Height"
+                                Value="55"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,8"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter Margin="20,0,20,0"
+                                                                          HorizontalAlignment="Left"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter TargetName="border"
+                                                                        Property="Background"
+                                                                        Value="#222A39"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Active Community Button Style with Gradient -->
-        <Style x:Key="ActiveCommunityButtonStyle"
-               TargetType="Button"
-               BasedOn="{StaticResource CommunityButtonStyle}">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#815A11"
-                                      Offset="0"/>
-                        <GradientStop Color="#FDE053"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground"
-                    Value="Black"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                CornerRadius="10">
-                            <ContentPresenter Margin="20,0,20,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="ActiveCommunityButtonStyle"
+                       TargetType="Button"
+                       BasedOn="{StaticResource CommunityButtonStyle}">
+                        <Setter Property="Background">
+                                <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                             EndPoint="1,0">
+                                                <GradientStop Color="#815A11"
+                                                              Offset="0"/>
+                                                <GradientStop Color="#FDE053"
+                                                              Offset="1"/>
+                                        </LinearGradientBrush>
+                                </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground"
+                                Value="Black"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter Margin="20,0,20,0"
+                                                                          HorizontalAlignment="Left"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Category Button Template -->
-        <Style x:Key="CategoryButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background"
-                    Value="#171C26"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="Height"
-                    Value="55"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,8"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                                Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                CornerRadius="10">
-                            <ContentPresenter Margin="20,0,20,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter TargetName="border"
-                                        Property="Background"
-                                        Value="#222A39"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="CategoryButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="#171C26"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Height"
+                                Value="55"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,8"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Left"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter Margin="20,0,20,0"
+                                                                          HorizontalAlignment="Left"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter TargetName="border"
+                                                                        Property="Background"
+                                                                        Value="#222A39"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Active Category Button Style with Gradient -->
-        <Style x:Key="ActiveCategoryButtonStyle"
-               TargetType="Button"
-               BasedOn="{StaticResource CategoryButtonStyle}">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#815A11"
-                                      Offset="0"/>
-                        <GradientStop Color="#FDE053"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground"
-                    Value="Black"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                CornerRadius="10">
-                            <ContentPresenter Margin="20,0,20,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="ActiveCategoryButtonStyle"
+                       TargetType="Button"
+                       BasedOn="{StaticResource CategoryButtonStyle}">
+                        <Setter Property="Background">
+                                <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                             EndPoint="1,0">
+                                                <GradientStop Color="#815A11"
+                                                              Offset="0"/>
+                                                <GradientStop Color="#FDE053"
+                                                              Offset="1"/>
+                                        </LinearGradientBrush>
+                                </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground"
+                                Value="Black"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter Margin="20,0,20,0"
+                                                                          HorizontalAlignment="Left"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Add Button Style with Gradient -->
-        <Style x:Key="AddButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#815A11"
-                                      Offset="0"/>
-                        <GradientStop Color="#FDE053"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground"
-                    Value="Black"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Height"
-                    Value="50"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,8"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="AddButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background">
+                                <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                             EndPoint="1,0">
+                                                <GradientStop Color="#815A11"
+                                                              Offset="0"/>
+                                                <GradientStop Color="#FDE053"
+                                                              Offset="1"/>
+                                        </LinearGradientBrush>
+                                </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground"
+                                Value="Black"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Height"
+                                Value="50"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,8"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Menu Button Style (copied from Settings window) -->
-        <Style x:Key="MenuButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background"
-                    Value="#0E121B"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="Height"
-                    Value="60"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,10"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                CornerRadius="10">
-                            <ContentPresenter Margin="20,0,20,0"
-                                              HorizontalAlignment="Left"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="#222A39"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="MenuButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="#0E121B"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Height"
+                                Value="60"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,10"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter Margin="20,0,20,0"
+                                                                          HorizontalAlignment="Left"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter Property="Background"
+                                                                        Value="#222A39"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Delete Button Style with Gradient -->
-        <Style x:Key="DeleteButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#171613"
-                                      Offset="0"/>
-                        <GradientStop Color="#D11A1A"
-                                      Offset="0.5"/>
-                        <GradientStop Color="#171613"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Height"
-                    Value="50"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,0"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="DeleteButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background">
+                                <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                             EndPoint="1,0">
+                                                <GradientStop Color="#171613"
+                                                              Offset="0"/>
+                                                <GradientStop Color="#D11A1A"
+                                                              Offset="0.5"/>
+                                                <GradientStop Color="#171613"
+                                                              Offset="1"/>
+                                        </LinearGradientBrush>
+                                </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Height"
+                                Value="50"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,0"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Exit Button Style with Gradient -->
-        <Style x:Key="ExitButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#171613"
-                                      Offset="0"/>
-                        <GradientStop Color="#D11A1A"
-                                      Offset="0.5"/>
-                        <GradientStop Color="#171613"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Height"
-                    Value="50"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,8"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="ExitButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background">
+                                <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0"
+                                                             EndPoint="1,0">
+                                                <GradientStop Color="#171613"
+                                                              Offset="0"/>
+                                                <GradientStop Color="#D11A1A"
+                                                              Offset="0.5"/>
+                                                <GradientStop Color="#171613"
+                                                              Offset="1"/>
+                                        </LinearGradientBrush>
+                                </Setter.Value>
+                        </Setter>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Height"
+                                Value="50"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,8"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Custom ScrollBar Style -->
-        <Style x:Key="CustomScrollBarThumb"
-               TargetType="Thumb">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Thumb">
-                        <Border Background="#815A11"
-                                CornerRadius="5"
-                                Width="8"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="CustomScrollBarThumb"
+                       TargetType="Thumb">
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Thumb">
+                                                <Border Background="#815A11"
+                                                        CornerRadius="5"
+                                                        Width="8"/>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <Style x:Key="CustomScrollBar"
-               TargetType="ScrollBar">
-            <Setter Property="Width"
-                    Value="10"/>
-            <Setter Property="Background"
-                    Value="#0E121B"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ScrollBar">
-                        <Grid>
-                            <Border Background="{TemplateBinding Background}"
-                                    CornerRadius="5"
-                                    Margin="1"/>
-                            <Track x:Name="PART_Track"
-                                   IsDirectionReversed="True"
-                                   Margin="1">
-                                <Track.Thumb>
-                                    <Thumb Style="{StaticResource CustomScrollBarThumb}"/>
-                                </Track.Thumb>
-                            </Track>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="CustomScrollBar"
+                       TargetType="ScrollBar">
+                        <Setter Property="Width"
+                                Value="10"/>
+                        <Setter Property="Background"
+                                Value="#0E121B"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="ScrollBar">
+                                                <Grid>
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                CornerRadius="5"
+                                                                Margin="1"/>
+                                                        <Track x:Name="PART_Track"
+                                                               IsDirectionReversed="True"
+                                                               Margin="1">
+                                                                <Track.Thumb>
+                                                                        <Thumb Style="{StaticResource CustomScrollBarThumb}"/>
+                                                                </Track.Thumb>
+                                                        </Track>
+                                                </Grid>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <Style x:Key="CustomScrollViewer"
-               TargetType="ScrollViewer">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ScrollViewer">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <ScrollContentPresenter Grid.Column="0"/>
-                            <ScrollBar x:Name="PART_VerticalScrollBar"
-                                       Grid.Column="1"
-                                       Value="{TemplateBinding VerticalOffset}"
-                                       Maximum="{TemplateBinding ScrollableHeight}"
-                                       ViewportSize="{TemplateBinding ViewportHeight}"
-                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                                       Style="{StaticResource CustomScrollBar}"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                <Style x:Key="CustomScrollViewer"
+                       TargetType="ScrollViewer">
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="ScrollViewer">
+                                                <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <ScrollContentPresenter Grid.Column="0"/>
+                                                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                                   Grid.Column="1"
+                                                                   Value="{TemplateBinding VerticalOffset}"
+                                                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                                                   Style="{StaticResource CustomScrollBar}"/>
+                                                </Grid>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
 
-        <!-- Password Strength Badge Styles -->
-        <Style x:Key="StrongBadgeStyle"
-               TargetType="Border">
-            <Setter Property="Background"
-                    Value="#14532D"/>
-            <Setter Property="BorderBrush"
-                    Value="#86EDAF"/>
-            <Setter Property="BorderThickness"
-                    Value="2"/>
-            <Setter Property="CornerRadius"
-                    Value="10"/>
-            <Setter Property="Padding"
-                    Value="12,5"/>
-            <Setter Property="Width"
-                    Value="85"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-        </Style>
+                <Style x:Key="StrongBadgeStyle"
+                       TargetType="Border">
+                        <Setter Property="Background"
+                                Value="#14532D"/>
+                        <Setter Property="BorderBrush"
+                                Value="#86EDAF"/>
+                        <Setter Property="BorderThickness"
+                                Value="2"/>
+                        <Setter Property="CornerRadius"
+                                Value="10"/>
+                        <Setter Property="Padding"
+                                Value="12,5"/>
+                        <Setter Property="Width"
+                                Value="85"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                </Style>
 
-        <Style x:Key="MediumBadgeStyle"
-               TargetType="Border">
-            <Setter Property="Background"
-                    Value="#713F12"/>
-            <Setter Property="BorderBrush"
-                    Value="#FDE053"/>
-            <Setter Property="BorderThickness"
-                    Value="2"/>
-            <Setter Property="CornerRadius"
-                    Value="10"/>
-            <Setter Property="Padding"
-                    Value="12,5"/>
-            <Setter Property="Width"
-                    Value="85"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-        </Style>
+                <Style x:Key="MediumBadgeStyle"
+                       TargetType="Border">
+                        <Setter Property="Background"
+                                Value="#713F12"/>
+                        <Setter Property="BorderBrush"
+                                Value="#FDE053"/>
+                        <Setter Property="BorderThickness"
+                                Value="2"/>
+                        <Setter Property="CornerRadius"
+                                Value="10"/>
+                        <Setter Property="Padding"
+                                Value="12,5"/>
+                        <Setter Property="Width"
+                                Value="85"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                </Style>
 
-        <Style x:Key="WeakBadgeStyle"
-               TargetType="Border">
-            <Setter Property="Background"
-                    Value="#620D0D"/>
-            <Setter Property="BorderBrush"
-                    Value="#FF6767"/>
-            <Setter Property="BorderThickness"
-                    Value="2"/>
-            <Setter Property="CornerRadius"
-                    Value="10"/>
-            <Setter Property="Padding"
-                    Value="12,5"/>
-            <Setter Property="Width"
-                    Value="85"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-        </Style>
+                <Style x:Key="WeakBadgeStyle"
+                       TargetType="Border">
+                        <Setter Property="Background"
+                                Value="#620D0D"/>
+                        <Setter Property="BorderBrush"
+                                Value="#FF6767"/>
+                        <Setter Property="BorderThickness"
+                                Value="2"/>
+                        <Setter Property="CornerRadius"
+                                Value="10"/>
+                        <Setter Property="Padding"
+                                Value="12,5"/>
+                        <Setter Property="Width"
+                                Value="85"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                </Style>
 
-        <!-- Password Strength Text Style -->
-        <Style x:Key="StrengthTextStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="12"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Center"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-            <Setter Property="TextAlignment"
-                    Value="Center"/>
-        </Style>
+                <Style x:Key="StrengthTextStyle"
+                       TargetType="TextBlock">
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="12"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        <Setter Property="TextAlignment"
+                                Value="Center"/>
+                </Style>
 
-        <!-- Icon Button Style -->
-        <Style x:Key="IconButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="BorderThickness"
-                    Value="2"/>
-            <Setter Property="BorderBrush"
-                    Value="#222A39"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="Width"
-                    Value="40"/>
-            <Setter Property="Height"
-                    Value="40"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="#222A39"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
+                <Style x:Key="IconButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="2"/>
+                        <Setter Property="BorderBrush"
+                                Value="#222A39"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Width"
+                                Value="40"/>
+                        <Setter Property="Height"
+                                Value="40"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                        CornerRadius="5">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter Property="Background"
+                                                                        Value="#222A39"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+        </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="240"/>
-            <ColumnDefinition Width="260"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- Top Panel -->
-        <Border Grid.Row="0"
-                Grid.Column="0"
-                Grid.ColumnSpan="3"
-                Background="#0E121B"
-                BorderBrush="#222A39"
-                BorderThickness="0,0,0,2"
-                MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
-            <Grid>
+        <Grid>
+                <Grid.RowDefinitions>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="40"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="240"/>
+                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo/Icon -->
-                <Image Grid.Column="0"
-                       Source="Images/logo.png"
-                       Width="30"
-                       Height="30"
-                       Stretch="Uniform"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"/>
-
-                <!-- Title -->
-                <TextBlock Grid.Column="1"
-                           Text="FamilyPass Manager"
-                           FontFamily="Bahnschrift"
-                           FontSize="16"
-                           FontWeight="SemiBold"
-                           Foreground="White"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <!-- Minimize/Close buttons -->
-                <StackPanel Grid.Column="2"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Margin="0,0,8,0">
-                    <Button Content="—"
-                            Width="25"
-                            Height="25"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="White"
-                            FontFamily="Bahnschrift"
-                            FontSize="16"
-                            FontWeight="Bold"
-                            Cursor="Hand"
-                            Click="MinimizeButton_Click"/>
-                    <Button Content="x"
-                            Width="25"
-                            Height="25"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="White"
-                            FontFamily="Bahnschrift"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Cursor="Hand"
-                            Click="CloseButton_Click"/>
-                </StackPanel>
-            </Grid>
-        </Border>
-
-        <!-- Left Sidebar Panel - Communities -->
-        <Border Grid.Row="1"
-                Grid.Column="0"
-                Background="#0E121B"
-                BorderBrush="#222A39"
-                BorderThickness="0,0,2,0">
-            <Grid Margin="15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <!-- Invitations Button (Semi-transparent, above title) -->
-                <Button x:Name="InvitationsButton"
-                        Grid.Row="0"
-                        Style="{StaticResource AddButtonStyle}"
-                        Margin="0,0,0,10"
-                        Opacity="0.7"
-                        Visibility="Collapsed"
-                        Click="InvitationsButton_Click">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Image Source="Images/Teams/mail_0.png"
-                               Width="20"
-                               Height="20"
-                               Margin="0,0,8,0"
-                               VerticalAlignment="Center"/>
-                        <TextBlock Text="Invites"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <!-- Title -->
-                <TextBlock Grid.Row="1"
-                           Text="Communities"
-                           FontFamily="Bahnschrift"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           Foreground="White"
-                           Margin="10,10,0,20"/>
-
-                <!-- Communities ScrollViewer -->
-                <ScrollViewer Grid.Row="2"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
-                              Style="{StaticResource CustomScrollViewer}"
-                              Margin="0,0,0,10">
-                    <StackPanel x:Name="CommunitiesPanel">
-                        <!-- Private (Default) -->
-                        <Button x:Name="PrivateCommunityButton"
-                                Style="{StaticResource ActiveCategoryButtonStyle}"
-                                Content="Private"
-                                Tag="0"
-                                Click="CommunityButton_Click"/>
-                    </StackPanel>
-                </ScrollViewer>
-
-                <!-- Settings Button -->
-                <Button x:Name="SettingsButton"
-                        Grid.Row="3"
-                        Style="{StaticResource AddButtonStyle}"
-                        Margin="0"
-                        Click="SettingsButton_Click">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Image Source="Images/settings.png"
-                               Width="20"
-                               Height="20"
-                               Margin="0,0,8,0"
-                               VerticalAlignment="Center"/>
-                        <TextBlock Text="Settings"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
-        </Border>
-
-        <!-- Left Sidebar Panel -->
-        <Border Grid.Row="1"
-                Grid.Column="1"
-                Background="#0E121B"
-                BorderBrush="#222A39"
-                BorderThickness="0,0,2,0">
-            <Grid Margin="15">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <StackPanel x:Name="UserContainer"
-                            Grid.Row="0"
-                            Margin="0,0,0,0">
-                </StackPanel>
-
-                <!-- Search Box -->
-                <Border Grid.Row="1"
-                        Background="#171C26"
-                        CornerRadius="20"
-                        Height="45"
-                        Margin="0,0,0,20">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="45"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Search Icon -->
-                        <TextBlock Grid.Column="0"
-                                   Text="🔍"
-                                   FontSize="20"
-                                   Foreground="#666"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-
-                        <!-- Search TextBox -->
-                        <TextBox Grid.Column="0"
-                                 x:Name="SearchTextBox"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Foreground="White"
-                                 FontFamily="Bahnschrift"
-                                 FontSize="14"
-                                 VerticalAlignment="Center"
-                                 VerticalContentAlignment="Center"
-                                 Padding="0,0,15,0"
-                                 TextChanged="SearchTextBox_TextChanged"/>
-                    </Grid>
-                </Border>
-
-                <!-- Category Edit Panel (Hidden by default) -->
-                <Border x:Name="CategoryEditPanel"
-                        Grid.Row="2"
-                        Background="#171C26"
-                        CornerRadius="10"
-                        Padding="15"
-                        Margin="0,0,0,10"
-                        Visibility="Collapsed">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <!-- Icon and Name Row -->
-                        <Grid Grid.Row="0"
-                              Margin="0,0,0,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Icon placeholder -->
-                            <Border Grid.Column="0"
-                                    Width="40"
-                                    Height="40"
-                                    Background="#0E121B"
-                                    CornerRadius="5"
-                                    VerticalAlignment="Center"/>
-
-                            <!-- Name TextBox -->
-                            <TextBox x:Name="CategoryNameTextBox"
-                                     Grid.Column="1"
-                                     Background="#0E121B"
-                                     Foreground="White"
-                                     FontFamily="Bahnschrift"
-                                     FontSize="14"
-                                     BorderThickness="0"
-                                     Padding="10"
-                                     VerticalAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="False"
-                                     VerticalScrollBarVisibility="Hidden"
-                                     PreviewMouseWheel="CategoryNameTextBox_PreviewMouseWheel"/>
-                        </Grid>
-
-                        <!-- OK Button -->
-                        <Button Grid.Row="1"
-                                Style="{StaticResource AddButtonStyle}"
-                                Height="40"
-                                Margin="0"
-                                Click="SaveCategoryButton_Click">
-                            <TextBlock Text="OK"
-                                       FontSize="14"
-                                       FontWeight="Bold"/>
-                        </Button>
-                    </Grid>
-                </Border>
-
-                <!-- Categories ScrollViewer -->
-                <ScrollViewer Grid.Row="3"
-                              VerticalScrollBarVisibility="Auto"
-                              HorizontalScrollBarVisibility="Disabled"
-                              Style="{StaticResource CustomScrollViewer}"
-                              Margin="0,0,0,10">
-                    <StackPanel x:Name="CategoriesPanel">
-                        <!-- Default Categories -->
-                        <Button Style="{StaticResource ActiveCategoryButtonStyle}"
-                                Tag="AllItems"
-                                Click="CategoryButton_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="30"
-                                        Height="20"
-                                        Margin="0,0,10,0"/>
-                                <TextBlock Text="All items"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource CategoryButtonStyle}"
-                                Tag="Favorite"
-                                Click="CategoryButton_Click">
-                            <StackPanel Orientation="Horizontal">
-                                <Border Width="30"
-                                        Height="20"
-                                        Margin="0,0,10,0"/>
-                                <TextBlock Text="Favorite"
-                                           VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                </ScrollViewer>
-
-                <!-- Admin Panel Button (shown for non-private communities) -->
-                <Button x:Name="AdminPanelButton"
-                        Grid.Row="4"
-                        Style="{StaticResource AddButtonStyle}"
-                        Margin="0"
-                        Visibility="Collapsed"
-                        Click="AdminPanelButton_Click">
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                        <Image Source="Images/Teams/admin.png"
-                               Width="20"
-                               Height="20"
-                               Margin="0,0,8,0"
-                               VerticalAlignment="Center"/>
-                        <TextBlock Text="Admin Panel"
-                                   VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Button>
-
-                <!-- Edit Mode Panels (Hidden by default) -->
-                <Grid x:Name="EditButtonsPanel"
-                      Grid.Row="4"
-                      Visibility="Collapsed">
-                    <!-- Save Button (Full Width) -->
-                    <Button Style="{StaticResource AddButtonStyle}"
-                            Margin="0,0,0,8"
-                            Click="SaveEditButton_Click">
-                        <TextBlock Text="Save"
-                                   VerticalAlignment="Center"/>
-                    </Button>
-                </Grid>
-
-                <Grid x:Name="PasswordEditButtonsPanel"
-                      Grid.Row="4"
-                      Visibility="Collapsed">
-                    <!-- Exit Button -->
-                    <Button Style="{StaticResource ExitButtonStyle}"
-                            Click="ExitPasswordEditMode_Click">
-                        <TextBlock Text="Exit"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </Button>
-                </Grid>
-            </Grid>
-        </Border>
-
-        <!-- Main Content Area -->
-        <Grid Grid.Row="1"
-              Grid.Column="2"
-              Background="#171C26">
-
-            <ScrollViewer x:Name="PasswordsScrollViewer"
-                          VerticalScrollBarVisibility="Auto"
-                          HorizontalScrollBarVisibility="Disabled"
-                          Style="{StaticResource CustomScrollViewer}"
-                          Margin="30,30,30,30">
-                <StackPanel>
-                    <!-- Password Edit Panel (Hidden by default, shown when adding/editing password) -->
-                    <Border x:Name="PasswordEditPanel"
-                            Background="#0E121B"
-                            BorderBrush="#222A39"
-                            BorderThickness="2"
-                            CornerRadius="15"
-                            Padding="30"
-                            Margin="0,0,0,20"
-                            Visibility="Collapsed">
+                <Border Grid.Row="0"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Background="#0E121B"
+                        BorderBrush="#222A39"
+                        BorderThickness="0,0,0,2"
+                        MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <!-- Title -->
-                            <TextBlock Grid.Row="0"
-                                       Text="Password Details"
-                                       FontFamily="Bahnschrift"
-                                       FontSize="24"
-                                       FontWeight="Bold"
-                                       Foreground="White"/>
-
-                            <!-- Main Content: Icon + Fields -->
-                            <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="20"/>
-                                    <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Icon Button with gradient background -->
-                                <Button x:Name="PasswordIconButton"
-                                        Grid.Column="0"
-                                        Width="80"
-                                        Height="80"
-                                        VerticalAlignment="Top"
-                                        Margin="0,40,0,0"
-                                        Background="Transparent"
-                                        BorderThickness="0"
-                                        Cursor="Hand"
-                                        Click="PasswordIconButton_Click">
-                                    <Border Width="80"
-                                            Height="80"
-                                            CornerRadius="15">
-                                        <Border.Background>
-                                            <LinearGradientBrush StartPoint="0,0"
-                                                                 EndPoint="1,1">
-                                                <GradientStop Color="#38BDF8"
-                                                              Offset="0"/>
-                                                <GradientStop Color="#FDE047"
-                                                              Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </Border.Background>
-                                        <Image x:Name="PasswordIconImage"
-                                               Source="Images/Icons/internet_2.png"
-                                               Width="45"
-                                               Height="45"
-                                               Stretch="Uniform"/>
-                                    </Border>
-                                </Button>
+                                <Image Grid.Column="0"
+                                       Source="Images/logo.png"
+                                       Width="30"
+                                       Height="30"
+                                       Stretch="Uniform"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
 
-                                <!-- Fields Column -->
-                                <StackPanel Grid.Column="2">
-                                    <!-- Name Label and TextBox -->
-                                    <TextBlock Text="Name:"
-                                               FontFamily="Bahnschrift"
-                                               FontSize="16"
-                                               FontWeight="SemiBold"
-                                               Foreground="White"
-                                               Margin="0,0,0,5"/>
-                                    <TextBox x:Name="PasswordNameTextBox"
-                                             Background="#171C26"
-                                             Foreground="White"
-                                             FontFamily="Bahnschrift"
-                                             FontSize="16"
-                                             BorderThickness="0"
-                                             Padding="15"
-                                             Margin="0,5,0,0"
-                                             Height="50"
-                                             VerticalContentAlignment="Center"
-                                             TextWrapping="Wrap"
-                                             AcceptsReturn="False"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="FamilyPass Manager"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Margin="10,0,0,0"/>
 
-                                    <!-- Login Label and TextBox -->
-                                    <TextBlock Text="Login:"
-                                               FontFamily="Bahnschrift"
-                                               FontSize="16"
-                                               FontWeight="SemiBold"
-                                               Foreground="White"
-                                               Margin="0,15,0,5"/>
-                                    <TextBox x:Name="PasswordLoginTextBox"
-                                             Background="#171C26"
-                                             Foreground="White"
-                                             FontFamily="Bahnschrift"
-                                             FontSize="16"
-                                             BorderThickness="0"
-                                             Padding="15"
-                                             Margin="0,5,0,0"
-                                             Height="50"
-                                             VerticalContentAlignment="Center"
-                                             TextWrapping="Wrap"
-                                             AcceptsReturn="False"/>
-
-                                    <!-- Password Label and Field with Show/Hide -->
-                                    <TextBlock Text="Password:"
-                                               FontFamily="Bahnschrift"
-                                               FontSize="16"
-                                               FontWeight="SemiBold"
-                                               Foreground="White"
-                                               Margin="0,15,0,5"/>
-                                    <Grid Margin="0,5,0,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="50"/>
-                                        </Grid.ColumnDefinitions>
-
-                                        <PasswordBox x:Name="PasswordValueBox"
-                                                     Grid.Column="0"
-                                                     Background="#171C26"
-                                                     Foreground="White"
-                                                     FontFamily="Bahnschrift"
-                                                     FontSize="16"
-                                                     BorderThickness="0"
-                                                     Padding="15"
-                                                     Height="50"
-                                                     VerticalContentAlignment="Center"
-                                                     Visibility="Visible"/>
-
-                                        <TextBox x:Name="PasswordValueTextBox"
-                                                 Grid.Column="0"
-                                                 Background="#171C26"
-                                                 Foreground="White"
-                                                 FontFamily="Bahnschrift"
-                                                 FontSize="16"
-                                                 BorderThickness="0"
-                                                 Padding="15"
-                                                 Height="50"
-                                                 VerticalContentAlignment="Center"
-                                                 Visibility="Collapsed"/>
-
-                                        <Button Grid.Column="1"
+                                <StackPanel Grid.Column="2"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,8,0">
+                                        <!-- TODO: Використати Command замість Click event handler -->
+                                        <Button Content="—"
+                                                Width="25"
+                                                Height="25"
                                                 Background="Transparent"
                                                 BorderThickness="0"
-                                                Width="40"
-                                                Height="40"
+                                                Foreground="White"
+                                                FontFamily="Bahnschrift"
+                                                FontSize="16"
+                                                FontWeight="Bold"
                                                 Cursor="Hand"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Click="TogglePasswordVisibility_Click">
-                                            <Image Source="Images/hide.png"
-                                                   Width="24"
-                                                   Height="24"/>
-                                        </Button>
-                                    </Grid>
+                                                Click="MinimizeButton_Click"/>
+                                        <!-- TODO: Використати Command замість Click event handler -->
+                                        <Button Content="x"
+                                                Width="25"
+                                                Height="25"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Foreground="White"
+                                                FontFamily="Bahnschrift"
+                                                FontSize="14"
+                                                FontWeight="Bold"
+                                                Cursor="Hand"
+                                                Click="CloseButton_Click"/>
                                 </StackPanel>
-                            </Grid>
-
-                            <!-- Buttons Row -->
-                            <Grid Grid.Row="4">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="15"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-
-                                <!-- Save Button -->
-                                <Button Grid.Column="0"
-                                        Style="{StaticResource AddButtonStyle}"
-                                        Height="50"
-                                        Click="SavePasswordButton_Click">
-                                    <TextBlock Text="Save"
-                                               FontSize="16"
-                                               FontWeight="Bold"/>
-                                </Button>
-
-                                <!-- Delete Button -->
-                                <Button Grid.Column="2"
-                                        Style="{StaticResource DeleteButtonStyle}"
-                                        Height="50"
-                                        Click="DeletePasswordButton_Click">
-                                    <TextBlock Text="Delete"
-                                               FontSize="16"
-                                               FontWeight="Bold"/>
-                                </Button>
-                            </Grid>
                         </Grid>
-                    </Border>
+                </Border>
 
-                    <!-- Passwords List -->
-                    <StackPanel x:Name="PasswordsPanel">
-                        <!-- Password cards will be populated dynamically from database -->
-                    </StackPanel>
-                </StackPanel>
-            </ScrollViewer>
+                <Border Grid.Row="1"
+                        Grid.Column="0"
+                        Background="#0E121B"
+                        BorderBrush="#222A39"
+                        BorderThickness="0,0,2,0">
+                        <Grid Margin="15">
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- TODO: Використати Command замість Click event handler -->
+                                <!-- TODO: Використати Data Binding для Visibility -->
+                                <Button x:Name="InvitationsButton"
+                                        Grid.Row="0"
+                                        Style="{StaticResource AddButtonStyle}"
+                                        Margin="0,0,0,10"
+                                        Opacity="0.7"
+                                        Visibility="Collapsed"
+                                        Click="InvitationsButton_Click">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                                <Image Source="Images/Teams/mail_0.png"
+                                                       Width="20"
+                                                       Height="20"
+                                                       Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                                <TextBlock Text="Invites"
+                                                           VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                </Button>
+
+                                <TextBlock Grid.Row="1"
+                                           Text="Communities"
+                                           FontFamily="Bahnschrift"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Foreground="White"
+                                           Margin="10,10,0,20"/>
+
+                                <ScrollViewer Grid.Row="2"
+                                              VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Disabled"
+                                              Style="{StaticResource CustomScrollViewer}"
+                                              Margin="0,0,0,10">
+                                        <StackPanel x:Name="CommunitiesPanel">
+                                                <Button x:Name="PrivateCommunityButton"
+                                                        Style="{StaticResource ActiveCategoryButtonStyle}"
+                                                        Content="Private"
+                                                        Tag="0"
+                                                        Click="CommunityButton_Click"/>
+                                        </StackPanel>
+                                </ScrollViewer>
+
+                                <!-- TODO: Використати Command замість Click event handler -->
+                                <Button x:Name="SettingsButton"
+                                        Grid.Row="3"
+                                        Style="{StaticResource AddButtonStyle}"
+                                        Margin="0"
+                                        Click="SettingsButton_Click">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                                <Image Source="Images/settings.png"
+                                                       Width="20"
+                                                       Height="20"
+                                                       Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                                <TextBlock Text="Settings"
+                                                           VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                </Button>
+                        </Grid>
+                </Border>
+
+                <Border Grid.Row="1"
+                        Grid.Column="1"
+                        Background="#0E121B"
+                        BorderBrush="#222A39"
+                        BorderThickness="0,0,2,0">
+                        <Grid Margin="15">
+                                <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                        <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <StackPanel x:Name="UserContainer"
+                                            Grid.Row="0"
+                                            Margin="0,0,0,0">
+                                </StackPanel>
+
+                                <Border Grid.Row="1"
+                                        Background="#171C26"
+                                        CornerRadius="20"
+                                        Height="45"
+                                        Margin="0,0,0,20">
+                                        <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="45"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0"
+                                                           Text="🔍"
+                                                           FontSize="20"
+                                                           Foreground="#666"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+
+                                                <!-- TODO: Використати Data Binding для Text та UpdateSourceTrigger=PropertyChanged -->
+                                                <TextBox Grid.Column="0"
+                                                         x:Name="SearchTextBox"
+                                                         Background="Transparent"
+                                                         BorderThickness="0"
+                                                         Foreground="White"
+                                                         FontFamily="Bahnschrift"
+                                                         FontSize="14"
+                                                         VerticalAlignment="Center"
+                                                         VerticalContentAlignment="Center"
+                                                         Padding="0,0,15,0"
+                                                         TextChanged="SearchTextBox_TextChanged"/>
+                                        </Grid>
+                                </Border>
+
+                                <!-- TODO: Використати Data Binding для Visibility -->
+                                <Border x:Name="CategoryEditPanel"
+                                        Grid.Row="2"
+                                        Background="#171C26"
+                                        CornerRadius="10"
+                                        Padding="15"
+                                        Margin="0,0,0,10"
+                                        Visibility="Collapsed">
+                                        <Grid>
+                                                <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                        <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
+
+                                                <Grid Grid.Row="0"
+                                                      Margin="0,0,0,10">
+                                                        <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="50"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <Border Grid.Column="0"
+                                                                Width="40"
+                                                                Height="40"
+                                                                Background="#0E121B"
+                                                                CornerRadius="5"
+                                                                VerticalAlignment="Center"/>
+
+                                                        <!-- TODO: Використати Data Binding для Text -->
+                                                        <TextBox x:Name="CategoryNameTextBox"
+                                                                 Grid.Column="1"
+                                                                 Background="#0E121B"
+                                                                 Foreground="White"
+                                                                 FontFamily="Bahnschrift"
+                                                                 FontSize="14"
+                                                                 BorderThickness="0"
+                                                                 Padding="10"
+                                                                 VerticalAlignment="Center"
+                                                                 VerticalContentAlignment="Center"
+                                                                 TextWrapping="Wrap"
+                                                                 AcceptsReturn="False"
+                                                                 VerticalScrollBarVisibility="Hidden"
+                                                                 PreviewMouseWheel="CategoryNameTextBox_PreviewMouseWheel"/>
+                                                </Grid>
+
+                                                <!-- TODO: Використати Command замість Click event handler -->
+                                                <Button Grid.Row="1"
+                                                        Style="{StaticResource AddButtonStyle}"
+                                                        Height="40"
+                                                        Margin="0"
+                                                        Click="SaveCategoryButton_Click">
+                                                        <TextBlock Text="OK"
+                                                                   FontSize="14"
+                                                                   FontWeight="Bold"/>
+                                                </Button>
+                                        </Grid>
+                                </Border>
+
+                                <ScrollViewer Grid.Row="3"
+                                              VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Disabled"
+                                              Style="{StaticResource CustomScrollViewer}"
+                                              Margin="0,0,0,10">
+                                        <StackPanel x:Name="CategoriesPanel">
+                                                <Button Style="{StaticResource ActiveCategoryButtonStyle}"
+                                                        Tag="AllItems"
+                                                        Click="CategoryButton_Click">
+                                                        <StackPanel Orientation="Horizontal">
+                                                                <Border Width="30"
+                                                                        Height="20"
+                                                                        Margin="0,0,10,0"/>
+                                                                <TextBlock Text="All items"
+                                                                           VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                </Button>
+
+                                                <Button Style="{StaticResource CategoryButtonStyle}"
+                                                        Tag="Favorite"
+                                                        Click="CategoryButton_Click">
+                                                        <StackPanel Orientation="Horizontal">
+                                                                <Border Width="30"
+                                                                        Height="20"
+                                                                        Margin="0,0,10,0"/>
+                                                                <TextBlock Text="Favorite"
+                                                                           VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                </Button>
+                                        </StackPanel>
+                                </ScrollViewer>
+
+                                <!-- TODO: Використати Command замість Click event handler -->
+                                <!-- TODO: Використати Data Binding для Visibility -->
+                                <Button x:Name="AdminPanelButton"
+                                        Grid.Row="4"
+                                        Style="{StaticResource AddButtonStyle}"
+                                        Margin="0"
+                                        Visibility="Collapsed"
+                                        Click="AdminPanelButton_Click">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                                <Image Source="Images/Teams/admin.png"
+                                                       Width="20"
+                                                       Height="20"
+                                                       Margin="0,0,8,0"
+                                                       VerticalAlignment="Center"/>
+                                                <TextBlock Text="Admin Panel"
+                                                           VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                </Button>
+
+                                <!-- TODO: Використати Data Binding для Visibility -->
+                                <Grid x:Name="EditButtonsPanel"
+                                      Grid.Row="4"
+                                      Visibility="Collapsed">
+                                        <!-- TODO: Використати Command замість Click event handler -->
+                                        <Button Style="{StaticResource AddButtonStyle}"
+                                                Margin="0,0,0,8"
+                                                Click="SaveEditButton_Click">
+                                                <TextBlock Text="Save"
+                                                           VerticalAlignment="Center"/>
+                                        </Button>
+                                </Grid>
+
+                                <!-- TODO: Використати Data Binding для Visibility -->
+                                <Grid x:Name="PasswordEditButtonsPanel"
+                                      Grid.Row="4"
+                                      Visibility="Collapsed">
+                                        <!-- TODO: Використати Command замість Click event handler -->
+                                        <Button Style="{StaticResource ExitButtonStyle}"
+                                                Click="ExitPasswordEditMode_Click">
+                                                <TextBlock Text="Exit"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                        </Button>
+                                </Grid>
+                        </Grid>
+                </Border>
+
+                <Grid Grid.Row="1"
+                      Grid.Column="2"
+                      Background="#171C26">
+
+                        <ScrollViewer x:Name="PasswordsScrollViewer"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      Style="{StaticResource CustomScrollViewer}"
+                                      Margin="30,30,30,30">
+                                <StackPanel>
+                                        <!-- TODO: Використати Data Binding для Visibility -->
+                                        <Border x:Name="PasswordEditPanel"
+                                                Background="#0E121B"
+                                                BorderBrush="#222A39"
+                                                BorderThickness="2"
+                                                CornerRadius="15"
+                                                Padding="30"
+                                                Margin="0,0,0,20"
+                                                Visibility="Collapsed">
+                                                <Grid>
+                                                        <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="20"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                                <RowDefinition Height="30"/>
+                                                                <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+
+                                                        <TextBlock Grid.Row="0"
+                                                                   Text="Password Details"
+                                                                   FontFamily="Bahnschrift"
+                                                                   FontSize="24"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="White"/>
+
+                                                        <Grid Grid.Row="2">
+                                                                <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                        <ColumnDefinition Width="20"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <!-- TODO: Використати Command замість Click event handler -->
+                                                                <Button x:Name="PasswordIconButton"
+                                                                        Grid.Column="0"
+                                                                        Width="80"
+                                                                        Height="80"
+                                                                        VerticalAlignment="Top"
+                                                                        Margin="0,40,0,0"
+                                                                        Background="Transparent"
+                                                                        BorderThickness="0"
+                                                                        Cursor="Hand"
+                                                                        Click="PasswordIconButton_Click">
+                                                                        <Border Width="80"
+                                                                                Height="80"
+                                                                                CornerRadius="15">
+                                                                                <Border.Background>
+                                                                                        <LinearGradientBrush StartPoint="0,0"
+                                                                                                             EndPoint="1,1">
+                                                                                                <GradientStop Color="#38BDF8"
+                                                                                                              Offset="0"/>
+                                                                                                <GradientStop Color="#FDE047"
+                                                                                                              Offset="1"/>
+                                                                                        </LinearGradientBrush>
+                                                                                </Border.Background>
+                                                                                <Image x:Name="PasswordIconImage"
+                                                                                       Source="Images/Icons/internet_2.png"
+                                                                                       Width="45"
+                                                                                       Height="45"
+                                                                                       Stretch="Uniform"/>
+                                                                        </Border>
+                                                                </Button>
+
+                                                                <StackPanel Grid.Column="2">
+                                                                        <TextBlock Text="Name:"
+                                                                                   FontFamily="Bahnschrift"
+                                                                                   FontSize="16"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="White"
+                                                                                   Margin="0,0,0,5"/>
+                                                                        <!-- TODO: Використати Data Binding для Text -->
+                                                                        <TextBox x:Name="PasswordNameTextBox"
+                                                                                 Background="#171C26"
+                                                                                 Foreground="White"
+                                                                                 FontFamily="Bahnschrift"
+                                                                                 FontSize="16"
+                                                                                 BorderThickness="0"
+                                                                                 Padding="15"
+                                                                                 Margin="0,5,0,0"
+                                                                                 Height="50"
+                                                                                 VerticalContentAlignment="Center"
+                                                                                 TextWrapping="Wrap"
+                                                                                 AcceptsReturn="False"/>
+
+                                                                        <TextBlock Text="Login:"
+                                                                                   FontFamily="Bahnschrift"
+                                                                                   FontSize="16"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="White"
+                                                                                   Margin="0,15,0,5"/>
+                                                                        <!-- TODO: Використати Data Binding для Text -->
+                                                                        <TextBox x:Name="PasswordLoginTextBox"
+                                                                                 Background="#171C26"
+                                                                                 Foreground="White"
+                                                                                 FontFamily="Bahnschrift"
+                                                                                 FontSize="16"
+                                                                                 BorderThickness="0"
+                                                                                 Padding="15"
+                                                                                 Margin="0,5,0,0"
+                                                                                 Height="50"
+                                                                                 VerticalContentAlignment="Center"
+                                                                                 TextWrapping="Wrap"
+                                                                                 AcceptsReturn="False"/>
+
+                                                                        <TextBlock Text="Password:"
+                                                                                   FontFamily="Bahnschrift"
+                                                                                   FontSize="16"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="White"
+                                                                                   Margin="0,15,0,5"/>
+                                                                        <Grid Margin="0,5,0,0">
+                                                                                <Grid.ColumnDefinitions>
+                                                                                        <ColumnDefinition Width="*"/>
+                                                                                        <ColumnDefinition Width="50"/>
+                                                                                </Grid.ColumnDefinitions>
+
+                                                                                <!-- TODO: Використати Data Binding для Password/Text -->
+                                                                                <!-- TODO: Використати Data Binding для Visibility -->
+                                                                                <PasswordBox x:Name="PasswordValueBox"
+                                                                                             Grid.Column="0"
+                                                                                             Background="#171C26"
+                                                                                             Foreground="White"
+                                                                                             FontFamily="Bahnschrift"
+                                                                                             FontSize="16"
+                                                                                             BorderThickness="0"
+                                                                                             Padding="15"
+                                                                                             Height="50"
+                                                                                             VerticalContentAlignment="Center"
+                                                                                             Visibility="Visible"/>
+
+                                                                                <!-- TODO: Використати Data Binding для Text -->
+                                                                                <!-- TODO: Використати Data Binding для Visibility -->
+                                                                                <TextBox x:Name="PasswordValueTextBox"
+                                                                                         Grid.Column="0"
+                                                                                         Background="#171C26"
+                                                                                         Foreground="White"
+                                                                                         FontFamily="Bahnschrift"
+                                                                                         FontSize="16"
+                                                                                         BorderThickness="0"
+                                                                                         Padding="15"
+                                                                                         Height="50"
+                                                                                         VerticalContentAlignment="Center"
+                                                                                         Visibility="Collapsed"/>
+
+                                                                                <!-- TODO: Використати Command замість Click event handler -->
+                                                                                <Button Grid.Column="1"
+                                                                                        Background="Transparent"
+                                                                                        BorderThickness="0"
+                                                                                        Width="40"
+                                                                                        Height="40"
+                                                                                        Cursor="Hand"
+                                                                                        HorizontalAlignment="Center"
+                                                                                        VerticalAlignment="Center"
+                                                                                        Click="TogglePasswordVisibility_Click">
+                                                                                        <Image Source="Images/hide.png"
+                                                                                               Width="24"
+                                                                                               Height="24"/>
+                                                                                </Button>
+                                                                        </Grid>
+                                                                </StackPanel>
+                                                        </Grid>
+
+                                                        <Grid Grid.Row="4">
+                                                                <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                        <ColumnDefinition Width="15"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <!-- TODO: Використати Command замість Click event handler -->
+                                                                <Button Grid.Column="0"
+                                                                        Style="{StaticResource AddButtonStyle}"
+                                                                        Height="50"
+                                                                        Click="SavePasswordButton_Click">
+                                                                        <TextBlock Text="Save"
+                                                                                   FontSize="16"
+                                                                                   FontWeight="Bold"/>
+                                                                </Button>
+
+                                                                <!-- TODO: Використати Command замість Click event handler -->
+                                                                <Button Grid.Column="2"
+                                                                        Style="{StaticResource DeleteButtonStyle}"
+                                                                        Height="50"
+                                                                        Click="DeletePasswordButton_Click">
+                                                                        <TextBlock Text="Delete"
+                                                                                   FontSize="16"
+                                                                                   FontWeight="Bold"/>
+                                                                </Button>
+                                                        </Grid>
+                                                </Grid>
+                                        </Border>
+
+                                        <StackPanel x:Name="PasswordsPanel">
+
+                                        </StackPanel>
+                                </StackPanel>
+                        </ScrollViewer>
+                </Grid>
         </Grid>
-    </Grid>
 </Window>

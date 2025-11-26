@@ -26,7 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Panel -->
             <Border Grid.Row="0"
                     Background="#0E121B"
                     BorderBrush="#222A39"
@@ -40,14 +39,12 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Icon -->
                     <TextBlock Grid.Column="0"
                                Text="👥"
                                FontSize="24"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"/>
 
-                    <!-- Title -->
                     <TextBlock Grid.Column="1"
                                Text="Add New Community"
                                FontFamily="Bahnschrift"
@@ -58,7 +55,7 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- Close button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -74,11 +71,9 @@
                 </Grid>
             </Border>
 
-            <!-- Main Content -->
             <Grid Grid.Row="1"
                   Margin="30">
                 <StackPanel>
-                    <!-- Description -->
                     <TextBlock Text="Create a shared password vault for your family or team"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -86,7 +81,6 @@
                                TextWrapping="Wrap"
                                Margin="0,0,0,30"/>
 
-                    <!-- Community Name Label -->
                     <TextBlock Text="Community Name"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -94,7 +88,7 @@
                                Foreground="White"
                                Margin="0,0,0,10"/>
 
-                    <!-- Community Name Input -->
+                    <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
                     <Border Background="#0E121B"
                             BorderBrush="#222A39"
                             BorderThickness="2"
@@ -114,7 +108,7 @@
                                  TextChanged="CommunityNameTextBox_TextChanged"/>
                     </Border>
 
-                    <!-- Character Counter -->
+                    <!-- TODO: Використати Data Binding для Text -->
                     <TextBlock x:Name="CharacterCountTextBlock"
                                Text="0 / 50 characters"
                                FontFamily="Bahnschrift"
@@ -125,7 +119,6 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Bottom Buttons -->
             <Grid Grid.Row="2"
                   Margin="30,0,30,30">
                 <Grid.ColumnDefinitions>
@@ -134,7 +127,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Cancel Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <Button Grid.Column="0"
                         Content="Cancel"
                         Height="45"
@@ -167,7 +160,8 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Create Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
+                <!-- TODO: Використати Data Binding для IsEnabled -->
                 <Button x:Name="CreateButton"
                         Grid.Column="2"
                         Content="Create Community"

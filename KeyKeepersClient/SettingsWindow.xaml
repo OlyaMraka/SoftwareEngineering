@@ -16,7 +16,6 @@
         Background="Transparent">
 
     <Window.Resources>
-        <!-- Menu Button Style -->
         <Style x:Key="MenuButtonStyle"
                TargetType="Button">
             <Setter Property="Background"
@@ -70,7 +69,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Panel -->
             <Border Grid.Row="0"
                     Background="#0E121B"
                     BorderBrush="#222A39"
@@ -84,7 +82,6 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Logo/Icon -->
                     <Image Grid.Column="0"
                            Source="Images/settings.png"
                            Width="24"
@@ -93,7 +90,6 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                    <!-- Title -->
                     <TextBlock Grid.Column="1"
                                Text="Settings"
                                FontFamily="Bahnschrift"
@@ -104,7 +100,7 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- Close button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -120,11 +116,9 @@
                 </Grid>
             </Border>
 
-            <!-- Main Content -->
             <Grid Grid.Row="1"
                   Margin="30">
                 <StackPanel>
-                    <!-- Title -->
                     <TextBlock Text="Manage Your Content"
                                FontFamily="Bahnschrift"
                                FontSize="24"
@@ -132,7 +126,7 @@
                                Foreground="White"
                                Margin="0,0,0,30"/>
 
-                    <!-- Add Password Button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Style="{StaticResource MenuButtonStyle}"
                             Click="AddPasswordButton_Click">
                         <StackPanel Orientation="Horizontal">
@@ -146,7 +140,7 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Add Category Button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Style="{StaticResource MenuButtonStyle}"
                             Click="AddCategoryButton_Click">
                         <StackPanel Orientation="Horizontal">
@@ -160,7 +154,7 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Add Community Button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Style="{StaticResource MenuButtonStyle}"
                             Click="AddCommunityButton_Click">
                         <StackPanel Orientation="Horizontal">
@@ -174,12 +168,11 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Separator -->
                     <Border Height="2"
                             Background="#222A39"
                             Margin="0,20,0,20"/>
 
-                    <!-- Account Settings Button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Style="{StaticResource MenuButtonStyle}"
                             Click="AccountSettingsButton_Click">
                         <StackPanel Orientation="Horizontal">
@@ -193,7 +186,7 @@
                         </StackPanel>
                     </Button>
 
-                    <!-- Log Out Button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Style="{StaticResource MenuButtonStyle}"
                             Background="#2A1010"
                             Click="LogOutButton_Click">

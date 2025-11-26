@@ -21,7 +21,6 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Top Panel -->
         <Border Grid.Row="0"
                 Background="#0E121B"
                 BorderBrush="#222A39"
@@ -34,7 +33,6 @@
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo/Icon -->
                 <Image Grid.Column="0"
                        Source="Images/logo.png"
                        Width="30"
@@ -43,7 +41,6 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"/>
 
-                <!-- Title -->
                 <TextBlock Grid.Column="1"
                            Text="FamilyPass Manager"
                            FontFamily="Bahnschrift"
@@ -54,7 +51,7 @@
                            HorizontalAlignment="Left"
                            Margin="10,0,0,0"/>
 
-                <!-- Minimize/Close buttons -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
@@ -88,7 +85,6 @@
             </Grid>
         </Border>
 
-        <!-- Main Content -->
         <Grid Grid.Row="1"
               Margin="40">
             <Grid.RowDefinitions>
@@ -102,7 +98,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- User Avatar -->
             <Image Grid.Row="0"
                    Source="Images/SignIn_LogUp/user.png"
                    Width="250"
@@ -112,7 +107,7 @@
                    VerticalAlignment="Center"
                    Margin="0,40,0,0"/>
 
-            <!-- Login Button -->
+            <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="2"
                     Height="55"
                     Background="#0E121B"
@@ -144,7 +139,7 @@
                 </Button>
             </Border>
 
-            <!-- Sign Up Button -->
+            <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="4"
                     Height="55"
                     Background="#0E121B"

@@ -26,7 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Panel -->
             <Border Grid.Row="0"
                     Background="#0E121B"
                     BorderBrush="#222A39"
@@ -40,7 +39,6 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Icon -->
                     <Image Grid.Column="0"
                            Source="Images/edit 1.png"
                            Width="24"
@@ -48,7 +46,6 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"/>
 
-                    <!-- Title -->
                     <TextBlock Grid.Column="1"
                                Text="Edit Community"
                                FontFamily="Bahnschrift"
@@ -59,7 +56,6 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- Close button -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -75,10 +71,8 @@
                 </Grid>
             </Border>
 
-            <!-- Main Content -->
             <StackPanel Grid.Row="1"
                         Margin="30,20,30,20">
-                <!-- Community Name Field -->
                 <TextBlock Text="Community Name"
                            FontFamily="Bahnschrift"
                            FontSize="14"
@@ -86,6 +80,7 @@
                            Foreground="White"
                            Margin="0,0,0,8"/>
 
+                <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
                 <Border Background="#0E121B"
                         BorderBrush="#222A39"
                         BorderThickness="2"
@@ -105,7 +100,7 @@
                              TextChanged="CommunityNameTextBox_TextChanged"/>
                 </Border>
 
-                <!-- Error Message -->
+                <!-- TODO: Використати Data Binding для Text та Visibility -->
                 <TextBlock x:Name="NameErrorTextBlock"
                            FontFamily="Bahnschrift"
                            FontSize="12"
@@ -113,7 +108,7 @@
                            Margin="5,0,0,10"
                            Visibility="Collapsed"/>
 
-                <!-- Character Counter -->
+                <!-- TODO: Використати Data Binding для Text -->
                 <TextBlock x:Name="CharacterCountTextBlock"
                            Text="0 / 50 characters"
                            FontFamily="Bahnschrift"
@@ -122,7 +117,6 @@
                            Margin="5,0,0,20"
                            HorizontalAlignment="Right"/>
 
-                <!-- Info Text -->
                 <TextBlock Text="Enter a new name for your community."
                            FontFamily="Bahnschrift"
                            FontSize="13"
@@ -131,7 +125,6 @@
                            Margin="0,0,0,20"/>
             </StackPanel>
 
-            <!-- Bottom Buttons -->
             <Grid Grid.Row="2"
                   Margin="30,0,30,30">
                 <Grid.ColumnDefinitions>
@@ -140,7 +133,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Cancel Button -->
                 <Button Grid.Column="0"
                         Content="Cancel"
                         Height="45"
@@ -169,7 +161,8 @@
                     </Button.Style>
                 </Button>
 
-                <!-- Save Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
+                <!-- TODO: Використати Data Binding для IsEnabled -->
                 <Button x:Name="SaveButton"
                         Grid.Column="2"
                         Content="Save"

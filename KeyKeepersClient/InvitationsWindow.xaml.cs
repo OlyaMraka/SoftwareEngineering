@@ -65,7 +65,6 @@ public partial class InvitationsWindow : Window
                     AcceptAllButton.IsEnabled = false;
                     DeclineAllButton.IsEnabled = false;
 
-                    // Notify parent to hide the button
                     if (onInvitationHandled != null)
                     {
                         await onInvitationHandled();
@@ -132,7 +131,6 @@ public partial class InvitationsWindow : Window
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(10) });
         grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
 
-        // Left side - Invitation info
         var infoStack = new StackPanel();
 
         var communityText = new TextBlock
@@ -166,7 +164,6 @@ public partial class InvitationsWindow : Window
         infoStack.Children.Add(fromText);
         infoStack.Children.Add(dateText);
 
-        // Accept Button
         var acceptButton = new Button
         {
             Content = "Accept",
@@ -194,7 +191,7 @@ public partial class InvitationsWindow : Window
         acceptTemplate.VisualTree = acceptBorder;
         acceptButton.Template = acceptTemplate;
 
-        // Decline Button
+
         var declineButton = new Button
         {
             Content = "Decline",
@@ -300,10 +297,10 @@ public partial class InvitationsWindow : Window
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
-                // Reload invitations
+
                 await LoadInvitationsAsync();
 
-                // Notify parent window
+
                 if (onInvitationHandled != null)
                 {
                     await onInvitationHandled();
@@ -332,7 +329,7 @@ public partial class InvitationsWindow : Window
     {
         try
         {
-            // Disable buttons during processing
+
             AcceptAllButton.IsEnabled = false;
             DeclineAllButton.IsEnabled = false;
 
@@ -340,7 +337,7 @@ public partial class InvitationsWindow : Window
             int failedCount = 0;
             List<string> errors = new List<string>();
 
-            // Process invitations sequentially to avoid DbContext conflicts
+
             foreach (var inv in invitations)
             {
                 try
@@ -399,10 +396,10 @@ public partial class InvitationsWindow : Window
                     MessageBoxImage.Error);
             }
 
-            // Reload invitations
+
             await LoadInvitationsAsync();
 
-            // Notify parent window
+
             if (onInvitationHandled != null)
             {
                 await onInvitationHandled();
@@ -416,7 +413,7 @@ public partial class InvitationsWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
 
-            // Re-enable buttons on error
+
             if (invitations.Any())
             {
                 AcceptAllButton.IsEnabled = true;

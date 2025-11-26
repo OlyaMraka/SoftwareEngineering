@@ -26,7 +26,6 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Top Panel -->
             <Border Grid.Row="0"
                     Background="#0E121B"
                     BorderBrush="#222A39"
@@ -40,14 +39,12 @@
                         <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Icon -->
                     <TextBlock Grid.Column="0"
                                Text="👤"
                                FontSize="24"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"/>
 
-                    <!-- Title -->
                     <TextBlock Grid.Column="1"
                                Text="Редагування профілю"
                                FontFamily="Bahnschrift"
@@ -58,7 +55,7 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- Close button -->
+                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -74,12 +71,10 @@
                 </Grid>
             </Border>
 
-            <!-- Main Content -->
             <ScrollViewer Grid.Row="1"
                           VerticalScrollBarVisibility="Auto"
                           Margin="30,20,30,20">
                 <StackPanel>
-                    <!-- Name Field -->
                     <TextBlock Text="Ім'я"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -87,6 +82,7 @@
                                Foreground="White"
                                Margin="0,0,0,8"/>
 
+                    <!-- TODO: Використати Data Binding для Text -->
                     <Border Background="#0E121B"
                             BorderBrush="#222A39"
                             BorderThickness="2"
@@ -105,6 +101,7 @@
                                  MaxLength="30"/>
                     </Border>
 
+                    <!-- TODO: Використати Data Binding для Text та Visibility -->
                     <TextBlock x:Name="NameErrorText"
                                Text=""
                                FontFamily="Bahnschrift"
@@ -113,7 +110,6 @@
                                Margin="5,0,0,15"
                                Visibility="Collapsed"/>
 
-                    <!-- Surname Field -->
                     <TextBlock Text="Прізвище"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -147,7 +143,6 @@
                                Margin="5,0,0,15"
                                Visibility="Collapsed"/>
 
-                    <!-- Email Field -->
                     <TextBlock Text="Email"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -181,7 +176,6 @@
                                Margin="5,0,0,15"
                                Visibility="Collapsed"/>
 
-                    <!-- Username Field -->
                     <TextBlock Text="Ім'я користувача"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -215,7 +209,6 @@
                                Margin="5,0,0,15"
                                Visibility="Collapsed"/>
 
-                    <!-- Password Field -->
                     <TextBlock Text="Новий пароль (залиште порожнім, якщо не хочете змінювати)"
                                FontFamily="Bahnschrift"
                                FontSize="14"
@@ -223,6 +216,7 @@
                                Foreground="White"
                                Margin="0,0,0,8"/>
 
+                    <!-- TODO: Використати Data Binding для Visibility -->
                     <Border Background="#0E121B"
                             BorderBrush="#222A39"
                             BorderThickness="2"
@@ -230,6 +224,7 @@
                             Height="45"
                             Margin="0,0,0,5">
                         <Grid>
+                            <!-- TODO: Використати Data Binding для Password (через helper behavior) замість PasswordChanged event -->
                             <PasswordBox x:Name="PasswordBox"
                                          Background="Transparent"
                                          BorderThickness="0"
@@ -242,6 +237,8 @@
                                          MaxLength="100"
                                          PasswordChanged="PasswordBox_PasswordChanged"/>
 
+                            <!-- TODO: Використати Data Binding для Text -->
+                            <!-- TODO: Використати Data Binding для Visibility -->
                             <TextBox x:Name="PasswordTextBox"
                                      Background="Transparent"
                                      BorderThickness="0"
@@ -255,6 +252,7 @@
                                      Visibility="Collapsed"
                                      TextChanged="PasswordTextBox_TextChanged"/>
 
+                            <!-- TODO: Використати Command замість Click event handler -->
                             <Button Content="👁"
                                     Width="40"
                                     Height="40"
@@ -268,6 +266,7 @@
                         </Grid>
                     </Border>
 
+                    <!-- TODO: Використати Data Binding для Text та Visibility -->
                     <TextBlock x:Name="PasswordErrorText"
                                Text=""
                                FontFamily="Bahnschrift"
@@ -284,7 +283,6 @@
                 </StackPanel>
             </ScrollViewer>
 
-            <!-- Bottom Buttons -->
             <Grid Grid.Row="2"
                   Margin="30,0,30,30">
                 <Grid.ColumnDefinitions>
@@ -293,7 +291,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- Cancel Button -->
                 <Button Grid.Column="0"
                         Content="Скасувати"
                         Height="45"
@@ -326,7 +323,7 @@
                     </Button.Template>
                 </Button>
 
-                <!-- Save Button -->
+                <!-- TODO: Використати Command замість Click event handler -->
                 <Button x:Name="SaveButton"
                         Grid.Column="2"
                         Content="Зберегти зміни"
