@@ -6,6 +6,7 @@ using KeyKeepers.BLL.DTOs.JoinRequests;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using KeyKeepers.DAL.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace KeyKeepers.BLL.Queries.JoinRequests.GetByRecipientId;
 
@@ -27,6 +28,9 @@ public class GetByRecipientInHandler : IRequestHandler<GetByRecipientIdQuery, Re
         QueryOptions<JoinRequest> options = new QueryOptions<JoinRequest>
         {
             Filter = filter => filter.RecipientId == request.RecipientId,
+            Include = x => x.Include(j => j.Community)
+                .Include(q => q.Sender)
+                .ThenInclude(w => w.User),
         };
 
         var entities = await repositoryWrapper.JoinRequestRepository.GetAllAsync(options);

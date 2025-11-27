@@ -9,6 +9,9 @@ public class JoinRequestsProfile : Profile
     public JoinRequestsProfile()
     {
         CreateMap<CreateRequestDto, JoinRequest>();
-        CreateMap<JoinRequest, JoinRequestResponseDto>();
+        CreateMap<JoinRequest, JoinRequestResponseDto>()
+            .ForMember(
+                dest => dest.SenderUsername,
+                opt => opt.MapFrom(src => src.Sender.User.UserName));
     }
 }

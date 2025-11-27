@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeyKeepersClient"
+        xmlns:vm="clr-namespace:KeyKeepersClient.ViewModels.CommunityViewModel"
         mc:Ignorable="d"
         Title="Add Community"
         Icon="Images/logo.png"
@@ -14,6 +15,10 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent">
+
+    <Window.DataContext>
+        <vm:AddCommunityViewModel/>
+    </Window.DataContext>
 
     <Border Background="#171C26"
             BorderBrush="#FDE053"
@@ -55,7 +60,6 @@
                                HorizontalAlignment="Left"
                                Margin="10,0,0,0"/>
 
-                    <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"
                             Content="×"
                             Width="30"
@@ -67,7 +71,7 @@
                             FontSize="24"
                             FontWeight="Bold"
                             Cursor="Hand"
-                            Click="CloseButton_Click"/>
+                            Command="{Binding CloseCommand}"/>
                 </Grid>
             </Border>
 
@@ -88,15 +92,13 @@
                                Foreground="White"
                                Margin="0,0,0,10"/>
 
-                    <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
                     <Border Background="#0E121B"
                             BorderBrush="#222A39"
                             BorderThickness="2"
                             CornerRadius="10"
                             Height="45"
                             Margin="0,0,0,20">
-                        <TextBox x:Name="CommunityNameTextBox"
-                                 Background="Transparent"
+                        <TextBox Background="Transparent"
                                  BorderThickness="0"
                                  Foreground="White"
                                  FontFamily="Bahnschrift"
@@ -105,15 +107,13 @@
                                  VerticalContentAlignment="Center"
                                  Padding="15,0"
                                  MaxLength="50"
-                                 TextChanged="CommunityNameTextBox_TextChanged"/>
+                                 Text="{Binding CommunityName, UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
 
-                    <!-- TODO: Використати Data Binding для Text -->
-                    <TextBlock x:Name="CharacterCountTextBlock"
-                               Text="0 / 50 characters"
+                    <TextBlock Text="{Binding CharacterCount}"
                                FontFamily="Bahnschrift"
                                FontSize="12"
-                               Foreground="#666"
+                               Foreground="{Binding CharacterCountForeground}"
                                HorizontalAlignment="Right"
                                Margin="0,-15,0,20"/>
                 </StackPanel>
@@ -127,7 +127,6 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- TODO: Використати Command замість Click event handler -->
                 <Button Grid.Column="0"
                         Content="Cancel"
                         Height="45"
@@ -139,7 +138,7 @@
                         BorderThickness="2"
                         BorderBrush="#222A39"
                         Cursor="Hand"
-                        Click="CancelButton_Click">
+                        Command="{Binding CancelCommand}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}"
@@ -160,10 +159,7 @@
                     </Button.Template>
                 </Button>
 
-                <!-- TODO: Використати Command замість Click event handler -->
-                <!-- TODO: Використати Data Binding для IsEnabled -->
-                <Button x:Name="CreateButton"
-                        Grid.Column="2"
+                <Button Grid.Column="2"
                         Content="Create Community"
                         Height="45"
                         FontFamily="Bahnschrift"
@@ -172,8 +168,8 @@
                         Foreground="Black"
                         BorderThickness="0"
                         Cursor="Hand"
-                        IsEnabled="False"
-                        Click="CreateButton_Click">
+                        IsEnabled="{Binding IsCreateEnabled}"
+                        Command="{Binding CreateCommand}">
                     <Button.Background>
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="1,0">

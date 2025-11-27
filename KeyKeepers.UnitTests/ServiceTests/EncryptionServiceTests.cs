@@ -1,10 +1,7 @@
-using System;
-using System.Text;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using KeyKeepers.BLL.Services;
 using System.Security.Cryptography;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.ServiceTests
 {

@@ -2,7 +2,6 @@ using FluentValidation.TestHelper;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
 using KeyKeepers.BLL.Validators.PasswordCategories;
 using KeyKeepers.BLL.Constants;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.ValidatorTests
 {

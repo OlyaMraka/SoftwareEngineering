@@ -1,7 +1,6 @@
 using FluentValidation.TestHelper;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.Validators.Users;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.ValidatorTests
 {

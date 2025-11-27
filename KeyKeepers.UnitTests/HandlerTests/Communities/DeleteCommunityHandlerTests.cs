@@ -1,11 +1,9 @@
-using FluentResults;
 using KeyKeepers.BLL.Commands.Communities.Delete;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.HandlerTests.Communities
 {

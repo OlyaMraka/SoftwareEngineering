@@ -1,14 +1,11 @@
 using AutoMapper;
-using FluentResults;
 using KeyKeepers.BLL.Commands.JoinRequests.Create;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.JoinRequests;
 using KeyKeepers.DAL.Entities;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
-using Microsoft.EntityFrameworkCore;
 using Moq;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.HandlerTests.JoinRequests
 {

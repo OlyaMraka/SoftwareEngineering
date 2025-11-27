@@ -1,6 +1,5 @@
-using System;
 using System.Windows;
-using System.Windows.Input;
+using KeyKeepersClient.ViewModels.CommunityViewModel;
 
 namespace KeyKeepersClient
 {
@@ -9,53 +8,31 @@ namespace KeyKeepersClient
         public AddCommunityWindow()
         {
             InitializeComponent();
-            CommunityNameTextBox.Focus();
-            CommunityName = string.Empty;
+
+            if (DataContext is AddCommunityViewModel vm)
+            {
+                vm.DialogResultRequested += Vm_DialogResultRequested;
+            }
         }
 
-        public string CommunityName { get; private set; }
+        public string? CommunityName { get; private set; }
 
-        private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Vm_DialogResultRequested(object? sender, DialogResultEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
+            DialogResult = e.DialogResult;
+            if (e.DialogResult)
+            {
+                this.CommunityName = e.CommunityName;
+            }
+
+            Close();
+        }
+
+        private void TitleBar_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == System.Windows.Input.MouseButtonState.Pressed)
             {
                 DragMove();
-            }
-        }
-
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
-
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
-            Close();
-        }
-
-        private void CreateButton_Click(object sender, RoutedEventArgs e)
-        {
-            CommunityName = CommunityNameTextBox.Text.Trim();
-            DialogResult = true;
-            Close();
-        }
-
-        private void CommunityNameTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
-        {
-            var text = CommunityNameTextBox.Text;
-            CharacterCountTextBlock.Text = $"{text.Length} / 50 characters";
-
-            CreateButton.IsEnabled = !string.IsNullOrWhiteSpace(text);
-
-            if (text.Length >= 45)
-            {
-                CharacterCountTextBlock.Foreground = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FDE053"));
-            }
-            else
-            {
-                CharacterCountTextBlock.Foreground = new System.Windows.Media.SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#666666"));
             }
         }
     }

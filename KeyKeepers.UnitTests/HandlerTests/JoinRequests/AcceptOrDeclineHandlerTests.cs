@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentResults;
 using KeyKeepers.BLL.Commands.JoinRequests.Accept;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.JoinRequests;
@@ -8,7 +7,6 @@ using KeyKeepers.DAL.Enums;
 using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using KeyKeepers.DAL.Repositories.Options;
 using Moq;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.HandlerTests.JoinRequests
 {

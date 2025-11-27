@@ -3,7 +3,6 @@ using KeyKeepers.BLL.Commands.Communities.Create;
 using KeyKeepers.BLL.Constants;
 using KeyKeepers.BLL.DTOs.Communities;
 using KeyKeepers.BLL.Validators.Communities;
-using Xunit;
 
 namespace KeyKeepers.UnitTests.ValidatorTests
 {
