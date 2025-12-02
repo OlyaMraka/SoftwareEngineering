@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KeyKeepersClient"
+        xmlns:helpers="clr-namespace:KeyKeepersClient.Helpers"
         mc:Ignorable="d"
         Title="FamilyPass Manager - Sign Up"
         Icon="Images/logo.png"
@@ -58,29 +59,9 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Margin="0,0,8,0">
-                    <Button Content="—"
-                            Width="30"
-                            Height="30"
-                            Background="Transparent"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontFamily="Bahnschrift"
-                            FontSize="16"
-                            FontWeight="Bold"
-                            Margin="3,0"
-                            VerticalContentAlignment="Center"
-                            HorizontalContentAlignment="Center"
+                    <Button Style="{StaticResource WindowMinimizeButtonStyle}"
                             Click="MinimizeButton_Click"/>
-                    <Button Content="x"
-                            Width="30"
-                            Height="30"
-                            Background="Transparent"
-                            Foreground="White"
-                            BorderThickness="0"
-                            FontFamily="Bahnschrift"
-                            FontSize="24"
-                            VerticalContentAlignment="Center"
-                            HorizontalContentAlignment="Center"
+                    <Button Style="{StaticResource WindowCloseButtonStyle}"
                             Click="CloseButton_Click"/>
                 </StackPanel>
             </Grid>
@@ -123,259 +104,150 @@
 
             <TextBlock Grid.Row="3"
                        Text="First Name"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
-            <!-- TODO: Використати Data Binding для Visibility placeholder -->
             <Border Grid.Row="4"
-                    Height="40"
-                    Background="#2A2F3A"
-                    CornerRadius="20"
-                    BorderThickness="0">
+                    Style="{StaticResource CompactInputBorderStyle}">
                 <Grid>
                     <TextBox x:Name="FirstNameTextBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             CaretBrush="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="14"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Stretch"
-                             Margin="15,0"
-                             TextChanged="FirstNameTextBox_TextChanged"/>
+                             Style="{StaticResource CompactInputTextBoxStyle}"/>
                     <TextBlock x:Name="FirstNamePlaceholder"
-                               Text="Enter your first name"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="15,0"
-                               IsHitTestVisible="False"/>
+                               Text="Enter your first name">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CompactPlaceholderTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), ElementName=FirstNameTextBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
 
             <TextBlock Grid.Row="6"
                        Text="Last Name"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
-            <!-- TODO: Використати Data Binding для Visibility placeholder -->
             <Border Grid.Row="7"
-                    Height="40"
-                    Background="#2A2F3A"
-                    CornerRadius="20"
-                    BorderThickness="0">
+                    Style="{StaticResource CompactInputBorderStyle}">
                 <Grid>
                     <TextBox x:Name="LastNameTextBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             CaretBrush="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="14"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Stretch"
-                             Margin="15,0"
-                             TextChanged="LastNameTextBox_TextChanged"/>
+                             Style="{StaticResource CompactInputTextBoxStyle}"/>
                     <TextBlock x:Name="LastNamePlaceholder"
-                               Text="Enter your last name"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="15,0"
-                               IsHitTestVisible="False"/>
+                               Text="Enter your last name">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CompactPlaceholderTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), ElementName=LastNameTextBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
 
             <TextBlock Grid.Row="9"
                        Text="Email"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
-            <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
-            <!-- TODO: Використати Data Binding для Visibility placeholder -->
             <Border Grid.Row="10"
-                    Height="40"
-                    Background="#2A2F3A"
-                    CornerRadius="20"
-                    BorderThickness="0">
+                    Style="{StaticResource CompactInputBorderStyle}"
+                    helpers:TextBoxHelper.IsValid="{Binding Path=(helpers:TextBoxHelper.IsValid), ElementName=EmailTextBox}">
                 <Grid>
                     <TextBox x:Name="EmailTextBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             CaretBrush="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="14"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Stretch"
-                             Margin="15,0"
+                             Style="{StaticResource CompactInputTextBoxStyle}"
                              TextChanged="EmailTextBox_TextChanged"/>
                     <TextBlock x:Name="EmailPlaceholder"
-                               Text="Enter your email"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="15,0"
-                               IsHitTestVisible="False"/>
+                               Text="Enter your email">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CompactPlaceholderTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), ElementName=EmailTextBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
 
             <TextBlock Grid.Row="12"
                        Text="Username"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
-            <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
-            <!-- TODO: Використати Data Binding для Visibility placeholder -->
             <Border x:Name="UsernameBorder"
                     Grid.Row="13"
-                    Height="40"
-                    Background="#2A2F3A"
-                    CornerRadius="20"
-                    BorderThickness="1">
+                    Style="{StaticResource CompactInputBorderStyle}"
+                    BorderThickness="1"
+                    helpers:TextBoxHelper.IsValid="{Binding Path=(helpers:TextBoxHelper.IsValid), ElementName=UsernameTextBox}">
                 <Grid>
                     <TextBox x:Name="UsernameTextBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             CaretBrush="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="14"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Stretch"
-                             Margin="15,0"
+                             Style="{StaticResource CompactInputTextBoxStyle}"
                              TextChanged="UsernameTextBox_TextChanged"/>
                     <TextBlock x:Name="UsernamePlaceholder"
-                               Text="Choose a username"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="15,0"
-                               IsHitTestVisible="False"/>
+                               Text="Choose a username">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CompactPlaceholderTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), ElementName=UsernameTextBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
 
             <TextBlock Grid.Row="15"
                        Text="Password"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <!-- TODO: Використати Data Binding для Password (через helper behavior) замість PasswordChanged event -->
-            <!-- TODO: Використати Data Binding для Visibility placeholder -->
             <Border Grid.Row="16"
-                    Height="40"
-                    Background="#2A2F3A"
-                    CornerRadius="20"
-                    BorderThickness="0">
+                    Style="{StaticResource CompactInputBorderStyle}">
                 <Grid>
-                    <PasswordBox x:Name="PasswordTextBox"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Foreground="White"
-                                 CaretBrush="White"
-                                 FontFamily="Bahnschrift"
-                                 FontSize="14"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Stretch"
-                                 Margin="15,0"
-                                 PasswordChanged="PasswordTextBox_PasswordChanged"/>
+                        <PasswordBox x:Name="PasswordTextBox"
+                                     Style="{StaticResource CompactPasswordBoxStyle}"/>
                     <TextBlock x:Name="PasswordPlaceholder"
-                               Text="Create a strong password"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="15,0"
-                               IsHitTestVisible="False"/>
+                               Text="Create a password">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CompactPlaceholderTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), ElementName=PasswordTextBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
-
+            
             <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="18"
-                    Height="50"
-                    CornerRadius="27"
-                    HorizontalAlignment="Stretch"
-                    Margin="20,0,20,0">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
-                        <GradientStop Color="#815A11"
-                                      Offset="0"/>
-                        <GradientStop Color="#FDE053"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Button Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="Black"
-                        FontFamily="Bahnschrift"
-                        FontSize="20"
-                        FontWeight="SemiBold"
+                    Style="{StaticResource AcceptButtonBorderStyle}">
+                <Button Style="{StaticResource AcceptButtonStyle}"
                         Content="register"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Cursor="Hand"
-                        Click="RegisterButton_Click">
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
+                        Click="RegisterButton_Click"/>
             </Border>
 
-            <TextBlock Grid.Row="21"
+            <TextBlock Grid.Row="20"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Top"
                        Margin="0,0,0,0">
                 <Run Text="Already have an account? "
-                     Foreground="#B0B0B0"
-                     FontFamily="Bahnschrift"
-                     FontSize="13"/>
-                <Hyperlink Click="LogInLink_Click"
-                           TextDecorations="None">
+                     Style="{StaticResource SecondaryRunStyle}"/>
+                <Hyperlink Click="LogInLink_Click">
                     <Run Text="Log In"
-                         Foreground="#FDE053"
-                         FontFamily="Bahnschrift"
-                         FontSize="13"
-                         FontWeight="SemiBold"/>
+                         Style="{StaticResource AccentRunStyle}"/>
                 </Hyperlink>
             </TextBlock>
         </Grid>

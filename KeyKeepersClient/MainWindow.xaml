@@ -570,28 +570,13 @@
                                             VerticalAlignment="Center"
                                             Margin="0,0,8,0">
                                         <!-- TODO: Використати Command замість Click event handler -->
-                                        <Button Content="—"
+                                        <Button Style="{StaticResource WindowMinimizeButtonStyle}"
                                                 Width="25"
                                                 Height="25"
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                Foreground="White"
-                                                FontFamily="Bahnschrift"
-                                                FontSize="16"
-                                                FontWeight="Bold"
-                                                Cursor="Hand"
                                                 Click="MinimizeButton_Click"/>
-                                        <!-- TODO: Використати Command замість Click event handler -->
-                                        <Button Content="x"
+                                        <Button Style="{StaticResource WindowCloseButtonStyle}"
                                                 Width="25"
                                                 Height="25"
-                                                Background="Transparent"
-                                                BorderThickness="0"
-                                                Foreground="White"
-                                                FontFamily="Bahnschrift"
-                                                FontSize="14"
-                                                FontWeight="Bold"
-                                                Cursor="Hand"
                                                 Click="CloseButton_Click"/>
                                 </StackPanel>
                         </Grid>

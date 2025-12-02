@@ -102,16 +102,7 @@
 
                     <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"
-                            Content="×"
-                            Width="30"
-                            Height="30"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="White"
-                            FontFamily="Bahnschrift"
-                            FontSize="24"
-                            FontWeight="Bold"
-                            Cursor="Hand"
+                            Style="{StaticResource WindowCloseButtonStyle}"
                             Click="CloseButton_Click"/>
                 </Grid>
             </Border>
