@@ -255,8 +255,8 @@ public partial class AddUserToCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception adding user to community: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером при відправці запрошення.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error when sending invitation.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             AddButton.IsEnabled = true;
@@ -265,8 +265,8 @@ public partial class AddUserToCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation adding user: {invEx}");
             MessageBox.Show(
-                $"Не вдалося відправити запрошення.\nМожливо, користувач вже у спільноті або вже має запрошення.\n\nДеталі: {invEx.Message}",
-                "Помилка валідації",
+                $"Failed to send invitation.\nUser may already be in the community or already have an invitation.\n\nDetails: {invEx.Message}",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             AddButton.IsEnabled = true;
@@ -275,8 +275,8 @@ public partial class AddUserToCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unauthorized adding user: {unauthEx}");
             MessageBox.Show(
-                "У вас немає прав для запрошення користувачів до цієї спільноти.\nТільки власник або адміністратор може додавати користувачів.",
-                "Доступ заборонено",
+                "You do not have permission to invite users to this community.\nOnly the owner or administrator can add users.",
+                "Access Denied",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             AddButton.IsEnabled = true;
@@ -285,8 +285,8 @@ public partial class AddUserToCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception adding user: {ex}");
             MessageBox.Show(
-                $"Виникла помилка при відправці запрошення.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                "Критична помилка",
+                $"An error occurred when sending invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             AddButton.IsEnabled = true;

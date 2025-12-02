@@ -168,8 +168,8 @@ public class MainWindowViewModel : BaseViewModel
         if (name.Length < 3)
         {
             MessageBox.Show(
-                "Мінімальна довжина назви додатку 3 символів!",
-                "Помилка валідації",
+                "Minimum app name length is 3 characters!",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -178,8 +178,8 @@ public class MainWindowViewModel : BaseViewModel
         if (name.Length > 30)
         {
             MessageBox.Show(
-                "Максимальна довжина назви додатку 30 символів!",
-                "Помилка валідації",
+                "Maximum app name length is 30 characters!",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -188,8 +188,8 @@ public class MainWindowViewModel : BaseViewModel
         if (login.Length > 50)
         {
             MessageBox.Show(
-                "Максимальна довжина логіну 50 символів!",
-                "Помилка валідації",
+                "Maximum login length is 50 characters!",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -198,8 +198,8 @@ public class MainWindowViewModel : BaseViewModel
         if (password.Length > 30)
         {
             MessageBox.Show(
-                "Максимальна довжина паролю 30 символів!",
-                "Помилка валідації",
+                "Maximum password length is 30 characters!",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -208,8 +208,8 @@ public class MainWindowViewModel : BaseViewModel
         if (currentCategoryId == 0)
         {
             MessageBox.Show(
-                "Будь ласка, оберіть категорію для паролю!",
-                "Помилка",
+                "Please select a category for the password!",
+                "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             return;
@@ -235,8 +235,8 @@ public class MainWindowViewModel : BaseViewModel
                 if (updateResult.IsSuccess)
                 {
                     MessageBox.Show(
-                        "Пароль успішно оновлено!",
-                        "Успіх",
+                        "Password successfully updated!",
+                        "Success",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
 
@@ -253,8 +253,8 @@ public class MainWindowViewModel : BaseViewModel
                 else
                 {
                     MessageBox.Show(
-                        $"Помилка оновлення паролю: {string.Join(", ", updateResult.Errors.Select(e => e.Message))}",
-                        "Помилка",
+                        $"Password update error: {string.Join(", ", updateResult.Errors.Select(e => e.Message))}",
+                        "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
@@ -276,8 +276,8 @@ public class MainWindowViewModel : BaseViewModel
                 if (createResult.IsSuccess)
                 {
                     MessageBox.Show(
-                        "Пароль успішно збережено!",
-                        "Успіх",
+                        "Password successfully saved!",
+                        "Success",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
 
@@ -293,8 +293,8 @@ public class MainWindowViewModel : BaseViewModel
                 else
                 {
                     MessageBox.Show(
-                        $"Помилка збереження паролю: {string.Join(", ", createResult.Errors.Select(e => e.Message))}",
-                        "Помилка",
+                        $"Password save error: {string.Join(", ", createResult.Errors.Select(e => e.Message))}",
+                        "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
@@ -304,8 +304,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception saving password: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером при збереженні пароля.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error when saving password.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -313,8 +313,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine("Saving password timed out");
             MessageBox.Show(
-                "Перевищено час очікування при збереженні пароля.\nСпробуйте ще раз.",
-                "Тайм-аут",
+                "Timeout exceeded when saving password.\nTry again.",
+                "Timeout",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -322,8 +322,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation saving password: {invEx}");
             MessageBox.Show(
-                $"Некоректна операція при збереженні пароля.\nПеревірте коректність введених даних.\n\nДеталі: {invEx.Message}",
-                "Помилка валідації",
+                $"Invalid operation when saving password.\nCheck the correctness of the entered data.\n\nDetails: {invEx.Message}",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -331,8 +331,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception saving password: {ex}");
             MessageBox.Show(
-                $"Виникла непередбачена помилка при збереженні пароля.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                "Критична помилка",
+                $"An unexpected error occurred when saving password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -346,8 +346,8 @@ public class MainWindowViewModel : BaseViewModel
         }
 
         var result = MessageBox.Show(
-            "Ви впевнені, що хочете видалити цей пароль?",
-            "Підтвердження",
+            "Are you sure you want to delete this password?",
+            "Confirmation",
             MessageBoxButton.YesNo,
             MessageBoxImage.Question);
 
@@ -364,8 +364,8 @@ public class MainWindowViewModel : BaseViewModel
             if (deleteResult.IsSuccess)
             {
                 MessageBox.Show(
-                    "Пароль успішно видалено!",
-                    "Успіх",
+                    "Password successfully deleted!",
+                    "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
@@ -383,8 +383,8 @@ public class MainWindowViewModel : BaseViewModel
             else
             {
                 MessageBox.Show(
-                    $"Помилка видалення паролю: {string.Join(", ", deleteResult.Errors.Select(e => e.Message))}",
-                    "Помилка",
+                    $"Password deletion error: {string.Join(", ", deleteResult.Errors.Select(e => e.Message))}",
+                    "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -393,8 +393,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting password: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером при видаленні пароля.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error when deleting password.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -402,8 +402,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation deleting password: {invEx}");
             MessageBox.Show(
-                $"Не вдалося видалити пароль.\nМожливо, він вже видалений або не існує.\n\nДеталі: {invEx.Message}",
-                "Помилка операції",
+                $"Failed to delete password.\nIt may already be deleted or does not exist.\n\nDetails: {invEx.Message}",
+                "Operation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -411,8 +411,8 @@ public class MainWindowViewModel : BaseViewModel
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting password: {ex}");
             MessageBox.Show(
-                $"Виникла помилка при видаленні пароля.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                "Критична помилка",
+                $"An error occurred when deleting password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -427,8 +427,8 @@ public class MainWindowViewModel : BaseViewModel
         if (hasChanges && currentEditingPassword == null)
         {
             var result = MessageBox.Show(
-                "У вас є незбережені зміни. Зберегти їх перед виходом?",
-                "Незбережені зміни",
+                "You have unsaved changes. Save them before exiting?",
+                "Unsaved Changes",
                 MessageBoxButton.YesNoCancel,
                 MessageBoxImage.Question);
 
@@ -464,8 +464,8 @@ public class MainWindowViewModel : BaseViewModel
     private void SelectPasswordIcon()
     {
         MessageBox.Show(
-            "Вибір іконки буде реалізовано в майбутньому.",
-            "Вибір іконки",
+            "Icon selection will be implemented in the future.",
+            "Icon Selection",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
     }

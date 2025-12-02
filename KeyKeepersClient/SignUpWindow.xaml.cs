@@ -91,7 +91,7 @@ public partial class SignUpWindow : Window
     {
         if (!this.ValidateRegistrationData(out string errorMessage))
         {
-            MessageBox.Show(errorMessage, "Помилка валідації", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 
@@ -106,7 +106,7 @@ public partial class SignUpWindow : Window
             if (this.mediator == null)
             {
                 MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -133,16 +133,16 @@ public partial class SignUpWindow : Window
             }
             else
             {
-                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Помилка при створенні користувача";
-                MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Error creating user";
+                MessageBox.Show($"Registration error: {errorMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception in Registration: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером під час реєстрації.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error during registration.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -150,8 +150,8 @@ public partial class SignUpWindow : Window
         {
             System.Diagnostics.Debug.WriteLine("Registration request timed out");
             MessageBox.Show(
-                "Перевищено час очікування відповіді від сервера.\nСпробуйте пізніше.",
-                "Тайм-аут",
+                "Server response timeout exceeded.\nTry again later.",
+                "Timeout",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -159,8 +159,8 @@ public partial class SignUpWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Invalid Operation in Registration: {invEx}");
             MessageBox.Show(
-                $"Некоректна операція під час реєстрації.\n\nДеталі: {invEx.Message}",
-                "Помилка валідації",
+                $"Invalid operation during registration.\n\nDetails: {invEx.Message}",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -168,8 +168,8 @@ public partial class SignUpWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception in Registration: {ex}");
             MessageBox.Show(
-                $"Виникла непередбачена помилка при реєстрації.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}\n\nСтек виклику: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace?.Length ?? 0))}",
-                "Критична помилка",
+                $"An unexpected error occurred during registration.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}\n\nStack trace: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace?.Length ?? 0))}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -181,7 +181,7 @@ public partial class SignUpWindow : Window
 
         if (string.IsNullOrWhiteSpace(this.FirstNameTextBox.Text))
         {
-            errorMessage = "Ім'я є обов'язковим.";
+            errorMessage = "Name is required.";
             this.FirstNameTextBox.Focus();
             return false;
         }
@@ -189,28 +189,28 @@ public partial class SignUpWindow : Window
         string firstName = this.FirstNameTextBox.Text.Trim();
         if (firstName.Length < 3)
         {
-            errorMessage = "Ім'я повинно містити мінімум 3 символи.";
+            errorMessage = "Name must contain at least 3 characters.";
             this.FirstNameTextBox.Focus();
             return false;
         }
 
         if (firstName.Length > 30)
         {
-            errorMessage = "Ім'я не може бути довше 30 символів.";
+            errorMessage = "Name cannot be longer than 30 characters.";
             this.FirstNameTextBox.Focus();
             return false;
         }
 
         if (!System.Text.RegularExpressions.Regex.IsMatch(firstName, @"^[a-zA-ZА-Яа-яІіЇїЄєʼ\s]+$"))
         {
-            errorMessage = "Ім'я має містити лише літери.";
+            errorMessage = "Name must contain only letters.";
             this.FirstNameTextBox.Focus();
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(this.LastNameTextBox.Text))
         {
-            errorMessage = "Прізвище є обов'язковим.";
+            errorMessage = "Surname is required.";
             this.LastNameTextBox.Focus();
             return false;
         }
@@ -218,28 +218,28 @@ public partial class SignUpWindow : Window
         string lastName = this.LastNameTextBox.Text.Trim();
         if (lastName.Length < 3)
         {
-            errorMessage = "Прізвище повинно містити мінімум 3 символи.";
+            errorMessage = "Surname must contain at least 3 characters.";
             this.LastNameTextBox.Focus();
             return false;
         }
 
         if (lastName.Length > 30)
         {
-            errorMessage = "Прізвище не може бути довше 30 символів.";
+            errorMessage = "Surname cannot be longer than 30 characters.";
             this.LastNameTextBox.Focus();
             return false;
         }
 
         if (!System.Text.RegularExpressions.Regex.IsMatch(lastName, @"^[a-zA-ZА-Яа-яІіЇїЄєʼ\s]+$"))
         {
-            errorMessage = "Прізвище має містити лише літери.";
+            errorMessage = "Surname must contain only letters.";
             this.LastNameTextBox.Focus();
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(this.EmailTextBox.Text))
         {
-            errorMessage = "Email є обов'язковим.";
+            errorMessage = "Email is required.";
             this.EmailTextBox.Focus();
             return false;
         }
@@ -247,14 +247,14 @@ public partial class SignUpWindow : Window
         string email = this.EmailTextBox.Text.Trim();
         if (email.Length < 4)
         {
-            errorMessage = "Email повинен містити мінімум 4 символи.";
+            errorMessage = "Email must contain at least 4 characters.";
             this.EmailTextBox.Focus();
             return false;
         }
 
         if (email.Length > 40)
         {
-            errorMessage = "Email не може бути довше 40 символів.";
+            errorMessage = "Email cannot be longer than 40 characters.";
             this.EmailTextBox.Focus();
             return false;
         }
@@ -262,14 +262,14 @@ public partial class SignUpWindow : Window
         string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
         if (!System.Text.RegularExpressions.Regex.IsMatch(email, emailPattern))
         {
-            errorMessage = "Введіть правильну email адресу.";
+            errorMessage = "Enter a valid email address.";
             this.EmailTextBox.Focus();
             return false;
         }
 
         if (string.IsNullOrWhiteSpace(this.UsernameTextBox.Text))
         {
-            errorMessage = "Ім'я користувача є обов'язковим.";
+            errorMessage = "Username is required.";
             this.UsernameTextBox.Focus();
             return false;
         }
@@ -277,28 +277,28 @@ public partial class SignUpWindow : Window
         string username = this.UsernameTextBox.Text.Trim();
         if (username.Length < 4)
         {
-            errorMessage = "Ім'я користувача повинно містити мінімум 4 символи.";
+            errorMessage = "Username must contain at least 4 characters.";
             this.UsernameTextBox.Focus();
             return false;
         }
 
         if (username.Length > 40)
         {
-            errorMessage = "Ім'я користувача не може бути довше 40 символів.";
+            errorMessage = "Username cannot be longer than 40 characters.";
             this.UsernameTextBox.Focus();
             return false;
         }
 
         if (!System.Text.RegularExpressions.Regex.IsMatch(username, @"^[a-zA-Z][a-zA-Z0-9_.-]*$"))
         {
-            errorMessage = "Ім'я користувача має починатися з літери і містити лише літери, цифри, _, -, .";
+            errorMessage = "Username must start with a letter and contain only letters, numbers, _, -, .";
             this.UsernameTextBox.Focus();
             return false;
         }
 
         if (string.IsNullOrEmpty(this.PasswordTextBox.Password))
         {
-            errorMessage = "Пароль є обов'язковим.";
+            errorMessage = "Password is required.";
             this.PasswordTextBox.Focus();
             return false;
         }
@@ -306,7 +306,7 @@ public partial class SignUpWindow : Window
         string password = this.PasswordTextBox.Password;
         if (password.Length < 8)
         {
-            errorMessage = "Пароль повинен містити мінімум 8 символів.";
+            errorMessage = "Password must contain at least 8 characters.";
             this.PasswordTextBox.Focus();
             return false;
         }
@@ -317,21 +317,21 @@ public partial class SignUpWindow : Window
 
         if (!hasUpper)
         {
-            errorMessage = "Пароль має містити хоча б одну велику літеру.";
+            errorMessage = "Password must contain at least one uppercase letter.";
             this.PasswordTextBox.Focus();
             return false;
         }
 
         if (!hasDigit)
         {
-            errorMessage = "Пароль має містити хоча б одну цифру.";
+            errorMessage = "Password must contain at least one digit.";
             this.PasswordTextBox.Focus();
             return false;
         }
 
         if (!hasSpecial)
         {
-            errorMessage = "Пароль має містити хоча б один спеціальний символ.";
+            errorMessage = "Password must contain at least one special character.";
             this.PasswordTextBox.Focus();
             return false;
         }

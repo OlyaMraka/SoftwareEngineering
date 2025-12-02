@@ -66,7 +66,7 @@ namespace KeyKeepersClient
             try
             {
                 SaveButton.IsEnabled = false;
-                SaveButton.Content = "Збереження...";
+                SaveButton.Content = "Saving...";
 
                 string password = string.IsNullOrWhiteSpace(PasswordBox.Password)
                     ? string.Empty
@@ -88,8 +88,8 @@ namespace KeyKeepersClient
                 if (result.IsSuccess)
                 {
                     MessageBox.Show(
-                        "Профіль успішно оновлено!",
-                        "Успіх",
+                        "ПProfile successfully updated!",
+                        "Success",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
 
@@ -98,10 +98,10 @@ namespace KeyKeepersClient
                 }
                 else
                 {
-                    string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Невідома помилка";
+                    string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Unknown error";
                     MessageBox.Show(
-                        $"Помилка оновлення профілю:\n{errorMsg}",
-                        "Помилка",
+                        $"Profile update error:\n{errorMsg}",
+                        "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
                 }
@@ -110,8 +110,8 @@ namespace KeyKeepersClient
             {
                 System.Diagnostics.Debug.WriteLine($"HTTP Exception in SaveButton_Click: {httpEx}");
                 MessageBox.Show(
-                    $"Помилка з'єднання з сервером при збереженні профілю.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                    "Помилка з'єднання",
+                    $"Server connection error when saving profile.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                    "Connection Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -119,8 +119,8 @@ namespace KeyKeepersClient
             {
                 System.Diagnostics.Debug.WriteLine("Save user request timed out");
                 MessageBox.Show(
-                    "Перевищено час очікування відповіді від сервера.\nСпробуйте пізніше.",
-                    "Тайм-аут",
+                    "Server response timeout exceeded.\nTry again later.",
+                    "Timeout",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
             }
@@ -128,8 +128,8 @@ namespace KeyKeepersClient
             {
                 System.Diagnostics.Debug.WriteLine($"Invalid Operation in SaveButton_Click: {invEx}");
                 MessageBox.Show(
-                    $"Некоректна операція при збереженні профілю.\nМожливо, такий email або username вже використовується.\n\nДеталі: {invEx.Message}",
-                    "Помилка валідації",
+                    $"Invalid operation when saving profile.\nEmail or username may already be in use.\n\nDetails: {invEx.Message}",
+                    "Validation Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
             }
@@ -137,15 +137,15 @@ namespace KeyKeepersClient
             {
                 System.Diagnostics.Debug.WriteLine($"Exception in SaveButton_Click: {ex}");
                 MessageBox.Show(
-                    $"Виникла непередбачена помилка при збереженні профілю.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                    "Критична помилка",
+                    $"An unexpected error occurred when saving profile.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                    "Critical Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
             finally
             {
                 SaveButton.IsEnabled = true;
-                SaveButton.Content = "Зберегти зміни";
+                SaveButton.Content = "Save changes";
             }
         }
 

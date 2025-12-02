@@ -141,8 +141,8 @@ public partial class UpdateCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception updating community: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером при оновленні спільноти.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error when updating community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             SaveButton.IsEnabled = true;
@@ -151,8 +151,8 @@ public partial class UpdateCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation updating community: {invEx}");
             MessageBox.Show(
-                $"Некоректна операція при оновленні спільноти.\nМожливо, спільнота з такою назвою вже існує.\n\nДеталі: {invEx.Message}",
-                "Помилка валідації",
+                $"Invalid operation when updating community.\nCommunity with this name may already exist.\n\nDetails: {invEx.Message}",
+                "Validation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
             SaveButton.IsEnabled = true;
@@ -161,8 +161,8 @@ public partial class UpdateCommunityWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception updating community: {ex}");
             MessageBox.Show(
-                $"Виникла непередбачена помилка при оновленні спільноти '{newName}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                "Критична помилка",
+                $"An unexpected error occurred when updating community '{newName}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             SaveButton.IsEnabled = true;

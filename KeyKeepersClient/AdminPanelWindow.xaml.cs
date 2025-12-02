@@ -92,8 +92,8 @@ public partial class AdminPanelWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting community: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером при видаленні спільноти.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error when deleting community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -101,8 +101,8 @@ public partial class AdminPanelWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation deleting community: {invEx}");
             MessageBox.Show(
-                $"Не вдалося видалити спільноту.\nМожливо, у ній є учасники або дані.\n\nДеталі: {invEx.Message}",
-                "Помилка операції",
+                $"Failed to delete community.\nIt may contain members or data.\n\nDetails: {invEx.Message}",
+                "Operation Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -110,8 +110,8 @@ public partial class AdminPanelWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unauthorized deleting community: {unauthEx}");
             MessageBox.Show(
-                "У вас немає прав для видалення цієї спільноти.\nТільки власник може видалити спільноту.",
-                "Доступ заборонено",
+                "You do not have permission to delete this community.\nOnly the owner can delete a community.",
+                "Access Denied",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -119,8 +119,8 @@ public partial class AdminPanelWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting community: {ex}");
             MessageBox.Show(
-                $"Виникла помилка при видаленні спільноти '{community.Name}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                "Критична помилка",
+                $"An error occurred when deleting community '{community.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

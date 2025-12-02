@@ -96,8 +96,8 @@ public partial class LogInWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception in Login: {httpEx}");
             MessageBox.Show(
-                $"Помилка з'єднання з сервером.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
-                "Помилка з'єднання",
+                $"Server connection error.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -105,8 +105,8 @@ public partial class LogInWindow : Window
         {
             System.Diagnostics.Debug.WriteLine("Login request timed out");
             MessageBox.Show(
-                "Перевищено час очікування відповіді від сервера.\nСпробуйте пізніше.",
-                "Тайм-аут",
+                "Server response timeout exceeded.\nTry again later.",
+                "Timeout",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
         }
@@ -114,8 +114,8 @@ public partial class LogInWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception in Login: {ex}");
             MessageBox.Show(
-                $"Виникла непередбачена помилка під час входу.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
-                "Помилка",
+                $"An unexpected error occurred during login.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
