@@ -142,7 +142,7 @@
                        Margin="0,0,0,5"/>
 
             <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
-            <Border Grid.Row="6"
+            <Border Grid.Row="7"
                     Style="{StaticResource CompactInputBorderStyle}">
                 <Grid>
                     <TextBox x:Name="LastNameTextBox"
@@ -171,7 +171,7 @@
                        HorizontalAlignment="Left"
                        Margin="0,0,0,5"/>
 
-            <Border Grid.Row="8"
+            <Border Grid.Row="10"
                     Style="{StaticResource CompactInputBorderStyle}">
                 <Grid>
                     <TextBox x:Name="EmailTextBox"
@@ -210,8 +210,17 @@
                              Style="{StaticResource CompactInputTextBoxStyle}"
                              TextChanged="UsernameTextBox_TextChanged"/>
                     <TextBlock x:Name="UsernamePlaceholder"
-                               Text="Choose a username"
-                               Style="{StaticResource CompactPlaceholderTextBlockStyle}"/>
+                               Text="Choose a username">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource CompactPlaceholderTextBlockStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), ElementName=UsernameTextBox}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Grid>
             </Border>
 
@@ -225,7 +234,7 @@
                        Margin="0,0,0,5"/>
 
             <!-- TODO: Використати Data Binding для Password (через helper behavior) замість PasswordChanged event -->
-            <Border Grid.Row="12"
+            <Border Grid.Row="16"
                     Style="{StaticResource CompactInputBorderStyle}">
                 <Grid>
                         <PasswordBox x:Name="PasswordTextBox"
@@ -243,7 +252,9 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Grid>
-            </Border>            <!-- TODO: Використати Command замість Click event handler -->
+            </Border>
+            
+            <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="18"
                     Style="{StaticResource AcceptButtonBorderStyle}">
                 <Button Style="{StaticResource AcceptButtonStyle}"
@@ -251,7 +262,7 @@
                         Click="RegisterButton_Click"/>
             </Border>
 
-            <TextBlock Grid.Row="21"
+            <TextBlock Grid.Row="20"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Top"
                        Margin="0,0,0,0">

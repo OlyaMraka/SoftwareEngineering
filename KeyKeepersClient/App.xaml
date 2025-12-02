@@ -115,6 +115,12 @@
                     Value="25"/>
             <Setter Property="BorderThickness"
                     Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="#FDE053"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Alternative Input Border Style (for forms) -->
@@ -130,6 +136,11 @@
                     Value="2"/>
             <Setter Property="CornerRadius"
                     Value="10"/>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="#FDE053"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Compact Input Border Style (for SignUp) -->
@@ -143,6 +154,12 @@
                     Value="20"/>
             <Setter Property="BorderThickness"
                     Value="0"/>
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="#FDE053"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Input TextBox Style -->
@@ -231,9 +248,7 @@
                     Value="15,0"/>
         </Style>
 
-        <!-- Placeholder TextBlock Style 
-             Note: Each placeholder needs inline DataTrigger with ElementName binding to specific TextBox
-             See usage in LogInWindow.xaml and SignUpWindow.xaml -->
+        <!-- Placeholder TextBlock Style with DataTrigger -->
         <Style x:Key="PlaceholderTextBlockStyle"
                TargetType="TextBlock">
             <Setter Property="Foreground"
