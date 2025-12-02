@@ -141,8 +141,8 @@ public partial class MainWindow : Window
             else
             {
                 MessageBox.Show(
-                    "Не вдалося завантажити дані користувача",
-                    "Помилка",
+                    "Failed to load user data",
+                    "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
@@ -151,8 +151,8 @@ public partial class MainWindow : Window
         {
             System.Diagnostics.Debug.WriteLine($"Exception in OpenEditUserMode: {ex}");
             MessageBox.Show(
-                $"Виникла помилка: {ex.Message}",
-                "Помилка",
+                $"An error occurred: {ex.Message}",
+                "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -202,10 +202,27 @@ public partial class MainWindow : Window
                 this.Close();
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception during logout: {httpEx}");
+            MessageBox.Show(
+                "ПServer connection error during logout.\nYou will be logged out locally.\n\nDetails: " + httpEx.Message,
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            
+            ClearStoredTokens();
+            var firstWindow = new FirstWindow();
+            firstWindow.Left = this.Left;
+            firstWindow.Top = this.Top;
+            firstWindow.Show();
+            this.Close();
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception during logout: {ex}");
             MessageBox.Show(
-                $"An error occurred during logout: {ex.Message}",
+                $"An error occurred during logout.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -233,8 +250,8 @@ public partial class MainWindow : Window
             {
                 MessageBox
                     .Show(
-                        "База даних не налаштована. Реєстрація тимчасово недоступна.",
-                        "Інформація",
+                        "Database is not configured. Registration is temporarily unavailable.",
+                        "Information",
                         MessageBoxButton.OK,
                         MessageBoxImage.Information);
                 return;
@@ -255,7 +272,7 @@ public partial class MainWindow : Window
             }
             else
             {
-                MessageBox.Show($"Помилка завантаження даних користувача", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error loading user data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         catch (Exception ex)
@@ -377,7 +394,7 @@ public partial class MainWindow : Window
             if (this.mediator == null)
             {
                 MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -398,10 +415,29 @@ public partial class MainWindow : Window
                 CategoriesPanel.Children.Add(button);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception loading categories: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when loading categories.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Loading categories timed out");
+            MessageBox.Show(
+                "Timeout exceeded when loading categories.\nTry refreshing the page.",
+                "Timeout",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception loading categories: {ex}");
             MessageBox.Show(
-                $"Error loading categories: {ex.Message}",
+                $"An error occurred when loading categories.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -438,10 +474,29 @@ public partial class MainWindow : Window
                 }
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception loading passwords: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when loading passwords.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Loading passwords timed out");
+            MessageBox.Show(
+                "Timeout exceeded when loading passwords.\nTry refreshing the page.",
+                "Timeout",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception loading passwords: {ex}");
             MessageBox.Show(
-                $"Error loading passwords: {ex.Message}",
+                $"An error occurred when loading passwords.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -640,7 +695,7 @@ public partial class MainWindow : Window
             if (this.mediator == null)
             {
                 MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -669,10 +724,29 @@ public partial class MainWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception updating category: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when updating category.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation updating category: {invEx}");
+            MessageBox.Show(
+                $"Invalid operation when updating category.\nCategory may no longer exist.\n\nDetails: {invEx.Message}",
+                "Operation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception updating category: {ex}");
             MessageBox.Show(
-                $"Error updating category: {ex.Message}",
+                $"An error occurred when updating category '{category.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
                 "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -701,7 +775,7 @@ public partial class MainWindow : Window
             if (this.mediator == null)
             {
                 MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -741,11 +815,30 @@ public partial class MainWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting category: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when deleting category.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation deleting category: {invEx}");
+            MessageBox.Show(
+                $"Failed to delete category.\nIt may contain saved passwords.\n\nDetails: {invEx.Message}",
+                "Operation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting category: {ex}");
             MessageBox.Show(
-                $"Error deleting category: {ex.Message}",
-                "Error",
+                $"An error occurred when deleting category '{category.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -759,7 +852,7 @@ public partial class MainWindow : Window
             if (this.mediator == null)
             {
                 MessageBox
-                    .Show("База даних не налаштована. Реєстрація тимчасово недоступна.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
@@ -788,13 +881,45 @@ public partial class MainWindow : Window
             }
             else
             {
-                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Помилка при створенні користувача";
-                MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Error creating user";
+                MessageBox.Show($"Registration error: {errorMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception creating category: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when creating category.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Creating category timed out");
+            MessageBox.Show(
+                "Timeout exceeded when creating category.\nPlease try again.",
+                "Timeout",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation creating category: {invEx}");
+            MessageBox.Show(
+                $"Invalid operation when creating category.\nCategory with this name may already exist.\n\nDetails: {invEx.Message}",
+                "Validation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception creating category: {ex}");
+            MessageBox.Show(
+                $"An error occurred when creating category '{categoryNamee}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 
@@ -804,13 +929,13 @@ public partial class MainWindow : Window
         {
             if (mediator == null)
             {
-                MessageBox.Show("База даних не налаштована.", "Інформація", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Database is not configured.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
 
             if (string.IsNullOrWhiteSpace(communityName))
             {
-                MessageBox.Show("Будь ласка, введіть назву команди.", "Попередження", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Please enter community name.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -838,8 +963,8 @@ public partial class MainWindow : Window
                 CommunitiesPanel.Children.Add(button);
 
                 MessageBox.Show(
-                    $"Команду '{communityName}' успішно створено!",
-                    "Успіх",
+                    $"Community '{communityName}' created successfully!",
+                    "Success",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
 
@@ -847,25 +972,25 @@ public partial class MainWindow : Window
             }
             else
             {
-                string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Невідома помилка при створенні команди";
+                string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Unknown error when creating community";
                 System.Diagnostics.Debug.WriteLine($"CreateCommunityAsync failed: {errorMsg}");
-                MessageBox.Show($"Помилка створення команди:\n{errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Community creation error:\n{errorMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception in CreateCommunityAsync: {httpEx}");
-            MessageBox.Show($"Помилка з'єднання з сервером:\n{httpEx.Message}", "Помилка з'єднання", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Server connection error:\n{httpEx.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid Operation in CreateCommunityAsync: {invEx}");
-            MessageBox.Show($"Некоректна операція:\n{invEx.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Invalid operation:\n{invEx.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Exception in CreateCommunityAsync: {ex}");
-            MessageBox.Show($"Виникла помилка при створенні команди:\n{ex.Message}\n\nТип помилки: {ex.GetType().Name}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"An error occurred when creating community:\n{ex.Message}\n\nError type: {ex.GetType().Name}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -910,14 +1035,14 @@ public partial class MainWindow : Window
             }
             else
             {
-                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Невідома помилка";
+                string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Unknown error";
                 System.Diagnostics.Debug.WriteLine($"LoadCommunitiesAsync failed: {errorMsg}");
             }
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Exception in LoadCommunitiesAsync: {ex}");
-            MessageBox.Show($"Помилка при завантаженні команд: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Error loading communities: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -965,9 +1090,23 @@ public partial class MainWindow : Window
                 SetActiveCommunity(btn);
             }
         }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation opening community: {invEx}");
+            MessageBox.Show(
+                $"Failed to open community.\nCommunity may be deleted or you don't have access.\n\nDetails: {invEx.Message}",
+                "Access Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error opening community: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception opening community: {ex}");
+            MessageBox.Show(
+                $"An error occurred when opening community.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 
@@ -1238,16 +1377,26 @@ public partial class MainWindow : Window
             Clipboard.SetText(passwordData.Password);
 
             MessageBox.Show(
-                "Пароль скопійовано в буфер обміну!",
-                "Успіх",
+                "Password copied to clipboard!",
+                "Success",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+        catch (System.Runtime.InteropServices.ExternalException clipEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Clipboard exception: {clipEx}");
+            MessageBox.Show(
+                "Failed to copy password to clipboard.\nClipboard may be in use by another application.\n\nPlease try again.",
+                "Clipboard Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception copying password: {ex}");
             MessageBox.Show(
-                $"Помилка копіювання: {ex.Message}",
-                "Помилка",
+                $"An error occurred when copying password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -1256,8 +1405,8 @@ public partial class MainWindow : Window
     private void FavoriteButton_Click(object sender, RoutedEventArgs e)
     {
         MessageBox.Show(
-            "Функціонал додавання до улюблених буде реалізовано в майбутньому.",
-            "Улюблені",
+            "Favorites feature will be implemented in the future.",
+            "Favorites",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
     }

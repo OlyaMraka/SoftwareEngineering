@@ -103,11 +103,30 @@ public partial class InvitationsWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception loading invitations: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when loading invitations.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Loading invitations timed out");
+            MessageBox.Show(
+                "Timeout exceeded when loading invitations.\nTry refreshing the list.",
+                "Timeout",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception loading invitations: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}\nStack trace: {ex.StackTrace}",
-                "Error",
+                $"An error occurred when loading invitations.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}\n\nStack: {ex.StackTrace?.Substring(0, Math.Min(150, ex.StackTrace?.Length ?? 0))}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -312,11 +331,30 @@ public partial class InvitationsWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception handling invitation: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when processing invitation.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation handling invitation: {invEx}");
+            MessageBox.Show(
+                $"Failed to process invitation.\nInvitation may already be processed or canceled.\n\nDetails: {invEx.Message}",
+                "Operation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception handling invitation: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
+                $"An error occurred when processing invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -398,11 +436,27 @@ public partial class InvitationsWindow : Window
                 await onInvitationHandled();
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception handling all invitations: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when processing invitations.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            if (invitations.Any())
+            {
+                AcceptAllButton.IsEnabled = true;
+                DeclineAllButton.IsEnabled = true;
+            }
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception handling all invitations: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
+                $"An error occurred when processing invitations.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
 

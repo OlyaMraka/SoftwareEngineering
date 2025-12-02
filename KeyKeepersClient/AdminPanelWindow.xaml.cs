@@ -88,11 +88,39 @@ public partial class AdminPanelWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting community: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when deleting community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation deleting community: {invEx}");
+            MessageBox.Show(
+                $"Failed to delete community.\nIt may contain members or data.\n\nDetails: {invEx.Message}",
+                "Operation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch (UnauthorizedAccessException unauthEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Unauthorized deleting community: {unauthEx}");
+            MessageBox.Show(
+                "You do not have permission to delete this community.\nOnly the owner can delete a community.",
+                "Access Denied",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting community: {ex}");
             MessageBox.Show(
-                $"An error occurred while deleting community: {ex.Message}",
-                "Error",
+                $"An error occurred when deleting community '{community.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

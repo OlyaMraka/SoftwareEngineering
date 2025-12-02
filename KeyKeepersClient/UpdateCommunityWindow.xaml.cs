@@ -137,11 +137,32 @@ public partial class UpdateCommunityWindow : Window
                 SaveButton.IsEnabled = true;
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception updating community: {httpEx}");
+            MessageBox.Show(
+                $"Server connection error when updating community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
+                "Connection Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            SaveButton.IsEnabled = true;
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation updating community: {invEx}");
+            MessageBox.Show(
+                $"Invalid operation when updating community.\nCommunity with this name may already exist.\n\nDetails: {invEx.Message}",
+                "Validation Error",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            SaveButton.IsEnabled = true;
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception updating community: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
+                $"An unexpected error occurred when updating community '{newName}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
+                "Critical Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             SaveButton.IsEnabled = true;
