@@ -210,7 +210,7 @@ public partial class MainWindow : Window
                 "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
-            
+
             ClearStoredTokens();
             var firstWindow = new FirstWindow();
             firstWindow.Left = this.Left;

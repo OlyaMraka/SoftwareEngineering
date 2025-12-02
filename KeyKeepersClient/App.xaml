@@ -4,7 +4,87 @@
              xmlns:local="clr-namespace:KeyKeepersClient"
              xmlns:helpers="clr-namespace:KeyKeepersClient.Helpers">
     <Application.Resources>
+        <!-- Title Bar Styles -->
+        
+        <!-- Title Bar Border Style -->
+        <Style x:Key="TitleBarBorderStyle"
+               TargetType="Border">
+            <Setter Property="Background"
+                    Value="#0E121B"/>
+            <Setter Property="BorderBrush"
+                    Value="#222A39"/>
+            <Setter Property="BorderThickness"
+                    Value="0,0,0,2"/>
+        </Style>
+
+        <!-- Title TextBlock Style -->
+        <Style x:Key="TitleTextBlockStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="16"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Setter Property="VerticalAlignment"
+                    Value="Center"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Left"/>
+            <Setter Property="Margin"
+                    Value="10,0,0,0"/>
+        </Style>
+
         <!-- Window Control Buttons Styles -->
+
+        <!-- Dialog Close Button Style (×) for Popup Windows -->
+        <Style x:Key="DialogCloseButtonStyle"
+               TargetType="Button">
+            <Setter Property="Width"
+                    Value="30"/>
+            <Setter Property="Height"
+                    Value="30"/>
+            <Setter Property="Background"
+                    Value="Transparent"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="24"/>
+            <Setter Property="FontWeight"
+                    Value="Bold"/>
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center"/>
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center"/>
+            <Setter Property="Content"
+                    Value="×"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#C42B1C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <!-- Close Button Style (×) -->
         <Style x:Key="WindowCloseButtonStyle"
@@ -94,7 +174,7 @@
                             <Trigger Property="IsMouseOver"
                                      Value="True">
                                 <Setter Property="Background"
-                                        Value="#2A2F3A"/>
+                                        Value="#222A39"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>

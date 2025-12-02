@@ -70,9 +70,7 @@
             </Grid.RowDefinitions>
 
             <Border Grid.Row="0"
-                    Background="#0E121B"
-                    BorderBrush="#222A39"
-                    BorderThickness="0,0,0,2"
+                    Style="{StaticResource TitleBarBorderStyle}"
                     CornerRadius="12,12,0,0"
                     MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                 <Grid>
@@ -92,13 +90,7 @@
 
                     <TextBlock Grid.Column="1"
                                Text="Settings"
-                               FontFamily="Bahnschrift"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Foreground="White"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="10,0,0,0"/>
+                               Style="{StaticResource TitleTextBlockStyle}"/>
 
                     <!-- TODO: Використати Command замість Click event handler -->
                     <Button Grid.Column="2"

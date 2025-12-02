@@ -535,9 +535,7 @@
                 <Border Grid.Row="0"
                         Grid.Column="0"
                         Grid.ColumnSpan="3"
-                        Background="#0E121B"
-                        BorderBrush="#222A39"
-                        BorderThickness="0,0,0,2"
+                        Style="{StaticResource TitleBarBorderStyle}"
                         MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
                         <Grid>
                                 <Grid.ColumnDefinitions>
@@ -556,13 +554,7 @@
 
                                 <TextBlock Grid.Column="1"
                                            Text="FamilyPass Manager"
-                                           FontFamily="Bahnschrift"
-                                           FontSize="16"
-                                           FontWeight="SemiBold"
-                                           Foreground="White"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Left"
-                                           Margin="10,0,0,0"/>
+                                           Style="{StaticResource TitleTextBlockStyle}"/>
 
                                 <StackPanel Grid.Column="2"
                                             Orientation="Horizontal"
