@@ -137,11 +137,32 @@ public partial class UpdateCommunityWindow : Window
                 SaveButton.IsEnabled = true;
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception updating community: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при оновленні спільноти.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+            SaveButton.IsEnabled = true;
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation updating community: {invEx}");
+            MessageBox.Show(
+                $"Некоректна операція при оновленні спільноти.\nМожливо, спільнота з такою назвою вже існує.\n\nДеталі: {invEx.Message}",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            SaveButton.IsEnabled = true;
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception updating community: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
+                $"Виникла непередбачена помилка при оновленні спільноти '{newName}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             SaveButton.IsEnabled = true;

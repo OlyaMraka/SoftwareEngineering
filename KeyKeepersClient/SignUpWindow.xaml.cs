@@ -137,9 +137,41 @@ public partial class SignUpWindow : Window
                 MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception in Registration: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером під час реєстрації.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Registration request timed out");
+            MessageBox.Show(
+                "Перевищено час очікування відповіді від сервера.\nСпробуйте пізніше.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid Operation in Registration: {invEx}");
+            MessageBox.Show(
+                $"Некоректна операція під час реєстрації.\n\nДеталі: {invEx.Message}",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception in Registration: {ex}");
+            MessageBox.Show(
+                $"Виникла непередбачена помилка при реєстрації.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}\n\nСтек виклику: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace?.Length ?? 0))}",
+                "Критична помилка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 

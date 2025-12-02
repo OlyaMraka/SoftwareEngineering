@@ -202,11 +202,28 @@ public partial class MainWindow : Window
                 this.Close();
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception during logout: {httpEx}");
+            MessageBox.Show(
+                "Помилка з'єднання з сервером при виході.\nВи будете вилогінені локально.\n\nДеталі: " + httpEx.Message,
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            
+            ClearStoredTokens();
+            var firstWindow = new FirstWindow();
+            firstWindow.Left = this.Left;
+            firstWindow.Top = this.Top;
+            firstWindow.Show();
+            this.Close();
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception during logout: {ex}");
             MessageBox.Show(
-                $"An error occurred during logout: {ex.Message}",
-                "Error",
+                $"Виникла помилка при виході з системи.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -398,11 +415,30 @@ public partial class MainWindow : Window
                 CategoriesPanel.Children.Add(button);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception loading categories: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при завантаженні категорій.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Loading categories timed out");
+            MessageBox.Show(
+                "Перевищено час очікування при завантаженні категорій.\nСпробуйте оновити сторінку.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception loading categories: {ex}");
             MessageBox.Show(
-                $"Error loading categories: {ex.Message}",
-                "Error",
+                $"Виникла помилка при завантаженні категорій.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -438,11 +474,30 @@ public partial class MainWindow : Window
                 }
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception loading passwords: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при завантаженні паролів.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Loading passwords timed out");
+            MessageBox.Show(
+                "Перевищено час очікування при завантаженні паролів.\nСпробуйте оновити сторінку.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception loading passwords: {ex}");
             MessageBox.Show(
-                $"Error loading passwords: {ex.Message}",
-                "Error",
+                $"Виникла помилка при завантаженні паролів.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -669,11 +724,30 @@ public partial class MainWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception updating category: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при оновленні категорії.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation updating category: {invEx}");
+            MessageBox.Show(
+                $"Некоректна операція при оновленні категорії.\nМожливо, категорія вже не існує.\n\nДеталі: {invEx.Message}",
+                "Помилка операції",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception updating category: {ex}");
             MessageBox.Show(
-                $"Error updating category: {ex.Message}",
-                "Error",
+                $"Виникла помилка при оновленні категорії '{category.Name}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -741,11 +815,30 @@ public partial class MainWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting category: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при видаленні категорії.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation deleting category: {invEx}");
+            MessageBox.Show(
+                $"Не вдалося видалити категорію.\nМожливо, в ній є збережені паролі.\n\nДеталі: {invEx.Message}",
+                "Помилка операції",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting category: {ex}");
             MessageBox.Show(
-                $"Error deleting category: {ex.Message}",
-                "Error",
+                $"Виникла помилка при видаленні категорії '{category.Name}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -792,9 +885,41 @@ public partial class MainWindow : Window
                 MessageBox.Show($"Помилка реєстрації: {errorMsg}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception creating category: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при створенні категорії.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Creating category timed out");
+            MessageBox.Show(
+                "Перевищено час очікування при створенні категорії.\nСпробуйте ще раз.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation creating category: {invEx}");
+            MessageBox.Show(
+                $"Некоректна операція при створенні категорії.\nМожливо, категорія з такою назвою вже існує.\n\nДеталі: {invEx.Message}",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Виникла помилка при реєстрації: {ex.Message}", "Помилка", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception creating category: {ex}");
+            MessageBox.Show(
+                $"Виникла помилка при створенні категорії '{categoryNamee}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 
@@ -965,9 +1090,23 @@ public partial class MainWindow : Window
                 SetActiveCommunity(btn);
             }
         }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation opening community: {invEx}");
+            MessageBox.Show(
+                $"Не вдалося відкрити спільноту.\nСпільнота може бути видалена або у вас немає доступу.\n\nДеталі: {invEx.Message}",
+                "Помилка доступу",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error opening community: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception opening community: {ex}");
+            MessageBox.Show(
+                $"Виникла помилка при відкритті спільноти.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 
@@ -1243,10 +1382,20 @@ public partial class MainWindow : Window
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
+        catch (System.Runtime.InteropServices.ExternalException clipEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Clipboard exception: {clipEx}");
+            MessageBox.Show(
+                "Не вдалося скопіювати пароль в буфер обміну.\nБуфер обміну може бути зайнятий іншим додатком.\n\nСпробуйте ще раз.",
+                "Помилка буфера обміну",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception copying password: {ex}");
             MessageBox.Show(
-                $"Помилка копіювання: {ex.Message}",
+                $"Виникла помилка при копіюванні пароля.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
                 "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);

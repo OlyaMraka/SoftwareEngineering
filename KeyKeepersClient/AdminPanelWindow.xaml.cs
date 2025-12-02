@@ -88,11 +88,39 @@ public partial class AdminPanelWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting community: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при видаленні спільноти.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation deleting community: {invEx}");
+            MessageBox.Show(
+                $"Не вдалося видалити спільноту.\nМожливо, у ній є учасники або дані.\n\nДеталі: {invEx.Message}",
+                "Помилка операції",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch (UnauthorizedAccessException unauthEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Unauthorized deleting community: {unauthEx}");
+            MessageBox.Show(
+                "У вас немає прав для видалення цієї спільноти.\nТільки власник може видалити спільноту.",
+                "Доступ заборонено",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting community: {ex}");
             MessageBox.Show(
-                $"An error occurred while deleting community: {ex.Message}",
-                "Error",
+                $"Виникла помилка при видаленні спільноти '{community.Name}'.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

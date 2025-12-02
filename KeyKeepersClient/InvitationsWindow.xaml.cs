@@ -103,11 +103,30 @@ public partial class InvitationsWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception loading invitations: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при завантаженні запрошень.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Loading invitations timed out");
+            MessageBox.Show(
+                "Перевищено час очікування при завантаженні запрошень.\nСпробуйте оновити список.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception loading invitations: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}\nStack trace: {ex.StackTrace}",
-                "Error",
+                $"Виникла помилка при завантаженні запрошень.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}\n\nСтек: {ex.StackTrace?.Substring(0, Math.Min(150, ex.StackTrace?.Length ?? 0))}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -312,11 +331,30 @@ public partial class InvitationsWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception handling invitation: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при обробці запрошення.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation handling invitation: {invEx}");
+            MessageBox.Show(
+                $"Не вдалося обробити запрошення.\nМожливо, запрошення вже оброблено або скасовано.\n\nДеталі: {invEx.Message}",
+                "Помилка операції",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception handling invitation: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
+                $"Виникла помилка при обробці запрошення.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -398,11 +436,27 @@ public partial class InvitationsWindow : Window
                 await onInvitationHandled();
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception handling all invitations: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при обробці запрошень.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+
+            if (invitations.Any())
+            {
+                AcceptAllButton.IsEnabled = true;
+                DeclineAllButton.IsEnabled = true;
+            }
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception handling all invitations: {ex}");
             MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
+                $"Виникла помилка при обробці запрошень.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
 

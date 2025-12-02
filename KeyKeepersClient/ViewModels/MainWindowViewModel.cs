@@ -300,11 +300,39 @@ public class MainWindowViewModel : BaseViewModel
                 }
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception saving password: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при збереженні пароля.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Saving password timed out");
+            MessageBox.Show(
+                "Перевищено час очікування при збереженні пароля.\nСпробуйте ще раз.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation saving password: {invEx}");
+            MessageBox.Show(
+                $"Некоректна операція при збереженні пароля.\nПеревірте коректність введених даних.\n\nДеталі: {invEx.Message}",
+                "Помилка валідації",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception saving password: {ex}");
             MessageBox.Show(
-                $"Помилка: {ex.Message}",
-                "Помилка",
+                $"Виникла непередбачена помилка при збереженні пароля.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -361,11 +389,30 @@ public class MainWindowViewModel : BaseViewModel
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting password: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером при видаленні пароля.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (InvalidOperationException invEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"Invalid operation deleting password: {invEx}");
+            MessageBox.Show(
+                $"Не вдалося видалити пароль.\nМожливо, він вже видалений або не існує.\n\nДеталі: {invEx.Message}",
+                "Помилка операції",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting password: {ex}");
             MessageBox.Show(
-                $"Помилка: {ex.Message}",
-                "Помилка",
+                $"Виникла помилка при видаленні пароля.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Критична помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }

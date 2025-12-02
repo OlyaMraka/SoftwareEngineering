@@ -106,12 +106,39 @@ namespace KeyKeepersClient
                         MessageBoxImage.Error);
                 }
             }
+            catch (System.Net.Http.HttpRequestException httpEx)
+            {
+                System.Diagnostics.Debug.WriteLine($"HTTP Exception in SaveButton_Click: {httpEx}");
+                MessageBox.Show(
+                    $"Помилка з'єднання з сервером при збереженні профілю.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                    "Помилка з'єднання",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+            catch (System.Threading.Tasks.TaskCanceledException)
+            {
+                System.Diagnostics.Debug.WriteLine("Save user request timed out");
+                MessageBox.Show(
+                    "Перевищено час очікування відповіді від сервера.\nСпробуйте пізніше.",
+                    "Тайм-аут",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+            catch (InvalidOperationException invEx)
+            {
+                System.Diagnostics.Debug.WriteLine($"Invalid Operation in SaveButton_Click: {invEx}");
+                MessageBox.Show(
+                    $"Некоректна операція при збереженні профілю.\nМожливо, такий email або username вже використовується.\n\nДеталі: {invEx.Message}",
+                    "Помилка валідації",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Exception in SaveButton_Click: {ex}");
                 MessageBox.Show(
-                    $"Виникла помилка при збереженні:\n{ex.Message}",
-                    "Помилка",
+                    $"Виникла непередбачена помилка при збереженні профілю.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                    "Критична помилка",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }

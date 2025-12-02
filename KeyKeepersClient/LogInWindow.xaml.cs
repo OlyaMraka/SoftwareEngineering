@@ -92,11 +92,30 @@ public partial class LogInWindow : Window
                     MessageBoxImage.Error);
             }
         }
+        catch (System.Net.Http.HttpRequestException httpEx)
+        {
+            System.Diagnostics.Debug.WriteLine($"HTTP Exception in Login: {httpEx}");
+            MessageBox.Show(
+                $"Помилка з'єднання з сервером.\nПеревірте підключення до інтернету.\n\nДеталі: {httpEx.Message}",
+                "Помилка з'єднання",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        catch (System.Threading.Tasks.TaskCanceledException)
+        {
+            System.Diagnostics.Debug.WriteLine("Login request timed out");
+            MessageBox.Show(
+                "Перевищено час очікування відповіді від сервера.\nСпробуйте пізніше.",
+                "Тайм-аут",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+        }
         catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"Unexpected exception in Login: {ex}");
             MessageBox.Show(
-                $"An error occurred during login: {ex.Message}",
-                "Error",
+                $"Виникла непередбачена помилка під час входу.\n\nТип помилки: {ex.GetType().Name}\nПовідомлення: {ex.Message}",
+                "Помилка",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
