@@ -60,25 +60,30 @@ public partial class SignUpWindow : Window
 
     private void ValidateEmailRealTime(string email)
     {
-        if (!string.IsNullOrWhiteSpace(email))
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            KeyKeepersClient.Helpers.TextBoxHelper.SetIsValid(this.EmailTextBox, null);
+        }
+        else
         {
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
-            if (System.Text.RegularExpressions.Regex.IsMatch(email.Trim(), emailPattern))
-            {
-            }
+            bool isValid = System.Text.RegularExpressions.Regex.IsMatch(email.Trim(), emailPattern);
+            KeyKeepersClient.Helpers.TextBoxHelper.SetIsValid(this.EmailTextBox, isValid);
         }
     }
 
     private void ValidateUsernameRealTime(string username)
     {
-        if (!string.IsNullOrWhiteSpace(username))
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            KeyKeepersClient.Helpers.TextBoxHelper.SetIsValid(this.UsernameTextBox, null);
+        }
+        else
         {
             string trimmedUsername = username.Trim();
-            if (trimmedUsername.Length >= 4 &&
-                System.Text.RegularExpressions.Regex.IsMatch(trimmedUsername, @"^[a-zA-Z][a-zA-Z0-9_.-]*$"))
-            {
-                this.UsernameBorder.BorderBrush = Brushes.Green;
-            }
+            bool isValid = trimmedUsername.Length >= 4 &&
+                System.Text.RegularExpressions.Regex.IsMatch(trimmedUsername, @"^[a-zA-Z][a-zA-Z0-9_.-]*$");
+            KeyKeepersClient.Helpers.TextBoxHelper.SetIsValid(this.UsernameTextBox, isValid);
         }
     }
 

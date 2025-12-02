@@ -104,12 +104,7 @@
 
             <TextBlock Grid.Row="3"
                        Text="First Name"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
             <Border Grid.Row="4"
@@ -134,12 +129,7 @@
 
             <TextBlock Grid.Row="6"
                        Text="Last Name"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
             <Border Grid.Row="7"
@@ -164,15 +154,11 @@
 
             <TextBlock Grid.Row="9"
                        Text="Email"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <Border Grid.Row="10"
-                    Style="{StaticResource CompactInputBorderStyle}">
+                    Style="{StaticResource CompactInputBorderStyle}"
+                    helpers:TextBoxHelper.IsValid="{Binding Path=(helpers:TextBoxHelper.IsValid), ElementName=EmailTextBox}">
                 <Grid>
                     <TextBox x:Name="EmailTextBox"
                              Style="{StaticResource CompactInputTextBoxStyle}"
@@ -194,17 +180,13 @@
 
             <TextBlock Grid.Row="12"
                        Text="Username"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <Border x:Name="UsernameBorder"
                     Grid.Row="13"
                     Style="{StaticResource CompactInputBorderStyle}"
-                    BorderThickness="1">
+                    BorderThickness="1"
+                    helpers:TextBoxHelper.IsValid="{Binding Path=(helpers:TextBoxHelper.IsValid), ElementName=UsernameTextBox}">
                 <Grid>
                     <TextBox x:Name="UsernameTextBox"
                              Style="{StaticResource CompactInputTextBoxStyle}"
@@ -226,12 +208,7 @@
 
             <TextBlock Grid.Row="15"
                        Text="Password"
-                       FontFamily="Bahnschrift"
-                       FontSize="16"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource CompactInputLabelStyle}"/>
 
             <!-- TODO: Використати Data Binding для Password (через helper behavior) замість PasswordChanged event -->
             <Border Grid.Row="16"
@@ -267,16 +244,10 @@
                        VerticalAlignment="Top"
                        Margin="0,0,0,0">
                 <Run Text="Already have an account? "
-                     Foreground="#B0B0B0"
-                     FontFamily="Bahnschrift"
-                     FontSize="13"/>
-                <Hyperlink Click="LogInLink_Click"
-                           TextDecorations="None">
+                     Style="{StaticResource SecondaryRunStyle}"/>
+                <Hyperlink Click="LogInLink_Click">
                     <Run Text="Log In"
-                         Foreground="#FDE053"
-                         FontFamily="Bahnschrift"
-                         FontSize="13"
-                         FontWeight="SemiBold"/>
+                         Style="{StaticResource AccentRunStyle}"/>
                 </Hyperlink>
             </TextBlock>
         </Grid>

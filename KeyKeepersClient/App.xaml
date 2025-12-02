@@ -120,6 +120,14 @@
                     <Setter Property="BorderBrush" Value="#FDE053"/>
                     <Setter Property="BorderThickness" Value="2"/>
                 </Trigger>
+                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="False">
+                    <Setter Property="BorderBrush" Value="#FF4444"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="BorderBrush" Value="#44FF44"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -140,6 +148,12 @@
                 <Trigger Property="IsKeyboardFocusWithin" Value="True">
                     <Setter Property="BorderBrush" Value="#FDE053"/>
                 </Trigger>
+                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="False">
+                    <Setter Property="BorderBrush" Value="#FF4444"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="BorderBrush" Value="#44FF44"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -159,6 +173,14 @@
                     <Setter Property="BorderBrush" Value="#FDE053"/>
                     <Setter Property="BorderThickness" Value="2"/>
                 </Trigger>
+                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="False">
+                    <Setter Property="BorderBrush" Value="#FF4444"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="BorderBrush" Value="#44FF44"/>
+                    <Setter Property="BorderThickness" Value="2"/>
+                </DataTrigger>
             </Style.Triggers>
         </Style>
 
@@ -287,6 +309,70 @@
                     Value="15,0"/>
         </Style>
 
+        <!-- Input Label Style -->
+        <Style x:Key="InputLabelStyle"
+               TargetType="TextBlock">
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="16"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+            <Setter Property="Foreground"
+                    Value="White"/>
+            <Setter Property="HorizontalAlignment"
+                    Value="Left"/>
+            <Setter Property="Margin"
+                    Value="0,0,0,5"/>
+        </Style>
+
+        <!-- Compact Input Label Style (for SignUp) -->
+        <Style x:Key="CompactInputLabelStyle"
+               TargetType="TextBlock"
+               BasedOn="{StaticResource InputLabelStyle}">
+            <Setter Property="FontSize"
+                    Value="14"/>
+            <Setter Property="Margin"
+                    Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Hyperlink Style -->
+        <Style TargetType="Hyperlink">
+            <Setter Property="TextDecorations"
+                    Value="None"/>
+            <Setter Property="Foreground"
+                    Value="#FDE053"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#FFE87A"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Accent Text Run Style (for Hyperlink text) -->
+        <Style x:Key="AccentRunStyle"
+               TargetType="Run">
+            <Setter Property="Foreground"
+                    Value="#FDE053"/>
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="13"/>
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+        </Style>
+
+        <!-- Secondary Text Run Style (for regular text in TextBlock) -->
+        <Style x:Key="SecondaryRunStyle"
+               TargetType="Run">
+            <Setter Property="Foreground"
+                    Value="#B0B0B0"/>
+            <Setter Property="FontFamily"
+                    Value="Bahnschrift"/>
+            <Setter Property="FontSize"
+                    Value="13"/>
+        </Style>
+
         <!-- Action Button Styles -->
 
         <!-- Accept/Submit Button Border with Gradient -->
@@ -311,6 +397,11 @@
                     </LinearGradientBrush>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Border}}" Value="False">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
 
         <!-- Accept/Submit Button Style -->
@@ -346,6 +437,11 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
     </Application.Resources>

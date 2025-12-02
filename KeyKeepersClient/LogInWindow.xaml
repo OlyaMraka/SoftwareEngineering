@@ -93,12 +93,8 @@
 
             <TextBlock Grid.Row="3"
                        Text="Username"
-                       FontFamily="Bahnschrift"
-                       FontSize="22"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
-                       Margin="0,0,0,5"/>
+                       Style="{StaticResource InputLabelStyle}"
+                       FontSize="22"/>
 
             <Border x:Name="UsernameBorder"
                     Grid.Row="4"
@@ -123,11 +119,8 @@
 
             <TextBlock Grid.Row="6"
                        Text="Password"
-                       FontFamily="Bahnschrift"
+                       Style="{StaticResource InputLabelStyle}"
                        FontSize="22"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       HorizontalAlignment="Left"
                        Margin="0,5,0,5"/>
 
             <Border Grid.Row="7"
@@ -163,16 +156,10 @@
                        VerticalAlignment="Top"
                        Margin="0,15,0,0">
                 <Run Text="Don't have an account? "
-                     Foreground="#B0B0B0"
-                     FontFamily="Bahnschrift"
-                     FontSize="13"/>
-                <Hyperlink Click="SignUpLink_Click"
-                           TextDecorations="None">
+                     Style="{StaticResource SecondaryRunStyle}"/>
+                <Hyperlink Click="SignUpLink_Click">
                     <Run Text="Sign Up"
-                         Foreground="#FDE053"
-                         FontFamily="Bahnschrift"
-                         FontSize="13"
-                         FontWeight="SemiBold"/>
+                         Style="{StaticResource AccentRunStyle}"/>
                 </Hyperlink>
             </TextBlock>
         </Grid>

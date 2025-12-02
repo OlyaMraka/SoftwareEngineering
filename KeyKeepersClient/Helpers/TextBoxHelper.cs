@@ -25,6 +25,14 @@ namespace KeyKeepersClient.Helpers
                 typeof(TextBoxHelper),
                 new PropertyMetadata(false, OnMonitorTextChanged));
 
+        // Attached property to track validation state
+        public static readonly DependencyProperty IsValidProperty =
+            DependencyProperty.RegisterAttached(
+                "IsValid",
+                typeof(bool?),
+                typeof(TextBoxHelper),
+                new PropertyMetadata(null));
+
         public static bool GetHasText(DependencyObject obj)
         {
             return (bool)obj.GetValue(HasTextProperty);
@@ -43,6 +51,16 @@ namespace KeyKeepersClient.Helpers
         public static void SetMonitorText(DependencyObject obj, bool value)
         {
             obj.SetValue(MonitorTextProperty, value);
+        }
+
+        public static bool? GetIsValid(DependencyObject obj)
+        {
+            return (bool?)obj.GetValue(IsValidProperty);
+        }
+
+        public static void SetIsValid(DependencyObject obj, bool? value)
+        {
+            obj.SetValue(IsValidProperty, value);
         }
 
         private static void OnMonitorTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
