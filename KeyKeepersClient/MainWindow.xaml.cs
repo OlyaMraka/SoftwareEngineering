@@ -210,7 +210,7 @@ public partial class MainWindow : Window
                 "Connection Error",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
-            
+
             ClearStoredTokens();
             var firstWindow = new FirstWindow();
             firstWindow.Left = this.Left;
@@ -620,11 +620,9 @@ public partial class MainWindow : Window
         }
         else
         {
-            MessageBox.Show(
-                "Please enter a category name.",
-                "Invalid Input",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var msg = new MessageWindow("Please enter a category name.");
+            msg.Owner = this;
+            msg.ShowDialog();
         }
     }
 
@@ -935,7 +933,10 @@ public partial class MainWindow : Window
 
             if (string.IsNullOrWhiteSpace(communityName))
             {
-                MessageBox.Show("Please enter community name.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                var msg = new MessageWindow("Please enter community name.");
+                msg.Owner = this;
+                msg.ShowDialog();
+
                 return;
             }
 
@@ -962,11 +963,9 @@ public partial class MainWindow : Window
                 var button = CreateCommunityButton(communityItem);
                 CommunitiesPanel.Children.Add(button);
 
-                MessageBox.Show(
-                    $"Community '{communityName}' created successfully!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow($"Community '{communityName}' created successfully!");
+                msg.Owner = this;
+                msg.ShowDialog();
 
                 button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
@@ -1376,11 +1375,9 @@ public partial class MainWindow : Window
 
             Clipboard.SetText(passwordData.Password);
 
-            MessageBox.Show(
-                "Password copied to clipboard!",
-                "Success",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            var msg = new MessageWindow("Password copied to clipboard!");
+            msg.Owner = this;
+            msg.ShowDialog();
         }
         catch (System.Runtime.InteropServices.ExternalException clipEx)
         {
@@ -1404,11 +1401,9 @@ public partial class MainWindow : Window
 
     private void FavoriteButton_Click(object sender, RoutedEventArgs e)
     {
-        MessageBox.Show(
-            "Favorites feature will be implemented in the future.",
-            "Favorites",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var msg = new MessageWindow("Favorites feature will be implemented in the future.");
+        msg.Owner = this;
+        msg.ShowDialog();
     }
 
     private void EditPasswordButton_Click(object sender, RoutedEventArgs e)

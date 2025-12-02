@@ -87,11 +87,9 @@ namespace KeyKeepersClient
 
                 if (result.IsSuccess)
                 {
-                    MessageBox.Show(
-                        "ПProfile successfully updated!",
-                        "Success",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    var msg = new MessageWindow("Profile successfully updated!");
+                    msg.Owner = this;
+                    msg.ShowDialog();
 
                     DialogResult = true;
                     Close();
@@ -115,7 +113,7 @@ namespace KeyKeepersClient
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
             }
-            catch (System.Threading.Tasks.TaskCanceledException)
+            catch (TaskCanceledException)
             {
                 System.Diagnostics.Debug.WriteLine("Save user request timed out");
                 MessageBox.Show(

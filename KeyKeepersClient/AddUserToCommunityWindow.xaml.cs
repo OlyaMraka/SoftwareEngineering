@@ -233,11 +233,9 @@ public partial class AddUserToCommunityWindow : Window
 
             if (createResult.IsSuccess)
             {
-                MessageBox.Show(
-                    $"Invitation sent to {selectedUser.UserName} successfully!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow($"Invitation sent to {selectedUser.UserName} successfully!");
+                msg.Owner = this;
+                msg.ShowDialog();
 
                 this.Close();
             }
