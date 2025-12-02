@@ -40,37 +40,11 @@ public partial class SignUpWindow : Window
         this.Close();
     }
 
-    private void FirstNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var textBox = sender as TextBox;
-        if (textBox != null)
-        {
-            this.FirstNamePlaceholder.Visibility = string.IsNullOrEmpty(textBox.Text)
-                ? Visibility.Visible
-                : Visibility.Hidden;
-        }
-    }
-
-    private void LastNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
-    {
-        var textBox = sender as TextBox;
-        if (textBox != null)
-        {
-            this.LastNamePlaceholder.Visibility = string.IsNullOrEmpty(textBox.Text)
-                ? Visibility.Visible
-                : Visibility.Hidden;
-        }
-    }
-
     private void EmailTextBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var textBox = sender as TextBox;
         if (textBox != null)
         {
-            this.EmailPlaceholder.Visibility = string.IsNullOrEmpty(textBox.Text)
-                ? Visibility.Visible
-                : Visibility.Hidden;
-
             this.ValidateEmailRealTime(textBox.Text);
         }
     }
@@ -80,10 +54,6 @@ public partial class SignUpWindow : Window
         var textBox = sender as TextBox;
         if (textBox != null)
         {
-            this.UsernamePlaceholder.Visibility = string.IsNullOrEmpty(textBox.Text)
-                ? Visibility.Visible
-                : Visibility.Hidden;
-
             this.ValidateUsernameRealTime(textBox.Text);
         }
     }
@@ -109,17 +79,6 @@ public partial class SignUpWindow : Window
             {
                 this.UsernameBorder.BorderBrush = Brushes.Green;
             }
-        }
-    }
-
-    private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        var passwordBox = sender as PasswordBox;
-        if (passwordBox != null)
-        {
-            this.PasswordPlaceholder.Visibility = string.IsNullOrEmpty(passwordBox.Password)
-                ? Visibility.Visible
-                : Visibility.Hidden;
         }
     }
 
@@ -351,12 +310,7 @@ public partial class SignUpWindow : Window
         this.UsernameTextBox.Text = string.Empty;
         this.PasswordTextBox.Password = string.Empty;
 
-        this.FirstNamePlaceholder.Visibility = Visibility.Visible;
-        this.LastNamePlaceholder.Visibility = Visibility.Visible;
-        this.EmailPlaceholder.Visibility = Visibility.Visible;
-        this.UsernamePlaceholder.Visibility = Visibility.Visible;
-        this.PasswordPlaceholder.Visibility = Visibility.Visible;
-
+        // Placeholder visibility now controlled by DataTrigger automatically
         this.FirstNameTextBox.Focus();
     }
 

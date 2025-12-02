@@ -231,7 +231,9 @@
                     Value="15,0"/>
         </Style>
 
-        <!-- Placeholder TextBlock Style with DataTrigger -->
+        <!-- Placeholder TextBlock Style 
+             Note: Each placeholder needs inline DataTrigger with ElementName binding to specific TextBox
+             See usage in LogInWindow.xaml and SignUpWindow.xaml -->
         <Style x:Key="PlaceholderTextBlockStyle"
                TargetType="TextBlock">
             <Setter Property="Foreground"
@@ -248,15 +250,6 @@
                     Value="20,0"/>
             <Setter Property="IsHitTestVisible"
                     Value="False"/>
-            <Setter Property="Visibility"
-                    Value="Visible"/>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.HasText), RelativeSource={RelativeSource AncestorType=Grid}}"
-                             Value="True">
-                    <Setter Property="Visibility"
-                            Value="Collapsed"/>
-                </DataTrigger>
-            </Style.Triggers>
         </Style>
 
         <!-- Form Placeholder Style (smaller) -->

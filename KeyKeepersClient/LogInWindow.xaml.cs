@@ -41,8 +41,6 @@ public partial class LogInWindow : Window
     {
         if (sender is System.Windows.Controls.TextBox textBox)
         {
-            this.UsernamePlaceholder.Visibility = string.IsNullOrEmpty(textBox.Text) ? Visibility.Visible : Visibility.Hidden;
-
             this.ValidateUsernameRealTime(textBox.Text);
         }
     }
@@ -52,14 +50,6 @@ public partial class LogInWindow : Window
         if (!string.IsNullOrWhiteSpace(username) && username.Trim().Length >= 4)
         {
             this.UsernameBorder.BorderBrush = Brushes.Green;
-        }
-    }
-
-    private void PasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (sender is System.Windows.Controls.PasswordBox passwordBox)
-        {
-            this.PasswordPlaceholder.Visibility = string.IsNullOrEmpty(passwordBox.Password) ? Visibility.Visible : Visibility.Hidden;
         }
     }
 
