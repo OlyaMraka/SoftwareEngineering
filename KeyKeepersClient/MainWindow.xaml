@@ -577,7 +577,6 @@
                                         <Button Style="{StaticResource WindowCloseButtonStyle}"
                                                 Width="25"
                                                 Height="25"
-                                                FontSize="14"
                                                 Click="CloseButton_Click"/>
                                 </StackPanel>
                         </Grid>

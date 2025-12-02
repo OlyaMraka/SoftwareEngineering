@@ -102,32 +102,15 @@
             <!-- TODO: Використати Data Binding для Text замість TextChanged event -->
             <Border x:Name="UsernameBorder"
                     Grid.Row="4"
-                    Height="50"
-                    Background="#2A2F3A"
-                    CornerRadius="25"
-                    BorderThickness="0">
+                    Style="{StaticResource InputBorderStyle}">
                 <Grid>
                     <TextBox x:Name="UsernameTextBox"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="White"
-                             CaretBrush="White"
-                             FontFamily="Bahnschrift"
-                             FontSize="16"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Stretch"
-                             Margin="20,0"
+                             Style="{StaticResource InputTextBoxStyle}"
                              TextChanged="UsernameTextBox_TextChanged"/>
                     <!-- TODO: Використати Data Binding для Visibility placeholder -->
                     <TextBlock x:Name="UsernamePlaceholder"
                                Text="username"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="16"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="20,0"
-                               IsHitTestVisible="False"/>
+                               Style="{StaticResource PlaceholderTextBlockStyle}"/>
                 </Grid>
             </Border>
 
@@ -142,32 +125,15 @@
 
             <!-- TODO: Використати Data Binding для Password (через helper behavior) замість PasswordChanged event -->
             <Border Grid.Row="7"
-                    Height="50"
-                    Background="#2A2F3A"
-                    CornerRadius="25"
-                    BorderThickness="0">
+                    Style="{StaticResource InputBorderStyle}">
                 <Grid>
                     <PasswordBox x:Name="PasswordTextBox"
-                                 Background="Transparent"
-                                 BorderThickness="0"
-                                 Foreground="White"
-                                 CaretBrush="White"
-                                 FontFamily="Bahnschrift"
-                                 FontSize="16"
-                                 VerticalAlignment="Center"
-                                 HorizontalAlignment="Stretch"
-                                 Margin="20,0"
+                                 Style="{StaticResource InputPasswordBoxStyle}"
                                  PasswordChanged="PasswordTextBox_PasswordChanged"/>
                     <!-- TODO: Використати Data Binding для Visibility placeholder -->
                     <TextBlock x:Name="PasswordPlaceholder"
                                Text="password"
-                               Foreground="#808080"
-                               FontFamily="Bahnschrift"
-                               FontSize="16"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="20,0"
-                               IsHitTestVisible="False"/>
+                               Style="{StaticResource PlaceholderTextBlockStyle}"/>
                 </Grid>
             </Border>
 
