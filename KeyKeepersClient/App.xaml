@@ -65,8 +65,8 @@
 
                 <!-- Window Control Buttons Styles -->
 
-                <!-- Dialog Close Button Style (×) for Popup Windows -->
-                <Style x:Key="DialogCloseButtonStyle"
+                <!-- Base Close Button Style (×) -->
+                <Style x:Key="BaseCloseButtonStyle"
                        TargetType="Button">
                         <Setter Property="Width"
                                 Value="30"/>
@@ -92,6 +92,12 @@
                                 Value="Center"/>
                         <Setter Property="Content"
                                 Value="×"/>
+                </Style>
+
+                <!-- Dialog Close Button Style (×) for Popup Windows -->
+                <Style x:Key="DialogCloseButtonStyle"
+                       TargetType="Button"
+                       BasedOn="{StaticResource BaseCloseButtonStyle}">
                         <Setter Property="Template">
                                 <Setter.Value>
                                         <ControlTemplate TargetType="Button">
@@ -113,33 +119,10 @@
                         </Setter>
                 </Style>
 
-                <!-- Close Button Style (×) -->
+                <!-- Window Close Button Style (×) -->
                 <Style x:Key="WindowCloseButtonStyle"
-                       TargetType="Button">
-                        <Setter Property="Width"
-                                Value="30"/>
-                        <Setter Property="Height"
-                                Value="30"/>
-                        <Setter Property="Background"
-                                Value="Transparent"/>
-                        <Setter Property="Foreground"
-                                Value="White"/>
-                        <Setter Property="BorderThickness"
-                                Value="0"/>
-                        <Setter Property="FontFamily"
-                                Value="Bahnschrift"/>
-                        <Setter Property="FontSize"
-                                Value="24"/>
-                        <Setter Property="FontWeight"
-                                Value="Bold"/>
-                        <Setter Property="Cursor"
-                                Value="Hand"/>
-                        <Setter Property="VerticalContentAlignment"
-                                Value="Center"/>
-                        <Setter Property="HorizontalContentAlignment"
-                                Value="Center"/>
-                        <Setter Property="Content"
-                                Value="×"/>
+                       TargetType="Button"
+                       BasedOn="{StaticResource BaseCloseButtonStyle}">
                         <Setter Property="Template">
                                 <Setter.Value>
                                         <ControlTemplate TargetType="Button">
@@ -470,25 +453,25 @@
                                 Value="0"/>
                         <Style.Triggers>
                                 <Trigger Property="IsKeyboardFocusWithin"
-                                                Value="True">
+                                         Value="True">
                                         <Setter Property="BorderBrush"
-                                                        Value="#FDE053"/>
+                                                Value="#FDE053"/>
                                         <Setter Property="BorderThickness"
-                                                        Value="2"/>
+                                                Value="2"/>
                                 </Trigger>
                                 <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
-                                                Value="False">
+                                             Value="False">
                                         <Setter Property="BorderBrush"
-                                                        Value="#FF4444"/>
+                                                Value="#FF4444"/>
                                         <Setter Property="BorderThickness"
-                                                        Value="2"/>
+                                                Value="2"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
-                                                Value="True">
+                                             Value="True">
                                         <Setter Property="BorderBrush"
-                                                        Value="#44FF44"/>
+                                                Value="#44FF44"/>
                                         <Setter Property="BorderThickness"
-                                                        Value="2"/>
+                                                Value="2"/>
                                 </DataTrigger>
                         </Style.Triggers>
                 </Style>
@@ -508,19 +491,19 @@
                                 Value="10"/>
                         <Style.Triggers>
                                 <Trigger Property="IsKeyboardFocusWithin"
-                                                Value="True">
+                                         Value="True">
                                         <Setter Property="BorderBrush"
-                                                        Value="#FDE053"/>
+                                                Value="#FDE053"/>
                                 </Trigger>
                                 <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
-                                                Value="False">
+                                             Value="False">
                                         <Setter Property="BorderBrush"
-                                                        Value="#FF4444"/>
+                                                Value="#FF4444"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
-                                                Value="True">
+                                             Value="True">
                                         <Setter Property="BorderBrush"
-                                                        Value="#44FF44"/>
+                                                Value="#44FF44"/>
                                 </DataTrigger>
                         </Style.Triggers>
                 </Style>
@@ -538,25 +521,25 @@
                                 Value="0"/>
                         <Style.Triggers>
                                 <Trigger Property="IsKeyboardFocusWithin"
-                                                Value="True">
+                                         Value="True">
                                         <Setter Property="BorderBrush"
-                                                        Value="#FDE053"/>
+                                                Value="#FDE053"/>
                                         <Setter Property="BorderThickness"
-                                                        Value="2"/>
+                                                Value="2"/>
                                 </Trigger>
                                 <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
-                                                Value="False">
+                                             Value="False">
                                         <Setter Property="BorderBrush"
-                                                        Value="#FF4444"/>
+                                                Value="#FF4444"/>
                                         <Setter Property="BorderThickness"
-                                                        Value="2"/>
+                                                Value="2"/>
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
-                                                Value="True">
+                                             Value="True">
                                         <Setter Property="BorderBrush"
-                                                        Value="#44FF44"/>
+                                                Value="#44FF44"/>
                                         <Setter Property="BorderThickness"
-                                                        Value="2"/>
+                                                Value="2"/>
                                 </DataTrigger>
                         </Style.Triggers>
                 </Style>
@@ -721,9 +704,9 @@
                                 Value="#FDE053"/>
                         <Style.Triggers>
                                 <Trigger Property="IsMouseOver"
-                                                Value="True">
+                                         Value="True">
                                         <Setter Property="Foreground"
-                                                        Value="#FFE87A"/>
+                                                Value="#FFE87A"/>
                                 </Trigger>
                         </Style.Triggers>
                 </Style>
@@ -769,9 +752,9 @@
                                 Value="{StaticResource AccentGradientBrush}"/>
                         <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Border}}"
-                                                Value="False">
+                                             Value="False">
                                         <Setter Property="Opacity"
-                                                        Value="0.5"/>
+                                                Value="0.5"/>
                                 </DataTrigger>
                         </Style.Triggers>
                 </Style>
