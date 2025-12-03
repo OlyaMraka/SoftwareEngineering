@@ -134,44 +134,38 @@ public partial class SignUpWindow : Window
             else
             {
                 string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Error creating user";
-                MessageBox.Show($"Registration error: {errorMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Registration error: {errorMsg}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception in Registration: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error during registration.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error during registration.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (System.Threading.Tasks.TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Registration request timed out");
-            MessageBox.Show(
-                "Server response timeout exceeded.\nTry again later.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Server response timeout exceeded.\nTry again later.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid Operation in Registration: {invEx}");
-            MessageBox.Show(
-                $"Invalid operation during registration.\n\nDetails: {invEx.Message}",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Invalid operation during registration.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception in Registration: {ex}");
-            MessageBox.Show(
-                $"An unexpected error occurred during registration.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}\n\nStack trace: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace?.Length ?? 0))}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An unexpected error occurred during registration.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}\n\nStack trace: {ex.StackTrace?.Substring(0, Math.Min(200, ex.StackTrace?.Length ?? 0))}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 

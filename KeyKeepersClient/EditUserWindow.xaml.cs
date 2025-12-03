@@ -97,48 +97,38 @@ namespace KeyKeepersClient
                 else
                 {
                     string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Unknown error";
-                    MessageBox.Show(
-                        $"Profile update error:\n{errorMsg}",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    var errorWindow = new ErrorWindow($"Profile update error:\n{errorMsg}");
+                    errorWindow.Owner = this;
+                    errorWindow.ShowDialog();
                 }
             }
             catch (System.Net.Http.HttpRequestException httpEx)
             {
                 System.Diagnostics.Debug.WriteLine($"HTTP Exception in SaveButton_Click: {httpEx}");
-                MessageBox.Show(
-                    $"Server connection error when saving profile.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                    "Connection Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Server connection error when saving profile.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
             catch (TaskCanceledException)
             {
                 System.Diagnostics.Debug.WriteLine("Save user request timed out");
-                MessageBox.Show(
-                    "Server response timeout exceeded.\nTry again later.",
-                    "Timeout",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                var errorWindow = new ErrorWindow($"Server response timeout exceeded.\nTry again later.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
             catch (InvalidOperationException invEx)
             {
                 System.Diagnostics.Debug.WriteLine($"Invalid Operation in SaveButton_Click: {invEx}");
-                MessageBox.Show(
-                    $"Invalid operation when saving profile.\nEmail or username may already be in use.\n\nDetails: {invEx.Message}",
-                    "Validation Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                var errorWindow = new ErrorWindow($"Invalid operation when saving profile.\\nEmail or username may already be in use.\\n\\nDetails: {invEx.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Exception in SaveButton_Click: {ex}");
-                MessageBox.Show(
-                    $"An unexpected error occurred when saving profile.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                    "Critical Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"An unexpected error occurred when saving profile.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
             finally
             {

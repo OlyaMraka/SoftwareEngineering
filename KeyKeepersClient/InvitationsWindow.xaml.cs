@@ -85,50 +85,40 @@ public partial class InvitationsWindow : Window
                         }
                         catch (Exception cardEx)
                         {
-                            MessageBox.Show(
-                                $"Error creating invitation card: {cardEx.Message}\nInvitation ID: {invitation.Id}",
-                                "Card Creation Error",
-                                MessageBoxButton.OK,
-                                MessageBoxImage.Warning);
+                            var errorWindow = new ErrorWindow($"Error creating invitation card: {cardEx.Message}\nInvitation ID: {invitation.Id}");
+                            errorWindow.Owner = this;
+                            errorWindow.ShowDialog();
                         }
                     }
                 }
             }
             else
             {
-                MessageBox.Show(
-                    $"Error loading invitations: {result.Errors.FirstOrDefault()?.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error loading invitations: {result.Errors.FirstOrDefault()?.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception loading invitations: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when loading invitations.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when loading invitations.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (System.Threading.Tasks.TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Loading invitations timed out");
-            MessageBox.Show(
-                "Timeout exceeded when loading invitations.\nTry refreshing the list.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Timeout exceeded when loading invitations.\nTry refreshing the list.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception loading invitations: {ex}");
-            MessageBox.Show(
-                $"An error occurred when loading invitations.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}\n\nStack: {ex.StackTrace?.Substring(0, Math.Min(150, ex.StackTrace?.Length ?? 0))}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when loading invitations.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}\n\nStack: {ex.StackTrace?.Substring(0, Math.Min(150, ex.StackTrace?.Length ?? 0))}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -324,39 +314,31 @@ public partial class InvitationsWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    $"Error handling invitation: {result.Errors.FirstOrDefault()?.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error handling invitation: {result.Errors.FirstOrDefault()?.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception handling invitation: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when processing invitation.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when processing invitation.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation handling invitation: {invEx}");
-            MessageBox.Show(
-                $"Failed to process invitation.\nInvitation may already be processed or canceled.\n\nDetails: {invEx.Message}",
-                "Operation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to process invitation.\nInvitation may already be processed or canceled.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception handling invitation: {ex}");
-            MessageBox.Show(
-                $"An error occurred when processing invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when processing invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -422,11 +404,9 @@ public partial class InvitationsWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    $"All {failedCount} invitation(s) failed to process.\n\nErrors:\n{string.Join("\n", errors.Take(5))}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"All {failedCount} invitation(s) failed to process.\n\nErrors:\n{string.Join("\n", errors.Take(5))}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
 
             await LoadInvitationsAsync();
@@ -439,11 +419,9 @@ public partial class InvitationsWindow : Window
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception handling all invitations: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when processing invitations.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when processing invitations.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
 
             if (invitations.Any())
             {
@@ -454,11 +432,9 @@ public partial class InvitationsWindow : Window
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception handling all invitations: {ex}");
-            MessageBox.Show(
-                $"An error occurred when processing invitations.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when processing invitations.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
 
             if (invitations.Any())
             {

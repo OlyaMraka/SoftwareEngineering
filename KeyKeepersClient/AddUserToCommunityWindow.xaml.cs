@@ -177,11 +177,9 @@ public partial class AddUserToCommunityWindow : Window
 
         if (string.IsNullOrEmpty(searchText))
         {
-            MessageBox.Show(
-                "Please enter a username.",
-                "No Username Entered",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Please enter a username.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             return;
         }
 
@@ -200,22 +198,18 @@ public partial class AddUserToCommunityWindow : Window
 
                     if (selectedUser == null)
                     {
-                        MessageBox.Show(
-                            $"User '{searchText}' not found.",
-                            "User Not Found",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Warning);
+                        var errorWindow = new ErrorWindow($"User '{searchText}' not found.");
+                        errorWindow.Owner = this;
+                        errorWindow.ShowDialog();
                         AddButton.IsEnabled = true;
                         return;
                     }
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"User '{searchText}' not found.",
-                        "User Not Found",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Warning);
+                    var errorWindow = new ErrorWindow($"User '{searchText}' not found.");
+                    errorWindow.Owner = this;
+                    errorWindow.ShowDialog();
                     AddButton.IsEnabled = true;
                     return;
                 }
@@ -241,52 +235,42 @@ public partial class AddUserToCommunityWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    $"Error sending invitation: {createResult.Errors.FirstOrDefault()?.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error sending invitation: {createResult.Errors.FirstOrDefault()?.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 AddButton.IsEnabled = true;
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception adding user to community: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when sending invitation.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when sending invitation.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             AddButton.IsEnabled = true;
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation adding user: {invEx}");
-            MessageBox.Show(
-                $"Failed to send invitation.\nUser may already be in the community or already have an invitation.\n\nDetails: {invEx.Message}",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to send invitation.\nUser may already be in the community or already have an invitation.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             AddButton.IsEnabled = true;
         }
         catch (UnauthorizedAccessException unauthEx)
         {
             System.Diagnostics.Debug.WriteLine($"Unauthorized adding user: {unauthEx}");
-            MessageBox.Show(
-                "You do not have permission to invite users to this community.\nOnly the owner or administrator can add users.",
-                "Access Denied",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"You do not have permission to invite users to this community.\nOnly the owner or administrator can add users.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             AddButton.IsEnabled = true;
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine($"Unexpected exception adding user: {ex}");
-            MessageBox.Show(
-                $"An error occurred when sending invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            System.Diagnostics.Debug.WriteLine($"An error occurred when sending invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            var errorWindow = new ErrorWindow($"An error occurred when sending invitation.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             AddButton.IsEnabled = true;
         }
     }
