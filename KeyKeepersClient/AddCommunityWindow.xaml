@@ -20,10 +20,7 @@
         <vm:AddCommunityViewModel/>
     </Window.DataContext>
 
-    <Border Background="#171C26"
-            BorderBrush="#FDE053"
-            BorderThickness="3"
-            CornerRadius="15">
+    <Border Style="{StaticResource DialogBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -44,9 +41,7 @@
 
                     <TextBlock Grid.Column="0"
                                Text="👥"
-                               FontSize="24"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                               Style="{StaticResource EmojiTextBlockStyle}"/>
 
                     <TextBlock Grid.Column="1"
                                Text="Add New Community"
@@ -152,16 +147,8 @@
                         BorderThickness="0"
                         Cursor="Hand"
                         IsEnabled="{Binding IsCreateEnabled}"
-                        Command="{Binding CreateCommand}">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0"
-                                             EndPoint="1,0">
-                            <GradientStop Color="#815A11"
-                                          Offset="0"/>
-                            <GradientStop Color="#FDE053"
-                                          Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
+                        Command="{Binding CreateCommand}"
+                        Background="{StaticResource AccentGradientBrush}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}"

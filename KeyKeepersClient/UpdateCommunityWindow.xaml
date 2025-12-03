@@ -15,10 +15,7 @@
         AllowsTransparency="True"
         Background="Transparent">
 
-    <Border Background="#171C26"
-            BorderBrush="#FDE053"
-            BorderThickness="3"
-            CornerRadius="15">
+    <Border Style="{StaticResource DialogBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -118,74 +115,17 @@
 
                 <Button Grid.Column="0"
                         Content="Cancel"
-                        Height="45"
-                        Background="#2A1010"
-                        Foreground="#FF6B6B"
-                        BorderThickness="0"
-                        FontFamily="Bahnschrift"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Cursor="Hand"
-                        Click="CancelButton_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                CornerRadius="10">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                        Style="{StaticResource DeclineButtonStyle}"
+                        Click="CancelButton_Click"/>
 
                 <!-- TODO: Використати Command замість Click event handler -->
                 <!-- TODO: Використати Data Binding для IsEnabled -->
                 <Button x:Name="SaveButton"
                         Grid.Column="2"
                         Content="Save"
-                        Height="45"
-                        Background="#1B5E40"
-                        Foreground="White"
-                        BorderThickness="0"
-                        FontFamily="Bahnschrift"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Cursor="Hand"
+                        Style="{StaticResource AcceptButtonStyle}"
                         IsEnabled="False"
-                        Click="SaveButton_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border x:Name="border"
-                                                Background="{TemplateBinding Background}"
-                                                CornerRadius="10">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsEnabled"
-                                                     Value="False">
-                                                <Setter TargetName="border"
-                                                        Property="Background"
-                                                        Value="#0E121B"/>
-                                                <Setter Property="Foreground"
-                                                        Value="#666666"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                        Click="SaveButton_Click"/>
             </Grid>
         </Grid>
     </Border>

@@ -15,10 +15,7 @@
         AllowsTransparency="True"
         Background="Transparent">
 
-    <Border Background="#171C26"
-            BorderBrush="#FDE053"
-            BorderThickness="3"
-            CornerRadius="15">
+    <Border Style="{StaticResource DialogBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -84,61 +81,15 @@
                 <Button x:Name="DeclineAllButton"
                         Grid.Column="0"
                         Content="Decline All"
-                        Height="45"
-                        Background="#2A1010"
-                        Foreground="#FF6B6B"
-                        BorderThickness="0"
-                        FontFamily="Bahnschrift"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Cursor="Hand"
-                        Click="DeclineAllButton_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                CornerRadius="10">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                        Style="{StaticResource DeclineButtonStyle}"
+                        Click="DeclineAllButton_Click"/>
 
                 <!-- TODO: Використати Command замість Click event handler -->
                 <Button x:Name="AcceptAllButton"
                         Grid.Column="2"
                         Content="Accept All"
-                        Height="45"
-                        Background="#1B5E40"
-                        Foreground="White"
-                        BorderThickness="0"
-                        FontFamily="Bahnschrift"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Cursor="Hand"
-                        Click="AcceptAllButton_Click">
-                    <Button.Style>
-                        <Style TargetType="Button">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="Button">
-                                        <Border Background="{TemplateBinding Background}"
-                                                CornerRadius="10">
-                                            <ContentPresenter HorizontalAlignment="Center"
-                                                              VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Button.Style>
-                </Button>
+                        Style="{StaticResource AcceptButtonStyle}"
+                        Click="AcceptAllButton_Click"/>
             </Grid>
         </Grid>
     </Border>

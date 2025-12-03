@@ -3,526 +3,778 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:KeyKeepersClient"
              xmlns:helpers="clr-namespace:KeyKeepersClient.Helpers">
-    <Application.Resources>
-        <!-- Title Bar Styles -->
-        
-        <!-- Title Bar Border Style -->
-        <Style x:Key="TitleBarBorderStyle"
-               TargetType="Border">
-            <Setter Property="Background"
-                    Value="#0E121B"/>
-            <Setter Property="BorderBrush"
-                    Value="#222A39"/>
-            <Setter Property="BorderThickness"
-                    Value="0,0,0,2"/>
-        </Style>
+        <Application.Resources>
+                <!-- Global Resources -->
 
-        <!-- Title TextBlock Style -->
-        <Style x:Key="TitleTextBlockStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Left"/>
-            <Setter Property="Margin"
-                    Value="10,0,0,0"/>
-        </Style>
-
-        <!-- Window Control Buttons Styles -->
-
-        <!-- Dialog Close Button Style (×) for Popup Windows -->
-        <Style x:Key="DialogCloseButtonStyle"
-               TargetType="Button">
-            <Setter Property="Width"
-                    Value="30"/>
-            <Setter Property="Height"
-                    Value="30"/>
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="24"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="Content"
-                    Value="×"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="#C42B1C"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Close Button Style (×) -->
-        <Style x:Key="WindowCloseButtonStyle"
-               TargetType="Button">
-            <Setter Property="Width"
-                    Value="30"/>
-            <Setter Property="Height"
-                    Value="30"/>
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="24"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="Content"
-                    Value="×"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="#C42B1C"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Minimize Button Style (—) -->
-        <Style x:Key="WindowMinimizeButtonStyle"
-               TargetType="Button">
-            <Setter Property="Width"
-                    Value="30"/>
-            <Setter Property="Height"
-                    Value="30"/>
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="Bold"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="Margin"
-                    Value="3,0"/>
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="Content"
-                    Value="—"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background"
-                                        Value="#222A39"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <!-- Input Field Styles -->
-
-        <!-- Input Border Style -->
-        <Style x:Key="InputBorderStyle"
-               TargetType="Border">
-            <Setter Property="Height"
-                    Value="50"/>
-            <Setter Property="Background"
-                    Value="#2A2F3A"/>
-            <Setter Property="CornerRadius"
-                    Value="25"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Style.Triggers>
-                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="BorderBrush" Value="#FDE053"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </Trigger>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="False">
-                    <Setter Property="BorderBrush" Value="#FF4444"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="True">
-                    <Setter Property="BorderBrush" Value="#44FF44"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Alternative Input Border Style (for forms) -->
-        <Style x:Key="FormInputBorderStyle"
-               TargetType="Border">
-            <Setter Property="Height"
-                    Value="45"/>
-            <Setter Property="Background"
-                    Value="#0E121B"/>
-            <Setter Property="BorderBrush"
-                    Value="#222A39"/>
-            <Setter Property="BorderThickness"
-                    Value="2"/>
-            <Setter Property="CornerRadius"
-                    Value="10"/>
-            <Style.Triggers>
-                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="BorderBrush" Value="#FDE053"/>
-                </Trigger>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="False">
-                    <Setter Property="BorderBrush" Value="#FF4444"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="True">
-                    <Setter Property="BorderBrush" Value="#44FF44"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Compact Input Border Style (for SignUp) -->
-        <Style x:Key="CompactInputBorderStyle"
-               TargetType="Border">
-            <Setter Property="Height"
-                    Value="40"/>
-            <Setter Property="Background"
-                    Value="#2A2F3A"/>
-            <Setter Property="CornerRadius"
-                    Value="20"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Style.Triggers>
-                <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                    <Setter Property="BorderBrush" Value="#FDE053"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </Trigger>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="False">
-                    <Setter Property="BorderBrush" Value="#FF4444"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}" Value="True">
-                    <Setter Property="BorderBrush" Value="#44FF44"/>
-                    <Setter Property="BorderThickness" Value="2"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Input TextBox Style -->
-        <Style x:Key="InputTextBoxStyle"
-               TargetType="TextBox">
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="CaretBrush"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch"/>
-            <Setter Property="Margin"
-                    Value="20,0"/>
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="helpers:TextBoxHelper.MonitorText"
-                    Value="True"/>
-        </Style>
-
-        <!-- Form Input TextBox Style (smaller) -->
-        <Style x:Key="FormInputTextBoxStyle"
-               TargetType="TextBox"
-               BasedOn="{StaticResource InputTextBoxStyle}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Padding"
-                    Value="15,0"/>
-            <Setter Property="Margin"
-                    Value="0"/>
-        </Style>
-
-        <!-- Compact Input TextBox Style (for SignUp) -->
-        <Style x:Key="CompactInputTextBoxStyle"
-               TargetType="TextBox"
-               BasedOn="{StaticResource InputTextBoxStyle}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Margin"
-                    Value="15,0"/>
-        </Style>
-
-        <!-- Input PasswordBox Style -->
-        <Style x:Key="InputPasswordBoxStyle"
-               TargetType="PasswordBox">
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="CaretBrush"
-                    Value="White"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch"/>
-            <Setter Property="Margin"
-                    Value="20,0"/>
-            <Setter Property="VerticalContentAlignment"
-                    Value="Center"/>
-            <Setter Property="helpers:TextBoxHelper.MonitorText"
-                    Value="True"/>
-        </Style>
-
-        <!-- Compact PasswordBox Style (for SignUp) -->
-        <Style x:Key="CompactPasswordBoxStyle"
-               TargetType="PasswordBox"
-               BasedOn="{StaticResource InputPasswordBoxStyle}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Margin"
-                    Value="15,0"/>
-        </Style>
-
-        <!-- Placeholder TextBlock Style with DataTrigger -->
-        <Style x:Key="PlaceholderTextBlockStyle"
-               TargetType="TextBlock">
-            <Setter Property="Foreground"
-                    Value="#808080"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Left"/>
-            <Setter Property="Margin"
-                    Value="20,0"/>
-            <Setter Property="IsHitTestVisible"
-                    Value="False"/>
-        </Style>
-
-        <!-- Form Placeholder Style (smaller) -->
-        <Style x:Key="FormPlaceholderTextBlockStyle"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource PlaceholderTextBlockStyle}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Margin"
-                    Value="15,0"/>
-        </Style>
-
-        <!-- Compact Placeholder Style (for SignUp) -->
-        <Style x:Key="CompactPlaceholderTextBlockStyle"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource PlaceholderTextBlockStyle}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Margin"
-                    Value="15,0"/>
-        </Style>
-
-        <!-- Input Label Style -->
-        <Style x:Key="InputLabelStyle"
-               TargetType="TextBlock">
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="16"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="Foreground"
-                    Value="White"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Left"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,5"/>
-        </Style>
-
-        <!-- Compact Input Label Style (for SignUp) -->
-        <Style x:Key="CompactInputLabelStyle"
-               TargetType="TextBlock"
-               BasedOn="{StaticResource InputLabelStyle}">
-            <Setter Property="FontSize"
-                    Value="14"/>
-            <Setter Property="Margin"
-                    Value="0,0,0,4"/>
-        </Style>
-
-        <!-- Hyperlink Style -->
-        <Style TargetType="Hyperlink">
-            <Setter Property="TextDecorations"
-                    Value="None"/>
-            <Setter Property="Foreground"
-                    Value="#FDE053"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="#FFE87A"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <!-- Accent Text Run Style (for Hyperlink text) -->
-        <Style x:Key="AccentRunStyle"
-               TargetType="Run">
-            <Setter Property="Foreground"
-                    Value="#FDE053"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="13"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-        </Style>
-
-        <!-- Secondary Text Run Style (for regular text in TextBlock) -->
-        <Style x:Key="SecondaryRunStyle"
-               TargetType="Run">
-            <Setter Property="Foreground"
-                    Value="#B0B0B0"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="13"/>
-        </Style>
-
-        <!-- Action Button Styles -->
-
-        <!-- Accept/Submit Button Border with Gradient -->
-        <Style x:Key="AcceptButtonBorderStyle"
-               TargetType="Border">
-            <Setter Property="Height"
-                    Value="50"/>
-            <Setter Property="CornerRadius"
-                    Value="27"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch"/>
-            <Setter Property="Margin"
-                    Value="20,0,20,0"/>
-            <Setter Property="Background">
-                <Setter.Value>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0">
+                <!-- Accent Gradient Brush -->
+                <LinearGradientBrush x:Key="AccentGradientBrush"
+                                     StartPoint="0,0"
+                                     EndPoint="1,0">
                         <GradientStop Color="#815A11"
                                       Offset="0"/>
                         <GradientStop Color="#FDE053"
                                       Offset="1"/>
-                    </LinearGradientBrush>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Border}}" Value="False">
-                    <Setter Property="Opacity" Value="0.5"/>
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
+                </LinearGradientBrush>
 
-        <!-- Accept/Submit Button Style -->
-        <Style x:Key="AcceptButtonStyle"
-               TargetType="Button">
-            <Setter Property="Background"
-                    Value="Transparent"/>
-            <Setter Property="BorderThickness"
-                    Value="0"/>
-            <Setter Property="Foreground"
-                    Value="Black"/>
-            <Setter Property="FontFamily"
-                    Value="Bahnschrift"/>
-            <Setter Property="FontSize"
-                    Value="20"/>
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-            <Setter Property="HorizontalAlignment"
-                    Value="Stretch"/>
-            <Setter Property="VerticalAlignment"
-                    Value="Stretch"/>
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Cursor" Value="Arrow"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
+                <!-- Dialog Window Styles -->
 
-    </Application.Resources>
+                <!-- Dialog Border Style -->
+                <Style x:Key="DialogBorderStyle"
+                       TargetType="Border">
+                        <Setter Property="Background"
+                                Value="#171C26"/>
+                        <Setter Property="BorderBrush"
+                                Value="#FDE053"/>
+                        <Setter Property="BorderThickness"
+                                Value="3"/>
+                        <Setter Property="CornerRadius"
+                                Value="15"/>
+                </Style>
+
+                <!-- Title Bar Styles -->
+
+                <!-- Title Bar Border Style -->
+                <Style x:Key="TitleBarBorderStyle"
+                       TargetType="Border">
+                        <Setter Property="Background"
+                                Value="#0E121B"/>
+                        <Setter Property="BorderBrush"
+                                Value="#222A39"/>
+                        <Setter Property="BorderThickness"
+                                Value="0,0,0,2"/>
+                </Style>
+
+                <!-- Title TextBlock Style -->
+                <Style x:Key="TitleTextBlockStyle"
+                       TargetType="TextBlock">
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Left"/>
+                        <Setter Property="Margin"
+                                Value="10,0,0,0"/>
+                </Style>
+
+                <!-- Window Control Buttons Styles -->
+
+                <!-- Dialog Close Button Style (×) for Popup Windows -->
+                <Style x:Key="DialogCloseButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Width"
+                                Value="30"/>
+                        <Setter Property="Height"
+                                Value="30"/>
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="24"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="Content"
+                                Value="×"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderThickness="0"
+                                                        CornerRadius="5">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter Property="Background"
+                                                                        Value="#C42B1C"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Close Button Style (×) -->
+                <Style x:Key="WindowCloseButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Width"
+                                Value="30"/>
+                        <Setter Property="Height"
+                                Value="30"/>
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="24"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="Content"
+                                Value="×"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderThickness="0">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter Property="Background"
+                                                                        Value="#C42B1C"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Minimize Button Style (—) -->
+                <Style x:Key="WindowMinimizeButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Width"
+                                Value="30"/>
+                        <Setter Property="Height"
+                                Value="30"/>
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="Bold"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Margin"
+                                Value="3,0"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="Content"
+                                Value="—"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        BorderThickness="0">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter Property="Background"
+                                                                        Value="#222A39"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- ScrollViewer Styles -->
+
+                <!-- Custom ScrollBar Thumb Style with Hover Effect -->
+                <Style x:Key="CustomScrollBarThumb"
+                       TargetType="Thumb">
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Thumb">
+                                                <Border x:Name="ThumbBorder"
+                                                        Background="#815A11"
+                                                        CornerRadius="5"
+                                                        Width="8"/>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter TargetName="ThumbBorder"
+                                                                        Property="Background"
+                                                                        Value="#FDE053"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Custom ScrollBar Style -->
+                <Style x:Key="CustomScrollBar"
+                       TargetType="ScrollBar">
+                        <Setter Property="Width"
+                                Value="10"/>
+                        <Setter Property="Background"
+                                Value="#0E121B"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="ScrollBar">
+                                                <Grid>
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                CornerRadius="5"
+                                                                Margin="1"/>
+                                                        <Track x:Name="PART_Track"
+                                                               IsDirectionReversed="True"
+                                                               Margin="1">
+                                                                <Track.Thumb>
+                                                                        <Thumb Style="{StaticResource CustomScrollBarThumb}"/>
+                                                                </Track.Thumb>
+                                                        </Track>
+                                                </Grid>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Custom ScrollViewer Style -->
+                <Style x:Key="CustomScrollViewer"
+                       TargetType="ScrollViewer">
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="ScrollViewer">
+                                                <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <ScrollContentPresenter Grid.Column="0"/>
+                                                        <ScrollBar x:Name="PART_VerticalScrollBar"
+                                                                   Grid.Column="1"
+                                                                   Value="{TemplateBinding VerticalOffset}"
+                                                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                                                   Style="{StaticResource CustomScrollBar}"/>
+                                                </Grid>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Action Button Styles -->
+
+                <!-- Decline Button Style -->
+                <Style x:Key="DeclineButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Height"
+                                Value="45"/>
+                        <Setter Property="Background"
+                                Value="#2A1010"/>
+                        <Setter Property="Foreground"
+                                Value="#FF6B6B"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter TargetName="border"
+                                                                        Property="Background"
+                                                                        Value="#3D1616"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Accept Button Style (for dialogs with solid background) -->
+                <Style x:Key="AcceptButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Height"
+                                Value="45"/>
+                        <Setter Property="Background"
+                                Value="#1B5E40"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border x:Name="border"
+                                                        Background="{TemplateBinding Background}"
+                                                        CornerRadius="10">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver"
+                                                                 Value="True">
+                                                                <Setter TargetName="border"
+                                                                        Property="Background"
+                                                                        Value="#268B5A"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsEnabled"
+                                                                 Value="False">
+                                                                <Setter TargetName="border"
+                                                                        Property="Background"
+                                                                        Value="#0E121B"/>
+                                                                <Setter Property="Foreground"
+                                                                        Value="#666666"/>
+                                                        </Trigger>
+                                                </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Gradient Button Style (for buttons inside AccentGradientBrush border) -->
+                <Style x:Key="GradientButtonStyle"
+                       TargetType="Button">
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Foreground"
+                                Value="Black"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="20"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Cursor"
+                                Value="Hand"/>
+                        <Setter Property="Template">
+                                <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                </Border>
+                                        </ControlTemplate>
+                                </Setter.Value>
+                        </Setter>
+                </Style>
+
+                <!-- Emoji TextBlock Style -->
+                <Style x:Key="EmojiTextBlockStyle"
+                       TargetType="TextBlock">
+                        <Setter Property="FontSize"
+                                Value="24"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Center"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        <Setter Property="RenderTransformOrigin"
+                                Value="0.5,0.5"/>
+                        <Setter Property="RenderTransform">
+                                <Setter.Value>
+                                        <ScaleTransform ScaleX="1"
+                                                        ScaleY="1"/>
+                                </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Border}}"
+                                             Value="True">
+                                        <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                        <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                                                 To="1.2"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                                                 To="1.2"
+                                                                                 Duration="0:0:0.2"/>
+                                                        </Storyboard>
+                                                </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                        <Storyboard>
+                                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                                                                 To="1.0"
+                                                                                 Duration="0:0:0.2"/>
+                                                                <DoubleAnimation Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                                                                 To="1.0"
+                                                                                 Duration="0:0:0.2"/>
+                                                        </Storyboard>
+                                                </BeginStoryboard>
+                                        </DataTrigger.ExitActions>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+
+                <!-- Input Field Styles -->
+
+                <!-- Input Border Style -->
+                <Style x:Key="InputBorderStyle"
+                       TargetType="Border">
+                        <Setter Property="Height"
+                                Value="50"/>
+                        <Setter Property="Background"
+                                Value="#2A2F3A"/>
+                        <Setter Property="CornerRadius"
+                                Value="25"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Style.Triggers>
+                                <Trigger Property="IsKeyboardFocusWithin"
+                                                Value="True">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#FDE053"/>
+                                        <Setter Property="BorderThickness"
+                                                        Value="2"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
+                                                Value="False">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#FF4444"/>
+                                        <Setter Property="BorderThickness"
+                                                        Value="2"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
+                                                Value="True">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#44FF44"/>
+                                        <Setter Property="BorderThickness"
+                                                        Value="2"/>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+
+                <!-- Alternative Input Border Style (for forms) -->
+                <Style x:Key="FormInputBorderStyle"
+                       TargetType="Border">
+                        <Setter Property="Height"
+                                Value="45"/>
+                        <Setter Property="Background"
+                                Value="#0E121B"/>
+                        <Setter Property="BorderBrush"
+                                Value="#222A39"/>
+                        <Setter Property="BorderThickness"
+                                Value="2"/>
+                        <Setter Property="CornerRadius"
+                                Value="10"/>
+                        <Style.Triggers>
+                                <Trigger Property="IsKeyboardFocusWithin"
+                                                Value="True">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#FDE053"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
+                                                Value="False">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#FF4444"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
+                                                Value="True">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#44FF44"/>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+
+                <!-- Compact Input Border Style (for SignUp) -->
+                <Style x:Key="CompactInputBorderStyle"
+                       TargetType="Border">
+                        <Setter Property="Height"
+                                Value="40"/>
+                        <Setter Property="Background"
+                                Value="#2A2F3A"/>
+                        <Setter Property="CornerRadius"
+                                Value="20"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Style.Triggers>
+                                <Trigger Property="IsKeyboardFocusWithin"
+                                                Value="True">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#FDE053"/>
+                                        <Setter Property="BorderThickness"
+                                                        Value="2"/>
+                                </Trigger>
+                                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
+                                                Value="False">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#FF4444"/>
+                                        <Setter Property="BorderThickness"
+                                                        Value="2"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Path=(helpers:TextBoxHelper.IsValid), RelativeSource={RelativeSource Self}}"
+                                                Value="True">
+                                        <Setter Property="BorderBrush"
+                                                        Value="#44FF44"/>
+                                        <Setter Property="BorderThickness"
+                                                        Value="2"/>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+
+                <!-- Input TextBox Style -->
+                <Style x:Key="InputTextBoxStyle"
+                       TargetType="TextBox">
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="CaretBrush"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch"/>
+                        <Setter Property="Margin"
+                                Value="20,0"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="helpers:TextBoxHelper.MonitorText"
+                                Value="True"/>
+                </Style>
+
+                <!-- Form Input TextBox Style (smaller) -->
+                <Style x:Key="FormInputTextBoxStyle"
+                       TargetType="TextBox"
+                       BasedOn="{StaticResource InputTextBoxStyle}">
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Padding"
+                                Value="15,0"/>
+                        <Setter Property="Margin"
+                                Value="0"/>
+                </Style>
+
+                <!-- Compact Input TextBox Style (for SignUp) -->
+                <Style x:Key="CompactInputTextBoxStyle"
+                       TargetType="TextBox"
+                       BasedOn="{StaticResource InputTextBoxStyle}">
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Margin"
+                                Value="15,0"/>
+                </Style>
+
+                <!-- Input PasswordBox Style -->
+                <Style x:Key="InputPasswordBoxStyle"
+                       TargetType="PasswordBox">
+                        <Setter Property="Background"
+                                Value="Transparent"/>
+                        <Setter Property="BorderThickness"
+                                Value="0"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="CaretBrush"
+                                Value="White"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch"/>
+                        <Setter Property="Margin"
+                                Value="20,0"/>
+                        <Setter Property="VerticalContentAlignment"
+                                Value="Center"/>
+                        <Setter Property="helpers:TextBoxHelper.MonitorText"
+                                Value="True"/>
+                </Style>
+
+                <!-- Compact PasswordBox Style (for SignUp) -->
+                <Style x:Key="CompactPasswordBoxStyle"
+                       TargetType="PasswordBox"
+                       BasedOn="{StaticResource InputPasswordBoxStyle}">
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Margin"
+                                Value="15,0"/>
+                </Style>
+
+                <!-- Placeholder TextBlock Style with DataTrigger -->
+                <Style x:Key="PlaceholderTextBlockStyle"
+                       TargetType="TextBlock">
+                        <Setter Property="Foreground"
+                                Value="#808080"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="VerticalAlignment"
+                                Value="Center"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Left"/>
+                        <Setter Property="Margin"
+                                Value="20,0"/>
+                        <Setter Property="IsHitTestVisible"
+                                Value="False"/>
+                </Style>
+
+                <!-- Form Placeholder Style (smaller) -->
+                <Style x:Key="FormPlaceholderTextBlockStyle"
+                       TargetType="TextBlock"
+                       BasedOn="{StaticResource PlaceholderTextBlockStyle}">
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Margin"
+                                Value="15,0"/>
+                </Style>
+
+                <!-- Compact Placeholder Style (for SignUp) -->
+                <Style x:Key="CompactPlaceholderTextBlockStyle"
+                       TargetType="TextBlock"
+                       BasedOn="{StaticResource PlaceholderTextBlockStyle}">
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Margin"
+                                Value="15,0"/>
+                </Style>
+
+                <!-- Input Label Style -->
+                <Style x:Key="InputLabelStyle"
+                       TargetType="TextBlock">
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="16"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                        <Setter Property="Foreground"
+                                Value="White"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Left"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,5"/>
+                </Style>
+
+                <!-- Compact Input Label Style (for SignUp) -->
+                <Style x:Key="CompactInputLabelStyle"
+                       TargetType="TextBlock"
+                       BasedOn="{StaticResource InputLabelStyle}">
+                        <Setter Property="FontSize"
+                                Value="14"/>
+                        <Setter Property="Margin"
+                                Value="0,0,0,4"/>
+                </Style>
+
+                <!-- Hyperlink Style -->
+                <Style TargetType="Hyperlink">
+                        <Setter Property="TextDecorations"
+                                Value="None"/>
+                        <Setter Property="Foreground"
+                                Value="#FDE053"/>
+                        <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                                Value="True">
+                                        <Setter Property="Foreground"
+                                                        Value="#FFE87A"/>
+                                </Trigger>
+                        </Style.Triggers>
+                </Style>
+
+                <!-- Accent Text Run Style (for Hyperlink text) -->
+                <Style x:Key="AccentRunStyle"
+                       TargetType="Run">
+                        <Setter Property="Foreground"
+                                Value="#FDE053"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="13"/>
+                        <Setter Property="FontWeight"
+                                Value="SemiBold"/>
+                </Style>
+
+                <!-- Secondary Text Run Style (for regular text in TextBlock) -->
+                <Style x:Key="SecondaryRunStyle"
+                       TargetType="Run">
+                        <Setter Property="Foreground"
+                                Value="#B0B0B0"/>
+                        <Setter Property="FontFamily"
+                                Value="Bahnschrift"/>
+                        <Setter Property="FontSize"
+                                Value="13"/>
+                </Style>
+
+                <!-- Action Button Styles -->
+
+                <!-- Accept/Submit Button Border with Gradient -->
+                <Style x:Key="AcceptButtonBorderStyle"
+                       TargetType="Border">
+                        <Setter Property="Height"
+                                Value="50"/>
+                        <Setter Property="CornerRadius"
+                                Value="27"/>
+                        <Setter Property="HorizontalAlignment"
+                                Value="Stretch"/>
+                        <Setter Property="Margin"
+                                Value="20,0,20,0"/>
+                        <Setter Property="Background"
+                                Value="{StaticResource AccentGradientBrush}"/>
+                        <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=Border}}"
+                                                Value="False">
+                                        <Setter Property="Opacity"
+                                                        Value="0.5"/>
+                                </DataTrigger>
+                        </Style.Triggers>
+                </Style>
+
+        </Application.Resources>
 </Application>

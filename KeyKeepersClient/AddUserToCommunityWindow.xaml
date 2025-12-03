@@ -15,10 +15,7 @@
         AllowsTransparency="True"
         Background="Transparent">
 
-    <Border Background="#171C26"
-            BorderBrush="#FDE053"
-            BorderThickness="3"
-            CornerRadius="15">
+    <Border Style="{StaticResource DialogBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>

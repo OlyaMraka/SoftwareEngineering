@@ -138,7 +138,7 @@
             <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="9"
                     Style="{StaticResource AcceptButtonBorderStyle}">
-                <Button Style="{StaticResource AcceptButtonStyle}"
+                <Button Style="{StaticResource GradientButtonStyle}"
                         Content="accept"
                         Click="AcceptButton_Click"/>
             </Border>

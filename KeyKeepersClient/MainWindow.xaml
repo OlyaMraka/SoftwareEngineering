@@ -68,17 +68,8 @@
                 <Style x:Key="ActiveCommunityButtonStyle"
                        TargetType="Button"
                        BasedOn="{StaticResource CommunityButtonStyle}">
-                        <Setter Property="Background">
-                                <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0"
-                                                             EndPoint="1,0">
-                                                <GradientStop Color="#815A11"
-                                                              Offset="0"/>
-                                                <GradientStop Color="#FDE053"
-                                                              Offset="1"/>
-                                        </LinearGradientBrush>
-                                </Setter.Value>
-                        </Setter>
+                        <Setter Property="Background"
+                                Value="{StaticResource AccentGradientBrush}"/>
                         <Setter Property="Foreground"
                                 Value="Black"/>
                         <Setter Property="Template">
@@ -145,17 +136,8 @@
                 <Style x:Key="ActiveCategoryButtonStyle"
                        TargetType="Button"
                        BasedOn="{StaticResource CategoryButtonStyle}">
-                        <Setter Property="Background">
-                                <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0"
-                                                             EndPoint="1,0">
-                                                <GradientStop Color="#815A11"
-                                                              Offset="0"/>
-                                                <GradientStop Color="#FDE053"
-                                                              Offset="1"/>
-                                        </LinearGradientBrush>
-                                </Setter.Value>
-                        </Setter>
+                        <Setter Property="Background"
+                                Value="{StaticResource AccentGradientBrush}"/>
                         <Setter Property="Foreground"
                                 Value="Black"/>
                         <Setter Property="Template">
@@ -175,17 +157,8 @@
 
                 <Style x:Key="AddButtonStyle"
                        TargetType="Button">
-                        <Setter Property="Background">
-                                <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0"
-                                                             EndPoint="1,0">
-                                                <GradientStop Color="#815A11"
-                                                              Offset="0"/>
-                                                <GradientStop Color="#FDE053"
-                                                              Offset="1"/>
-                                        </LinearGradientBrush>
-                                </Setter.Value>
-                        </Setter>
+                        <Setter Property="Background"
+                                Value="{StaticResource AccentGradientBrush}"/>
                         <Setter Property="Foreground"
                                 Value="Black"/>
                         <Setter Property="FontFamily"
@@ -340,69 +313,6 @@
                                                         <ContentPresenter HorizontalAlignment="Center"
                                                                           VerticalAlignment="Center"/>
                                                 </Border>
-                                        </ControlTemplate>
-                                </Setter.Value>
-                        </Setter>
-                </Style>
-
-                <Style x:Key="CustomScrollBarThumb"
-                       TargetType="Thumb">
-                        <Setter Property="Template">
-                                <Setter.Value>
-                                        <ControlTemplate TargetType="Thumb">
-                                                <Border Background="#815A11"
-                                                        CornerRadius="5"
-                                                        Width="8"/>
-                                        </ControlTemplate>
-                                </Setter.Value>
-                        </Setter>
-                </Style>
-
-                <Style x:Key="CustomScrollBar"
-                       TargetType="ScrollBar">
-                        <Setter Property="Width"
-                                Value="10"/>
-                        <Setter Property="Background"
-                                Value="#0E121B"/>
-                        <Setter Property="Template">
-                                <Setter.Value>
-                                        <ControlTemplate TargetType="ScrollBar">
-                                                <Grid>
-                                                        <Border Background="{TemplateBinding Background}"
-                                                                CornerRadius="5"
-                                                                Margin="1"/>
-                                                        <Track x:Name="PART_Track"
-                                                               IsDirectionReversed="True"
-                                                               Margin="1">
-                                                                <Track.Thumb>
-                                                                        <Thumb Style="{StaticResource CustomScrollBarThumb}"/>
-                                                                </Track.Thumb>
-                                                        </Track>
-                                                </Grid>
-                                        </ControlTemplate>
-                                </Setter.Value>
-                        </Setter>
-                </Style>
-
-                <Style x:Key="CustomScrollViewer"
-                       TargetType="ScrollViewer">
-                        <Setter Property="Template">
-                                <Setter.Value>
-                                        <ControlTemplate TargetType="ScrollViewer">
-                                                <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*"/>
-                                                                <ColumnDefinition Width="Auto"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <ScrollContentPresenter Grid.Column="0"/>
-                                                        <ScrollBar x:Name="PART_VerticalScrollBar"
-                                                                   Grid.Column="1"
-                                                                   Value="{TemplateBinding VerticalOffset}"
-                                                                   Maximum="{TemplateBinding ScrollableHeight}"
-                                                                   ViewportSize="{TemplateBinding ViewportHeight}"
-                                                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
-                                                                   Style="{StaticResource CustomScrollBar}"/>
-                                                </Grid>
                                         </ControlTemplate>
                                 </Setter.Value>
                         </Setter>

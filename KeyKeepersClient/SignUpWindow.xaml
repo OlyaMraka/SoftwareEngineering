@@ -226,7 +226,7 @@
             <!-- TODO: Використати Command замість Click event handler -->
             <Border Grid.Row="18"
                     Style="{StaticResource AcceptButtonBorderStyle}">
-                <Button Style="{StaticResource AcceptButtonStyle}"
+                <Button Style="{StaticResource GradientButtonStyle}"
                         Content="register"
                         Click="RegisterButton_Click"/>
             </Border>

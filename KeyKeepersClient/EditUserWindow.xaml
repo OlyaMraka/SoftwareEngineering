@@ -15,10 +15,7 @@
         AllowsTransparency="True"
         Background="Transparent">
 
-    <Border Background="#171C26"
-            BorderBrush="#FDE053"
-            BorderThickness="3"
-            CornerRadius="15">
+    <Border Style="{StaticResource DialogBorderStyle}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
@@ -39,9 +36,7 @@
 
                     <TextBlock Grid.Column="0"
                                Text="👤"
-                               FontSize="24"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                               Style="{StaticResource EmojiTextBlockStyle}"/>
 
                     <TextBlock Grid.Column="1"
                                Text="Редагування профілю"
@@ -317,16 +312,8 @@
                         Foreground="Black"
                         BorderThickness="0"
                         Cursor="Hand"
-                        Click="SaveButton_Click">
-                    <Button.Background>
-                        <LinearGradientBrush StartPoint="0,0"
-                                             EndPoint="1,0">
-                            <GradientStop Color="#815A11"
-                                          Offset="0"/>
-                            <GradientStop Color="#FDE053"
-                                          Offset="1"/>
-                        </LinearGradientBrush>
-                    </Button.Background>
+                        Click="SaveButton_Click"
+                        Background="{StaticResource AccentGradientBrush}">
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
                             <Border Background="{TemplateBinding Background}"
