@@ -70,11 +70,9 @@ public partial class AdminPanelWindow : Window
 
             if (deleteResult.IsSuccess)
             {
-                MessageBox.Show(
-                    $"Community \"{community.Name}\" has been successfully deleted.",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow($"Community \"{community.Name}\" has been successfully deleted.");
+                msg.Owner = this;
+                msg.ShowDialog();
 
                 onCommunityDeleted?.Invoke();
                 Close();
