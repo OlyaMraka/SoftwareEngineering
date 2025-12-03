@@ -140,21 +140,17 @@ public partial class MainWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    "Failed to load user data",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Failed to load user data");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Exception in OpenEditUserMode: {ex}");
-            MessageBox.Show(
-                $"An error occurred: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -186,11 +182,9 @@ public partial class MainWindow : Window
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "Error during logout. Please try again.",
-                        "Logout Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    var errorWindow = new ErrorWindow($"Error during logout. Please try again.");
+                    errorWindow.Owner = this;
+                    errorWindow.ShowDialog();
                 }
             }
             else
@@ -205,11 +199,9 @@ public partial class MainWindow : Window
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception during logout: {httpEx}");
-            MessageBox.Show(
-                "ПServer connection error during logout.\nYou will be logged out locally.\n\nDetails: " + httpEx.Message,
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Server connection error during logout.\\nYou will be logged out locally.\\n\\nDetails: \" + httpEx.Message,");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
 
             ClearStoredTokens();
             var firstWindow = new FirstWindow();
@@ -221,11 +213,9 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception during logout: {ex}");
-            MessageBox.Show(
-                $"An error occurred during logout.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred during logout.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -272,12 +262,16 @@ public partial class MainWindow : Window
             }
             else
             {
-                MessageBox.Show($"Error loading user data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error loading user data");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error loading categories: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Error loading categories: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -418,29 +412,23 @@ public partial class MainWindow : Window
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception loading categories: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when loading categories.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when loading categories.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (System.Threading.Tasks.TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Loading categories timed out");
-            MessageBox.Show(
-                "Timeout exceeded when loading categories.\nTry refreshing the page.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Timeout exceeded when loading categories.\nTry refreshing the page.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception loading categories: {ex}");
-            MessageBox.Show(
-                $"An error occurred when loading categories.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when loading categories.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -477,29 +465,23 @@ public partial class MainWindow : Window
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception loading passwords: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when loading passwords.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when loading passwords.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (System.Threading.Tasks.TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Loading passwords timed out");
-            MessageBox.Show(
-                "Timeout exceeded when loading passwords.\nTry refreshing the page.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Timeout exceeded when loading passwords.\nTry refreshing the page.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception loading passwords: {ex}");
-            MessageBox.Show(
-                $"An error occurred when loading passwords.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when loading passwords.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -715,39 +697,31 @@ public partial class MainWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    $"Error",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception updating category: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when updating category.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when updating category.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation updating category: {invEx}");
-            MessageBox.Show(
-                $"Invalid operation when updating category.\nCategory may no longer exist.\n\nDetails: {invEx.Message}",
-                "Operation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Invalid operation when updating category.\nCategory may no longer exist.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception updating category: {ex}");
-            MessageBox.Show(
-                $"An error occurred when updating category '{category.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when updating category '{category.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -806,39 +780,31 @@ public partial class MainWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    "Category not found.",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Category not found.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting category: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when deleting category.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when deleting category.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation deleting category: {invEx}");
-            MessageBox.Show(
-                $"Failed to delete category.\nIt may contain saved passwords.\n\nDetails: {invEx.Message}",
-                "Operation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to delete category.\nIt may contain saved passwords.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting category: {ex}");
-            MessageBox.Show(
-                $"An error occurred when deleting category '{category.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when deleting category '{category.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -880,44 +846,38 @@ public partial class MainWindow : Window
             else
             {
                 string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Error creating user";
-                MessageBox.Show($"Registration error: {errorMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Registration error: {errorMsg}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception creating category: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when creating category.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when creating category.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (System.Threading.Tasks.TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Creating category timed out");
-            MessageBox.Show(
-                "Timeout exceeded when creating category.\nPlease try again.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Timeout exceeded when creating category.\nPlease try again.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation creating category: {invEx}");
-            MessageBox.Show(
-                $"Invalid operation when creating category.\nCategory with this name may already exist.\n\nDetails: {invEx.Message}",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Invalid operation when creating category.\nCategory with this name may already exist.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception creating category: {ex}");
-            MessageBox.Show(
-                $"An error occurred when creating category '{categoryNamee}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when creating category '{categoryNamee}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -973,23 +933,31 @@ public partial class MainWindow : Window
             {
                 string errorMsg = result.Errors.Any() ? string.Join("\n", result.Errors) : "Unknown error when creating community";
                 System.Diagnostics.Debug.WriteLine($"CreateCommunityAsync failed: {errorMsg}");
-                MessageBox.Show($"Community creation error:\n{errorMsg}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Community creation error:\n{errorMsg}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception in CreateCommunityAsync: {httpEx}");
-            MessageBox.Show($"Server connection error:\n{httpEx.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error:\n{httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid Operation in CreateCommunityAsync: {invEx}");
-            MessageBox.Show($"Invalid operation:\n{invEx.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Invalid operation:\n{invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Exception in CreateCommunityAsync: {ex}");
-            MessageBox.Show($"An error occurred when creating community:\n{ex.Message}\n\nError type: {ex.GetType().Name}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when creating community:\n{ex.Message}\n\nError type: {ex.GetType().Name}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -1041,7 +1009,9 @@ public partial class MainWindow : Window
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Exception in LoadCommunitiesAsync: {ex}");
-            MessageBox.Show($"Error loading communities: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Error loading communities: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -1092,20 +1062,16 @@ public partial class MainWindow : Window
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation opening community: {invEx}");
-            MessageBox.Show(
-                $"Failed to open community.\nCommunity may be deleted or you don't have access.\n\nDetails: {invEx.Message}",
-                "Access Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to open community.\nCommunity may be deleted or you don't have access.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception opening community: {ex}");
-            MessageBox.Show(
-                $"An error occurred when opening community.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when opening community.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
@@ -1382,20 +1348,16 @@ public partial class MainWindow : Window
         catch (System.Runtime.InteropServices.ExternalException clipEx)
         {
             System.Diagnostics.Debug.WriteLine($"Clipboard exception: {clipEx}");
-            MessageBox.Show(
-                "Failed to copy password to clipboard.\nClipboard may be in use by another application.\n\nPlease try again.",
-                "Clipboard Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to copy password to clipboard.\nClipboard may be in use by another application.\n\nPlease try again.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception copying password: {ex}");
-            MessageBox.Show(
-                $"An error occurred when copying password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when copying password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 

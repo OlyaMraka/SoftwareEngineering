@@ -129,42 +129,34 @@ public partial class UpdateCommunityWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    $"Error updating community: {result.Errors.FirstOrDefault()?.Message}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error updating community: {result.Errors.FirstOrDefault()?.Message}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 SaveButton.IsEnabled = true;
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception updating community: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when updating community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when updating community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             SaveButton.IsEnabled = true;
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation updating community: {invEx}");
-            MessageBox.Show(
-                $"Invalid operation when updating community.\nCommunity with this name may already exist.\n\nDetails: {invEx.Message}",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Invalid operation when updating community.\nCommunity with this name may already exist.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             SaveButton.IsEnabled = true;
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception updating community: {ex}");
-            MessageBox.Show(
-                $"An unexpected error occurred when updating community '{newName}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An unexpected error occurred when updating community '{newName}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             SaveButton.IsEnabled = true;
         }
     }

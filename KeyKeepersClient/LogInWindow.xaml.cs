@@ -85,39 +85,31 @@ public partial class LogInWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    "Invalid username or password. Please try again.",
-                    "Login Failed",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Invalid username or password. Please try again.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception in Login: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (System.Threading.Tasks.TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Login request timed out");
-            MessageBox.Show(
-                "Server response timeout exceeded.\nTry again later.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Server response timeout exceeded.\nTry again later.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception in Login: {ex}");
-            MessageBox.Show(
-                $"An unexpected error occurred during login.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An unexpected error occurred during login.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
