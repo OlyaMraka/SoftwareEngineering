@@ -78,6 +78,7 @@ public partial class MainWindow : Window
         }
 
         CategoryEditPanel.Visibility = Visibility.Collapsed;
+        EmptyStatePanel.Visibility = Visibility.Collapsed;
         viewModel.OpenAddPasswordMode(currentCategoryId);
 
         if (PasswordsScrollViewer != null)
@@ -225,7 +226,7 @@ public partial class MainWindow : Window
         await LoadCommunitiesAsync();
         await LoadCategoriesAsync();
 
-        await LoadPasswordsAsync(0);
+        await LoadPasswordsAsync(0, isSpecialCategory: true);
         await LoadCurrentUser();
 
         StartInvitationCheckTimer();
@@ -433,7 +434,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private async Task LoadPasswordsAsync(long categoryId)
+    private async Task LoadPasswordsAsync(long categoryId, bool isSpecialCategory = false)
     {
         try
         {
@@ -449,17 +450,37 @@ public partial class MainWindow : Window
 
             if (result.IsSuccess)
             {
-                foreach (var password in result.Value)
+                if (result.Value.Count() == 0)
                 {
-                    string strength = CalculatePasswordStrength(password.Password);
-                    CreatePasswordCard(
-                        password.Id,
-                        password.AppName,
-                        password.Login,
-                        password.Password,
-                        password.LogoUrl ?? "Images/Icons/internet_2.png",
-                        strength,
-                        password.CategoryId);
+                    // Don't show empty state for special categories (All items, Favorite)
+                    if (isSpecialCategory)
+                    {
+                        EmptyStatePanel.Visibility = Visibility.Collapsed;
+                        PasswordsPanel.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        EmptyStatePanel.Visibility = Visibility.Visible;
+                        PasswordsPanel.Visibility = Visibility.Collapsed;
+                    }
+                }
+                else
+                {
+                    EmptyStatePanel.Visibility = Visibility.Collapsed;
+                    PasswordsPanel.Visibility = Visibility.Visible;
+
+                    foreach (var password in result.Value)
+                    {
+                        string strength = CalculatePasswordStrength(password.Password);
+                        CreatePasswordCard(
+                            password.Id,
+                            password.AppName,
+                            password.Login,
+                            password.Password,
+                            password.LogoUrl ?? "Images/Icons/internet_2.png",
+                            strength,
+                            password.CategoryId);
+                    }
                 }
             }
         }
@@ -509,6 +530,11 @@ public partial class MainWindow : Window
         this.Close();
     }
 
+    private void AddPasswordFromEmptyStateButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenAddPasswordMode();
+    }
+
     private void CategoryButton_Click(object sender, RoutedEventArgs e)
     {
         if (sender is Button clickedButton)
@@ -518,12 +544,15 @@ public partial class MainWindow : Window
             if (clickedButton.Tag is CategoryItem category)
             {
                 currentCategoryId = category.Id;
-                _ = LoadPasswordsAsync(category.Id);
+                _ = LoadPasswordsAsync(category.Id, isSpecialCategory: false);
             }
             else
             {
+                // Special categories: AllItems, Favorite
+                bool isSpecialCategory = clickedButton.Tag is string tag &&
+                                         (tag == "AllItems" || tag == "Favorite");
                 currentCategoryId = 0;
-                _ = LoadPasswordsAsync(0);
+                _ = LoadPasswordsAsync(0, isSpecialCategory: isSpecialCategory);
             }
         }
     }
