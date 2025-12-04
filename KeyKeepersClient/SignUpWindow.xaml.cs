@@ -91,7 +91,9 @@ public partial class SignUpWindow : Window
     {
         if (!this.ValidateRegistrationData(out string errorMessage))
         {
-            MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow(errorMessage);
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             return;
         }
 
@@ -103,10 +105,11 @@ public partial class SignUpWindow : Window
 
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
-                MessageBox
-                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured. Registration is temporarily unavailable.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 

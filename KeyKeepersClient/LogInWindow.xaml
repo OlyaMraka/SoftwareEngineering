@@ -44,8 +44,7 @@
                 <TextBlock Grid.Column="1"
                            Text="FamilyPass Manager"
                            Style="{StaticResource TitleTextBlockStyle}"/>
-
-                <!-- TODO: Використати Command замість Click event handler -->
+                
                 <StackPanel Grid.Column="2"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
