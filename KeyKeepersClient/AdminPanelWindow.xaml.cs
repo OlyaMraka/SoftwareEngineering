@@ -79,48 +79,38 @@ public partial class AdminPanelWindow : Window
             }
             else
             {
-                MessageBox.Show(
-                    $"Error deleting community: {string.Join(", ", deleteResult.Errors)}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Error deleting community: {string.Join(", ", deleteResult.Errors)}");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting community: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when deleting community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when deleting community.\nCheck your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation deleting community: {invEx}");
-            MessageBox.Show(
-                $"Failed to delete community.\nIt may contain members or data.\n\nDetails: {invEx.Message}",
-                "Operation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to delete community.\nIt may contain members or data.\n\nDetails: {invEx.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (UnauthorizedAccessException unauthEx)
         {
             System.Diagnostics.Debug.WriteLine($"Unauthorized deleting community: {unauthEx}");
-            MessageBox.Show(
-                "You do not have permission to delete this community.\nOnly the owner can delete a community.",
-                "Access Denied",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"You do not have permission to delete this community.\nOnly the owner can delete a community.");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting community: {ex}");
-            MessageBox.Show(
-                $"An error occurred when deleting community '{community.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when deleting community '{community.Name}'.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
         }
     }
 
