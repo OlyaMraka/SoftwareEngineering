@@ -65,7 +65,8 @@ public partial class MainWindow : Window
 
         this.Loaded += MainWindow_Loaded;
 
-        SetActiveCategory((Button)CategoriesPanel.Children[0]);
+        currentActiveButton = (Button)CategoriesPanel.Children[0];
+        currentActiveButton.Style = (Style)FindResource("ActiveCategoryButtonStyle");
         SetActiveCommunity(PrivateCommunityButton);
     }
 
@@ -1122,6 +1123,12 @@ public partial class MainWindow : Window
             await LoadCategoriesAsync();
 
             AdminPanelButton.Visibility = Visibility.Collapsed;
+
+            // Set first category as active after loading
+            if (CategoriesPanel.Children.Count > 0 && CategoriesPanel.Children[0] is Button firstButton)
+            {
+                SetActiveCategory(firstButton);
+            }
         }
         else
         {
@@ -1129,7 +1136,7 @@ public partial class MainWindow : Window
 
             var allBtn = new Button
             {
-                Style = (Style)FindResource("ActiveCategoryButtonStyle"),
+                Style = (Style)FindResource("CategoryButtonStyle"),
                 Tag = "AllItems",
             };
             allBtn.Click += CategoryButton_Click;
@@ -1186,6 +1193,9 @@ public partial class MainWindow : Window
             favContent.Children.Add(favText);
             favBtn.Content = favContent;
             CategoriesPanel.Children.Add(favBtn);
+
+            // Set All items as active
+            SetActiveCategory(allBtn);
 
             if (community.UserRole == CommunityRole.Owner)
             {
