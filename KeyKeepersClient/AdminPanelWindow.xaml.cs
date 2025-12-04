@@ -52,13 +52,10 @@ public partial class AdminPanelWindow : Window
 
     private async void DeleteCommunityButton_Click(object sender, RoutedEventArgs e)
     {
-        var result = MessageBox.Show(
-            $"Are you sure you want to delete community \"{community.Name}\"?\nThis action cannot be undone.",
-            "Delete Confirmation",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+        var confirm = new ConfirmDialog($"Are you sure you want to delete \"{community.Name}\"?");
+        confirm.Owner = this;
 
-        if (result != MessageBoxResult.Yes)
+        if (confirm.ShowDialog() != true)
         {
             return;
         }

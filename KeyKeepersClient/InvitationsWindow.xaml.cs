@@ -257,13 +257,10 @@ public partial class InvitationsWindow : Window
 
     private async void AcceptAllButton_Click(object sender, RoutedEventArgs e)
     {
-        var result = MessageBox.Show(
-            "Are you sure you want to accept all invitations?",
-            "Confirm",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
+        var confirm = new ConfirmDialog("Are you sure you want to accept all invitations?");
+        confirm.Owner = this;
 
-        if (result == MessageBoxResult.Yes)
+        if (confirm.ShowDialog() != true)
         {
             await HandleAllInvitationsAsync(RequestStatus.Accepted);
         }
@@ -271,13 +268,10 @@ public partial class InvitationsWindow : Window
 
     private async void DeclineAllButton_Click(object sender, RoutedEventArgs e)
     {
-        var result = MessageBox.Show(
-            "Are you sure you want to decline all invitations?",
-            "Confirm",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Warning);
+        var confirm = new ConfirmDialog("Are you sure you want to decline all invitations?");
+        confirm.Owner = this;
 
-        if (result == MessageBoxResult.Yes)
+        if (confirm.ShowDialog() != true)
         {
             await HandleAllInvitationsAsync(RequestStatus.Declined);
         }
@@ -299,11 +293,9 @@ public partial class InvitationsWindow : Window
             if (result.IsSuccess)
             {
                 var actionText = status == RequestStatus.Accepted ? "accepted" : "declined";
-                MessageBox.Show(
-                    $"Invitation {actionText} successfully!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow($"Invitation {actionText} successfully!");
+                msg.Owner = this;
+                msg.ShowDialog();
 
                 await LoadInvitationsAsync();
 
@@ -387,20 +379,16 @@ public partial class InvitationsWindow : Window
             if (failedCount == 0)
             {
                 var actionText = status == RequestStatus.Accepted ? "accepted" : "declined";
-                MessageBox.Show(
-                    $"All {successCount} invitations {actionText} successfully!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow($"All {successCount} invitations {actionText} successfully!");
+                msg.Owner = this;
+                msg.ShowDialog();
             }
             else if (successCount > 0)
             {
                 var actionText = status == RequestStatus.Accepted ? "accepted" : "declined";
-                MessageBox.Show(
-                    $"{successCount} invitation(s) {actionText} successfully.\n{failedCount} invitation(s) failed.\n\nErrors:\n{string.Join("\n", errors.Take(5))}",
-                    "Partial Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Warning);
+                var msg = new MessageWindow($"{successCount} invitation(s) {actionText} successfully.\n{failedCount} invitation(s) failed.\n\nErrors:\n{string.Join("\n", errors.Take(5))}");
+                msg.Owner = this;
+                msg.ShowDialog();
             }
             else
             {

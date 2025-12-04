@@ -8,13 +8,9 @@ using KeyKeepers.BLL.Commands.Communities.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Create;
 using KeyKeepers.BLL.Commands.PasswordCategory.Delete;
 using KeyKeepers.BLL.Commands.PasswordCategory.Update;
-using KeyKeepers.BLL.Commands.Passwords.Create;
-using KeyKeepers.BLL.Commands.Passwords.Delete;
-using KeyKeepers.BLL.Commands.Passwords.Update;
 using KeyKeepers.BLL.Commands.Users.LogOut;
 using KeyKeepers.BLL.DTOs.Communities;
 using KeyKeepers.BLL.DTOs.PasswordCategories;
-using KeyKeepers.BLL.DTOs.Passwords;
 using KeyKeepers.BLL.DTOs.Users;
 using KeyKeepers.BLL.Queries.CommunityUsers.GetByUserId;
 using KeyKeepers.BLL.Queries.JoinRequests.GetByRecipientId;
@@ -22,7 +18,6 @@ using KeyKeepers.BLL.Queries.PasswordCategories.GetAll;
 using KeyKeepers.BLL.Queries.Passwords.GetAllById;
 using KeyKeepers.BLL.Queries.Users.GetById;
 using KeyKeepers.DAL.Enums;
-using KeyKeepers.DAL.Repositories.Interfaces.Base;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using KeyKeepersClient.ViewModels;
@@ -32,7 +27,6 @@ namespace KeyKeepersClient;
 public partial class MainWindow : Window
 {
     private readonly IMediator mediator;
-    private readonly IRepositoryWrapper repositoryWrapper;
     private readonly long userId;
     private readonly MainWindowViewModel viewModel;
     private Button? currentActiveButton;
@@ -53,7 +47,6 @@ public partial class MainWindow : Window
         InitializeComponent();
         this.userId = userId;
         mediator = App.ServiceProvider.GetRequiredService<IMediator>();
-        repositoryWrapper = App.ServiceProvider.GetRequiredService<IRepositoryWrapper>();
         customCategories = new ObservableCollection<CategoryItem>();
         communities = new ObservableCollection<CommunityItem>();
 
@@ -238,14 +231,11 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
-                MessageBox
-                    .Show(
-                        "Database is not configured. Registration is temporarily unavailable.",
-                        "Information",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured. Registration is temporarily unavailable.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
@@ -334,7 +324,7 @@ public partial class MainWindow : Window
         {
             Text = email,
             Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#999999")),
-            FontFamily = new System.Windows.Media.FontFamily("Bahnschrift"),
+            FontFamily = new FontFamily("Bahnschrift"),
             FontSize = 12,
             HorizontalAlignment = HorizontalAlignment.Center,
             TextAlignment = TextAlignment.Center,
@@ -387,16 +377,17 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
-                MessageBox
-                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured. Registration is temporarily unavailable.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
             var query = new GetAllPasswordCategoriesQuery(userId);
 
-            var result = await this.mediator.Send(query);
+            var result = await mediator.Send(query);
 
             foreach (var category in result.Value)
             {
@@ -418,7 +409,7 @@ public partial class MainWindow : Window
             errorWindow.Owner = this;
             errorWindow.ShowDialog();
         }
-        catch (System.Threading.Tasks.TaskCanceledException)
+        catch (TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Loading categories timed out");
             var errorWindow = new ErrorWindow($"Timeout exceeded when loading categories.\nTry refreshing the page.");
@@ -438,7 +429,7 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
                 return;
             }
@@ -446,7 +437,7 @@ public partial class MainWindow : Window
             PasswordsPanel.Children.Clear();
 
             var query = new GetCredentialsByIdQuery(categoryId);
-            var result = await this.mediator.Send(query);
+            var result = await mediator.Send(query);
 
             if (result.IsSuccess)
             {
@@ -491,7 +482,7 @@ public partial class MainWindow : Window
             errorWindow.Owner = this;
             errorWindow.ShowDialog();
         }
-        catch (System.Threading.Tasks.TaskCanceledException)
+        catch (TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Loading passwords timed out");
             var errorWindow = new ErrorWindow($"Timeout exceeded when loading passwords.\nTry refreshing the page.");
@@ -516,18 +507,18 @@ public partial class MainWindow : Window
     {
         if (e.ButtonState == MouseButtonState.Pressed)
         {
-            this.DragMove();
+            DragMove();
         }
     }
 
     private void MinimizeButton_Click(object sender, RoutedEventArgs e)
     {
-        this.WindowState = WindowState.Minimized;
+        WindowState = WindowState.Minimized;
     }
 
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
-        this.Close();
+        Close();
     }
 
     private void AddPasswordFromEmptyStateButton_Click(object sender, RoutedEventArgs e)
@@ -702,10 +693,11 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
-                MessageBox
-                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured. Registration is temporarily unavailable.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
@@ -718,7 +710,7 @@ public partial class MainWindow : Window
 
             var command = new UpdatePrivateCategoryCommand(dto);
 
-            var result = await this.mediator.Send(command);
+            var result = await mediator.Send(command);
 
             if (result.IsSuccess)
             {
@@ -774,16 +766,17 @@ public partial class MainWindow : Window
     {
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
-                MessageBox
-                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured. Registration is temporarily unavailable.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
             var command = new DeletePrivateCategoryCommand(category.Id);
 
-            var result = await this.mediator.Send(command);
+            var result = await mediator.Send(command);
 
             if (result.IsSuccess)
             {
@@ -840,13 +833,14 @@ public partial class MainWindow : Window
 
     private async Task AddCustomCategoryAsync(string categoryName)
     {
-        string categoryNamee = this.CategoryNameTextBox.Text.Trim();
+        string categoryNamee = CategoryNameTextBox.Text.Trim();
         try
         {
-            if (this.mediator == null)
+            if (mediator == null)
             {
-                MessageBox
-                    .Show("Database is not configured. Registration is temporarily unavailable.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured. Registration is temporarily unavailable.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
@@ -858,7 +852,7 @@ public partial class MainWindow : Window
 
             var command = new CreatePrivateCategoryCommand(dto);
 
-            var result = await this.mediator.Send(command);
+            var result = await mediator.Send(command);
 
             if (result.IsSuccess)
             {
@@ -888,7 +882,7 @@ public partial class MainWindow : Window
             errorWindow.Owner = this;
             errorWindow.ShowDialog();
         }
-        catch (System.Threading.Tasks.TaskCanceledException)
+        catch (TaskCanceledException)
         {
             System.Diagnostics.Debug.WriteLine("Creating category timed out");
             var errorWindow = new ErrorWindow($"Timeout exceeded when creating category.\nPlease try again.");
@@ -917,7 +911,9 @@ public partial class MainWindow : Window
         {
             if (mediator == null)
             {
-                MessageBox.Show("Database is not configured.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                var errorWindow = new ErrorWindow("Database is not configured.");
+                errorWindow.Owner = this;
+                errorWindow.ShowDialog();
                 return;
             }
 
@@ -1328,13 +1324,10 @@ public partial class MainWindow : Window
 
         if (sender is Button deleteButton && deleteButton.Tag is CategoryItem category)
         {
-            var result = MessageBox.Show(
-                $"Are you sure you want to delete the '{category.Name}' category?",
-                "Delete Category",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+            var confirm = new ConfirmDialog($"Are you sure you want to delete the '{category.Name}' category?");
+            confirm.Owner = this;
 
-            if (result == MessageBoxResult.Yes)
+            if (confirm.ShowDialog() == true)
             {
                 await DeleteCategoryAsync(category);
             }

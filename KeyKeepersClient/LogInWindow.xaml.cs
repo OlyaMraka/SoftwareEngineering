@@ -57,7 +57,9 @@ public partial class LogInWindow : Window
     {
         if (!this.ValidateLoginData(out string errorMessage))
         {
-            MessageBox.Show(errorMessage, "Validation Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow(errorMessage);
+            errorWindow.Owner = this;
+            errorWindow.ShowDialog();
             return;
         }
 
