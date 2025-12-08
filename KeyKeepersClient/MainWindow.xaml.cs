@@ -37,6 +37,7 @@ public partial class MainWindow : Window
     private bool isEditMode = false;
     private CategoryItem? currentEditingCategory = null;
     private long currentCategoryId = 0;
+    private bool currentCategoryHasPasswords = false;
 
     private Border? currentEditingPasswordCard = null;
     private PasswordData? currentEditingPassword = null;
@@ -54,6 +55,7 @@ public partial class MainWindow : Window
             mediator,
             async () => await LoadPasswordsForCategory(currentCategoryId),
             UpdatePasswordCardsButtons);
+        viewModel.PropertyChanged += ViewModel_PropertyChanged;
         DataContext = viewModel;
 
         this.Loaded += MainWindow_Loaded;
@@ -65,6 +67,14 @@ public partial class MainWindow : Window
 
     public void OpenAddPasswordMode()
     {
+        if (!CanEditCurrentCommunity())
+        {
+            var msg = new MessageWindow("You don't have permission to add passwords in this community.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         if (isEditMode)
         {
             ExitEditMode();
@@ -72,6 +82,7 @@ public partial class MainWindow : Window
 
         CategoryEditPanel.Visibility = Visibility.Collapsed;
         EmptyStatePanel.Visibility = Visibility.Collapsed;
+        AddPasswordButton.Visibility = Visibility.Collapsed;
         viewModel.OpenAddPasswordMode(currentCategoryId);
 
         if (PasswordsScrollViewer != null)
@@ -82,6 +93,14 @@ public partial class MainWindow : Window
 
     public void OpenAddCategoryMode()
     {
+        if (!CanEditCurrentCommunity())
+        {
+            var msg = new MessageWindow("You don't have permission to add categories in this community.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         if (viewModel.IsPasswordEditPanelVisible)
         {
             viewModel.ExitPasswordEditModeCommand.Execute(null);
@@ -92,6 +111,7 @@ public partial class MainWindow : Window
         CategoryNameTextBox.Text = string.Empty;
         CategoryEditPanel.Visibility = Visibility.Visible;
         EditButtonsPanel.Visibility = Visibility.Visible;
+        AddCategoryButton.Visibility = Visibility.Collapsed;
         UpdateAllCategoryButtonsVisibility();
         CategoryNameTextBox.Focus();
     }
@@ -211,6 +231,14 @@ public partial class MainWindow : Window
             var errorWindow = new ErrorWindow($"An error occurred during logout.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}");
             errorWindow.Owner = this;
             errorWindow.ShowDialog();
+        }
+    }
+
+    private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(viewModel.IsPasswordEditPanelVisible))
+        {
+            UpdateEditButtonsVisibility();
         }
     }
 
@@ -441,7 +469,10 @@ public partial class MainWindow : Window
 
             if (result.IsSuccess)
             {
-                if (result.Value.Count() == 0)
+                int passwordCount = result.Value.Count();
+                currentCategoryHasPasswords = passwordCount > 0;
+
+                if (passwordCount == 0)
                 {
                     // Don't show empty state for special categories (All items, Favorite)
                     if (isSpecialCategory)
@@ -473,6 +504,8 @@ public partial class MainWindow : Window
                             password.CategoryId);
                     }
                 }
+
+                UpdateAddPasswordButtonVisibility();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
@@ -526,8 +559,29 @@ public partial class MainWindow : Window
         OpenAddPasswordMode();
     }
 
+    private void AddPasswordButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenAddPasswordMode();
+    }
+
     private void CategoryButton_Click(object sender, RoutedEventArgs e)
     {
+        if (isEditMode)
+        {
+            var msg = new MessageWindow("Please finish editing the category first.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
+        if (viewModel.IsPasswordEditPanelVisible)
+        {
+            var msg = new MessageWindow("Please finish editing the password first.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         if (sender is Button clickedButton)
         {
             SetActiveCategory(clickedButton);
@@ -539,7 +593,6 @@ public partial class MainWindow : Window
             }
             else
             {
-                // Special categories: AllItems, Favorite
                 bool isSpecialCategory = clickedButton.Tag is string tag &&
                                          (tag == "AllItems" || tag == "Favorite");
                 currentCategoryId = 0;
@@ -570,10 +623,65 @@ public partial class MainWindow : Window
         button.Style = (Style)FindResource("ActiveCommunityButtonStyle");
     }
 
+    private bool CanEditCurrentCommunity()
+    {
+        if (currentCommunity == null)
+        {
+            return true; // Private community
+        }
+
+        return currentCommunity.UserRole == CommunityRole.Owner ||
+               currentCommunity.UserRole == CommunityRole.Admin;
+    }
+
+    private void UpdateEditButtonsVisibility()
+    {
+        bool canEdit = CanEditCurrentCommunity();
+        AddCategoryButton.Visibility = (canEdit && !isEditMode && !viewModel.IsPasswordEditPanelVisible) ? Visibility.Visible : Visibility.Collapsed;
+
+        if (viewModel.IsPasswordEditPanelVisible || isEditMode)
+        {
+            AdminPanelButton.Visibility = Visibility.Collapsed;
+        }
+        else if (currentCommunity != null &&
+                 (currentCommunity.UserRole == CommunityRole.Owner || currentCommunity.UserRole == CommunityRole.Admin))
+        {
+            AdminPanelButton.Visibility = Visibility.Visible;
+        }
+
+        UpdateAddPasswordButtonVisibility();
+    }
+
+    private void UpdateAddPasswordButtonVisibility()
+    {
+        bool canEdit = CanEditCurrentCommunity();
+        bool hasPasswords = currentCategoryHasPasswords;
+        bool isSpecialCategory = currentCategoryId == 0 || IsCurrentCategorySpecial();
+
+        AddPasswordButton.Visibility = (canEdit && hasPasswords && !isSpecialCategory && !isEditMode && !viewModel.IsPasswordEditPanelVisible)
+            ? Visibility.Visible
+            : Visibility.Collapsed;
+    }
+
+    private bool IsCurrentCategorySpecial()
+    {
+        if (currentActiveButton != null && currentActiveButton.Tag is string tag)
+        {
+            return tag == "AllItems" || tag == "Favorite";
+        }
+
+        return false;
+    }
+
     private void SettingsButton_Click(object sender, RoutedEventArgs e)
     {
         var settingsWindow = new SettingsWindow(this);
         settingsWindow.ShowDialog();
+    }
+
+    private void AddCategoryButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenAddCategoryMode();
     }
 
     private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -658,6 +766,7 @@ public partial class MainWindow : Window
         CategoryNameTextBox.Text = string.Empty;
         CategoryEditPanel.Visibility = Visibility.Collapsed;
         EditButtonsPanel.Visibility = Visibility.Collapsed;
+        UpdateEditButtonsVisibility();
         UpdateAllCategoryButtonsVisibility();
     }
 
@@ -677,6 +786,14 @@ public partial class MainWindow : Window
 
     private void EditCategoryButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!CanEditCurrentCommunity())
+        {
+            var msg = new MessageWindow("You don't have permission to edit categories in this community.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         if (sender is Button editButton && editButton.Tag is CategoryItem category)
         {
             isEditMode = true;
@@ -684,6 +801,7 @@ public partial class MainWindow : Window
             CategoryNameTextBox.Text = category.Name;
             CategoryEditPanel.Visibility = Visibility.Visible;
             EditButtonsPanel.Visibility = Visibility.Visible;
+            AddCategoryButton.Visibility = Visibility.Collapsed;
             CategoryNameTextBox.Focus();
             CategoryNameTextBox.SelectAll();
         }
@@ -1057,6 +1175,22 @@ public partial class MainWindow : Window
 
     private void CommunityButton_Click(object sender, RoutedEventArgs e)
     {
+        if (isEditMode)
+        {
+            var msg = new MessageWindow("Please finish editing the category first.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
+        if (viewModel.IsPasswordEditPanelVisible)
+        {
+            var msg = new MessageWindow("Please finish editing the password first.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         try
         {
             if (sender is Button btn)
@@ -1103,11 +1237,11 @@ public partial class MainWindow : Window
 
     private async Task EnterCommunityAsync(CommunityItem community)
     {
-        currentCommunity = community;
+        bool isPrivate = string.Equals(community.Name, "Private", StringComparison.OrdinalIgnoreCase);
+
+        currentCommunity = isPrivate ? null : community;
 
         System.Diagnostics.Debug.WriteLine($"Entering community: {community.Name}, Role: {community.UserRole}");
-
-        bool isPrivate = string.Equals(community.Name, "Private", StringComparison.OrdinalIgnoreCase);
 
         if (isPrivate)
         {
@@ -1115,7 +1249,6 @@ public partial class MainWindow : Window
 
             AdminPanelButton.Visibility = Visibility.Collapsed;
 
-            // Set first category as active after loading
             if (CategoriesPanel.Children.Count > 0 && CategoriesPanel.Children[0] is Button firstButton)
             {
                 SetActiveCategory(firstButton);
@@ -1199,6 +1332,8 @@ public partial class MainWindow : Window
                 AdminPanelButton.Visibility = Visibility.Collapsed;
             }
         }
+
+        UpdateEditButtonsVisibility();
     }
 
     private void AdminPanelButton_Click(object sender, RoutedEventArgs e)
@@ -1322,6 +1457,14 @@ public partial class MainWindow : Window
     {
         e.Handled = true;
 
+        if (!CanEditCurrentCommunity())
+        {
+            var msg = new MessageWindow("You don't have permission to delete categories in this community.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         if (sender is Button deleteButton && deleteButton.Tag is CategoryItem category)
         {
             var confirm = new ConfirmDialog($"Are you sure you want to delete the '{category.Name}' category?");
@@ -1402,6 +1545,14 @@ public partial class MainWindow : Window
 
     private void EditPasswordButton_Click(object sender, RoutedEventArgs e)
     {
+        if (!CanEditCurrentCommunity())
+        {
+            var msg = new MessageWindow("You don't have permission to edit passwords in this community.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         var button = sender as Button;
         if (button == null)
         {
@@ -1650,7 +1801,8 @@ public partial class MainWindow : Window
             Style = (Style)FindResource("IconButtonStyle")
         };
 
-        if (viewModel.IsPasswordEditPanelVisible)
+        bool canEdit = CanEditCurrentCommunity();
+        if (viewModel.IsPasswordEditPanelVisible && canEdit)
         {
             actionButton.Click += EditPasswordButton_Click;
             var editImage = new Image
@@ -1797,6 +1949,9 @@ public partial class MainWindow : Window
 
     private void UpdatePasswordCardsButtons(bool showEditButton)
     {
+        bool canEdit = CanEditCurrentCommunity();
+        bool actualShowEdit = showEditButton && canEdit;
+
         foreach (var child in PasswordsPanel.Children)
         {
             if (child is Border border && border.Child is Grid grid)
@@ -1820,7 +1975,7 @@ public partial class MainWindow : Window
                         Style = (Style)FindResource("IconButtonStyle"),
                     };
 
-                    if (showEditButton)
+                    if (actualShowEdit)
                     {
                         newButton.Click += EditPasswordButton_Click;
                         var editImage = new Image

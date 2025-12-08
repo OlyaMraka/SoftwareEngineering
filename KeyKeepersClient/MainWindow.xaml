@@ -574,6 +574,7 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
                                 <StackPanel x:Name="UserContainer"
@@ -706,9 +707,23 @@
                                 </ScrollViewer>
 
                                 <!-- TODO: Використати Command замість Click event handler -->
+                                <Button x:Name="AddCategoryButton"
+                                        Grid.Row="4"
+                                        Style="{StaticResource AddButtonStyle}"
+                                        Margin="0,0,0,8"
+                                        Click="AddCategoryButton_Click">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="+ Add Category"
+                                                           VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                </Button>
+
+                                <!-- TODO: Використати Command замість Click event handler -->
                                 <!-- TODO: Використати Data Binding для Visibility -->
                                 <Button x:Name="AdminPanelButton"
-                                        Grid.Row="4"
+                                        Grid.Row="5"
                                         Style="{StaticResource AddButtonStyle}"
                                         Margin="0"
                                         Visibility="Collapsed"
@@ -728,7 +743,7 @@
 
                                 <!-- TODO: Використати Data Binding для Visibility -->
                                 <Grid x:Name="EditButtonsPanel"
-                                      Grid.Row="4"
+                                      Grid.Row="5"
                                       Visibility="Collapsed">
                                         <!-- TODO: Використати Command замість Click event handler -->
                                         <Button Style="{StaticResource AddButtonStyle}"
@@ -740,7 +755,7 @@
                                 </Grid>
 
                                 <Grid x:Name="PasswordEditButtonsPanel"
-                                      Grid.Row="4"
+                                      Grid.Row="5"
                                       Visibility="{Binding IsPasswordEditButtonsPanelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Button Style="{StaticResource ExitButtonStyle}"
                                                 Command="{Binding ExitPasswordEditModeCommand}">
@@ -1000,6 +1015,57 @@
                                                         </Button>
                                                 </StackPanel>
                                         </Border>
+
+                                        <!-- TODO: Використати Command замість Click event handler -->
+                                        <!-- TODO: Використати Data Binding для Visibility -->
+                                        <Button x:Name="AddPasswordButton"
+                                                Margin="0,0,0,20"
+                                                Visibility="Collapsed"
+                                                Height="100"
+                                                Cursor="Hand"
+                                                Click="AddPasswordButton_Click">
+                                                <Button.Style>
+                                                        <Style TargetType="Button">
+                                                                <Setter Property="Background"
+                                                                        Value="#0E121B"/>
+                                                                <Setter Property="BorderBrush"
+                                                                        Value="#222A39"/>
+                                                                <Setter Property="BorderThickness"
+                                                                        Value="2"/>
+                                                                <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                                <ControlTemplate TargetType="Button">
+                                                                                        <Border Background="{TemplateBinding Background}"
+                                                                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                                                                CornerRadius="15"
+                                                                                                Padding="20">
+                                                                                                <ContentPresenter HorizontalAlignment="Center"
+                                                                                                                  VerticalAlignment="Center"/>
+                                                                                        </Border>
+                                                                                </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                </Setter>
+                                                                <Style.Triggers>
+                                                                        <Trigger Property="IsMouseOver"
+                                                                                 Value="True">
+                                                                                <Setter Property="Background"
+                                                                                        Value="#171C26"/>
+                                                                        </Trigger>
+                                                                </Style.Triggers>
+                                                        </Style>
+                                                </Button.Style>
+                                                <StackPanel Orientation="Horizontal"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="+ Add Password"
+                                                                   VerticalAlignment="Center"
+                                                                   FontFamily="Bahnschrift"
+                                                                   FontSize="16"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="White"/>
+                                                </StackPanel>
+                                        </Button>
 
                                         <StackPanel x:Name="PasswordsPanel">
 
