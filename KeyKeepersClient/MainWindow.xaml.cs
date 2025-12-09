@@ -75,6 +75,22 @@ public partial class MainWindow : Window
             return;
         }
 
+        if (currentCommunity != null)
+        {
+            var msg = new MessageWindow("This feature is currently under development.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
+        if (IsCurrentCategorySpecial())
+        {
+            var msg = new MessageWindow("Cannot add passwords to 'All items' or 'Favorite'.\nPlease select or create a category.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
         if (isEditMode)
         {
             ExitEditMode();
@@ -96,6 +112,14 @@ public partial class MainWindow : Window
         if (!CanEditCurrentCommunity())
         {
             var msg = new MessageWindow("You don't have permission to add categories in this community.");
+            msg.Owner = this;
+            msg.ShowDialog();
+            return;
+        }
+
+        if (currentCommunity != null)
+        {
+            var msg = new MessageWindow("This feature is currently under development.");
             msg.Owner = this;
             msg.ShowDialog();
             return;
@@ -1252,6 +1276,11 @@ public partial class MainWindow : Window
             if (CategoriesPanel.Children.Count > 0 && CategoriesPanel.Children[0] is Button firstButton)
             {
                 SetActiveCategory(firstButton);
+                if (firstButton.Tag is CategoryItem category)
+                {
+                    currentCategoryId = category.Id;
+                    _ = LoadPasswordsAsync(category.Id, isSpecialCategory: false);
+                }
             }
         }
         else
@@ -1318,8 +1347,9 @@ public partial class MainWindow : Window
             favBtn.Content = favContent;
             CategoriesPanel.Children.Add(favBtn);
 
-            // Set All items as active
             SetActiveCategory(allBtn);
+            currentCategoryId = 0;
+            _ = LoadPasswordsAsync(0, isSpecialCategory: true);
 
             if (community.UserRole == CommunityRole.Owner)
             {
