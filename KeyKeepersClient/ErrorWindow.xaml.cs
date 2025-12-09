@@ -9,6 +9,7 @@ namespace KeyKeepersClient
         {
             InitializeComponent();
             ErrorMessageTextBlock.Text = message;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)

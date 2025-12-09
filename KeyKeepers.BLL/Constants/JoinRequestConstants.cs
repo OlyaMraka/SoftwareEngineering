@@ -3,14 +3,14 @@ namespace KeyKeepers.BLL.Constants;
 public static class JoinRequestConstants
 {
     public static readonly string RequestAlreadyExistsError
-        = "Такий запит уже був відправлений!";
+        = "Such a request has already been sent!";
 
     public static readonly string DbSaveError
-        = "Помилка збереження запиту!";
+        = "Error saving the request!";
 
     public static readonly string DataNotFoundError
-        = "Дані не знайдено!";
+        = "Data not found!";
 
     public static readonly string RequestNotFound
-        = "Такий запит не знайдемо!";
+        = "Such a request cannot be found!";
 }

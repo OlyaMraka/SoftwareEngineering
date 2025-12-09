@@ -137,7 +137,7 @@ public partial class SignUpWindow : Window
             else
             {
                 string errorMsg = result.Errors.Any() ? string.Join(", ", result.Errors) : "Error creating user";
-                var errorWindow = new ErrorWindow($"Registration error: {errorMsg}");
+                var errorWindow = new ErrorWindow(result.Errors.First().Message);
                 errorWindow.Owner = this;
                 errorWindow.ShowDialog();
             }

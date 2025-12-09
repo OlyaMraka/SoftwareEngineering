@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Confirmation"
         Icon="Images/logo.png"
-        Height="220"
+        SizeToContent="Height"
         Width="450"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"

@@ -115,11 +115,9 @@ public partial class UpdateCommunityWindow : Window
 
             if (result.IsSuccess)
             {
-                MessageBox.Show(
-                    $"Community '{newName}' has been successfully updated!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow($"Community '{newName}' has been successfully updated!");
+                msg.Owner = this;
+                msg.ShowDialog();
 
                 community.Name = newName;
 

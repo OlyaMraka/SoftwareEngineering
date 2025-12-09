@@ -6,26 +6,26 @@ public class PasswordCategoriesConstants
     public static readonly int MinNameLength = 2;
 
     public static readonly string NameRequiredErrorMessage
-        = "Ім'я категорії обов'язкове!";
+        = "Category name is required!";
 
     public static readonly string MaxNameLengthErrorMessage
-        = $"Ім'я повинне бути менше ніж {MaxNameLength} симовлів!";
+        = $"Name must be shorter than {MaxNameLength} characters!";
 
     public static readonly string MinNameLengthErrorMessage
-        = $"Ім'я повинне бути більше ніж {MinNameLength} символів!";
+        = $"Name must be longer than {MinNameLength} characters!";
 
     public static readonly string CategoryAlreadyExistsErrorMessage
-        = "Приватна категорія з даним ім'ям уже існує!";
+        = "A private category with this name already exists!";
 
     public static readonly string DbSaveErrorMessage
-        = "Помилка збереження бази даних!";
+        = "Database save error!";
 
     public static readonly string ErrorMessage
-        = "Виникла помилка при створенні категорії";
+        = "An error occurred while creating the category.";
 
     public static readonly string CategoryNotFound
-        = "Категорія не знайдена!";
+        = "Category not found!";
 
     public static readonly string ImpossibleToDelete
-        = "Неможливо видалити категорію оскільки вона містить записи!";
+        = "Impossible to delete the category because it contains credentials!";
 }

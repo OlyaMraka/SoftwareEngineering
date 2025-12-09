@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Повідомлення"
         Icon="Images/logo.png"
-        Height="165"
+        SizeToContent="Height"
         Width="400"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"

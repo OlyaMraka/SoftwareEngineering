@@ -1,5 +1,3 @@
-using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using KeyKeepers.BLL.Commands.Passwords.Create;
@@ -159,7 +157,7 @@ public class MainWindowViewModel : BaseViewModel
         return currentEditingPassword != null;
     }
 
-    private async System.Threading.Tasks.Task SavePasswordAsync()
+    private async Task SavePasswordAsync()
     {
         string name = PasswordName.Trim();
         string login = PasswordLogin.Trim();
@@ -167,51 +165,36 @@ public class MainWindowViewModel : BaseViewModel
 
         if (name.Length < 3)
         {
-            MessageBox.Show(
-                "Minimum app name length is 3 characters!",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow("Minimum app name length is 3 characters!");
+            errorWindow.ShowDialog();
             return;
         }
 
         if (name.Length > 30)
         {
-            MessageBox.Show(
-                "Maximum app name length is 30 characters!",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow("Maximum app name length is 30 characters!");
+            errorWindow.ShowDialog();
             return;
         }
 
         if (login.Length > 50)
         {
-            MessageBox.Show(
-                "Maximum login length is 50 characters!",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow("Maximum login length is 50 characters!");
+            errorWindow.ShowDialog();
             return;
         }
 
         if (password.Length > 30)
         {
-            MessageBox.Show(
-                "Maximum password length is 30 characters!",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow("Maximum password length is 30 characters!");
+            errorWindow.ShowDialog();
             return;
         }
 
         if (currentCategoryId == 0)
         {
-            MessageBox.Show(
-                "Please select a category for the password!",
-                "Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var msg = new MessageWindow("Please select a category for the password!");
+            msg.ShowDialog();
             return;
         }
 
@@ -234,11 +217,8 @@ public class MainWindowViewModel : BaseViewModel
 
                 if (updateResult.IsSuccess)
                 {
-                    MessageBox.Show(
-                        "Password successfully updated!",
-                        "Success",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    var msg = new MessageWindow("Password successfully updated!");
+                    msg.ShowDialog();
 
                     refreshPasswordsCallback();
 
@@ -252,11 +232,9 @@ public class MainWindowViewModel : BaseViewModel
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"Password update error: {string.Join(", ", updateResult.Errors.Select(e => e.Message))}",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    var errorWindow = new ErrorWindow($"Password update error:" +
+                                                      $" {string.Join(", ", updateResult.Errors.Select(e => e.Message))}");
+                    errorWindow.ShowDialog();
                 }
             }
             else
@@ -275,15 +253,11 @@ public class MainWindowViewModel : BaseViewModel
 
                 if (createResult.IsSuccess)
                 {
-                    MessageBox.Show(
-                        "Password successfully saved!",
-                        "Success",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
+                    var msg = new MessageWindow("Password successfully saved!");
+                    msg.ShowDialog();
 
                     refreshPasswordsCallback();
 
-                    // Очищаємо поля для додавання наступного паролю
                     PasswordName = string.Empty;
                     PasswordLogin = string.Empty;
                     PasswordValue = string.Empty;
@@ -292,66 +266,50 @@ public class MainWindowViewModel : BaseViewModel
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"Password save error: {string.Join(", ", createResult.Errors.Select(e => e.Message))}",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    var errorWindow = new ErrorWindow($"Password save error:" +
+                                                      $" {string.Join(", ", createResult.Errors.Select(e => e.Message))}");
+                    errorWindow.ShowDialog();
                 }
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
             System.Diagnostics.Debug.WriteLine($"HTTP Exception saving password: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when saving password.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when saving password.\n" +
+                                              $"Check your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.ShowDialog();
         }
-        catch (System.Threading.Tasks.TaskCanceledException)
+        catch (TaskCanceledException)
         {
-            System.Diagnostics.Debug.WriteLine("Saving password timed out");
-            MessageBox.Show(
-                "Timeout exceeded when saving password.\nTry again.",
-                "Timeout",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow("Timeout exceeded when saving password.\nTry again.");
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation saving password: {invEx}");
-            MessageBox.Show(
-                $"Invalid operation when saving password.\nCheck the correctness of the entered data.\n\nDetails: {invEx.Message}",
-                "Validation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Invalid operation when saving password.\n" +
+                                              $"Check the correctness of the entered data.\n\nDetails: {invEx.Message}");
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception saving password: {ex}");
-            MessageBox.Show(
-                $"An unexpected error occurred when saving password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An unexpected error occurred when saving password.\n\n" +
+                                              $"Error type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.ShowDialog();
         }
     }
 
-    private async System.Threading.Tasks.Task DeletePasswordAsync()
+    private async Task DeletePasswordAsync()
     {
         if (currentEditingPassword == null)
         {
             return;
         }
 
-        var result = MessageBox.Show(
-            "Are you sure you want to delete this password?",
-            "Confirmation",
-            MessageBoxButton.YesNo,
-            MessageBoxImage.Question);
+        var confirm = new ConfirmDialog("Are you sure you want to delete this password?");
 
-        if (result != MessageBoxResult.Yes)
+        if (confirm.ShowDialog() != true)
         {
             return;
         }
@@ -363,15 +321,11 @@ public class MainWindowViewModel : BaseViewModel
 
             if (deleteResult.IsSuccess)
             {
-                MessageBox.Show(
-                    "Password successfully deleted!",
-                    "Success",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
+                var msg = new MessageWindow("Password successfully deleted!");
+                msg.ShowDialog();
 
                 refreshPasswordsCallback();
 
-                // Очищаємо поля після видалення
                 currentEditingPassword = null;
                 PasswordName = string.Empty;
                 PasswordLogin = string.Empty;
@@ -382,39 +336,30 @@ public class MainWindowViewModel : BaseViewModel
             }
             else
             {
-                MessageBox.Show(
-                    $"Password deletion error: {string.Join(", ", deleteResult.Errors.Select(e => e.Message))}",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                var errorWindow = new ErrorWindow($"Password deletion error:" +
+                                                  $" {string.Join(", ", deleteResult.Errors.Select(e => e.Message))}");
+                errorWindow.ShowDialog();
             }
         }
         catch (System.Net.Http.HttpRequestException httpEx)
         {
-            System.Diagnostics.Debug.WriteLine($"HTTP Exception deleting password: {httpEx}");
-            MessageBox.Show(
-                $"Server connection error when deleting password.\nCheck your internet connection.\n\nDetails: {httpEx.Message}",
-                "Connection Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"Server connection error when deleting password.\n" +
+                                              $"Check your internet connection.\n\nDetails: {httpEx.Message}");
+            errorWindow.ShowDialog();
         }
         catch (InvalidOperationException invEx)
         {
             System.Diagnostics.Debug.WriteLine($"Invalid operation deleting password: {invEx}");
-            MessageBox.Show(
-                $"Failed to delete password.\nIt may already be deleted or does not exist.\n\nDetails: {invEx.Message}",
-                "Operation Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Warning);
+            var errorWindow = new ErrorWindow($"Failed to delete password.\n" +
+                                              $"It may already be deleted or does not exist.\n\nDetails: {invEx.Message}");
+            errorWindow.ShowDialog();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Unexpected exception deleting password: {ex}");
-            MessageBox.Show(
-                $"An error occurred when deleting password.\n\nError type: {ex.GetType().Name}\nMessage: {ex.Message}",
-                "Critical Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
+            var errorWindow = new ErrorWindow($"An error occurred when deleting password.\n\n" +
+                                              $"Error type: {ex.GetType().Name}\nMessage: {ex.Message}");
+            errorWindow.ShowDialog();
         }
     }
 
@@ -426,18 +371,15 @@ public class MainWindowViewModel : BaseViewModel
 
         if (hasChanges && currentEditingPassword == null)
         {
-            var result = MessageBox.Show(
-                "You have unsaved changes. Save them before exiting?",
-                "Unsaved Changes",
-                MessageBoxButton.YesNoCancel,
-                MessageBoxImage.Question);
+            var confirm = new ConfirmDialog("You have unsaved changes. Save them before exiting?");
 
-            if (result == MessageBoxResult.Yes)
+            if (confirm.ShowDialog() == true)
             {
                 _ = SavePasswordAsync();
                 return;
             }
-            else if (result == MessageBoxResult.Cancel)
+
+            if (confirm.ShowDialog() != true)
             {
                 return;
             }
@@ -463,10 +405,7 @@ public class MainWindowViewModel : BaseViewModel
 
     private void SelectPasswordIcon()
     {
-        MessageBox.Show(
-            "Icon selection will be implemented in the future.",
-            "Icon Selection",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        var msg = new MessageWindow("Icon selection will be implemented in the future.");
+        msg.ShowDialog();
     }
 }

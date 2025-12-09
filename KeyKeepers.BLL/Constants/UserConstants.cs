@@ -13,71 +13,71 @@ public static class UserConstants
     public static readonly int MinPasswordLength = 8;
 
     public static readonly string NameRequiredErrorMessage
-        = "Ім'я обов'язкове!";
+        = "First name is required!";
 
     public static readonly string MaxNameLengthErrorMessage
-        = $"Ім'я повинне бути менше ніж {MaxNameLength} символів!";
+        = $"First name must be shorter than {MaxNameLength} characters!";
 
     public static readonly string MinNameLengthErrorMessage
-        = $"Ім'я повинне бути більше ніж {MinNameLength} символів!";
+        = $"First name must be longer than {MinNameLength} characters!";
 
     public static readonly string SurnameRequiredErrorMessage
-        = "Прізвище обов'язкове!";
+        = "Last name is required!";
 
     public static readonly string MaxSurnameLengthErrorMessage
-        = $"Прізвище повинне бути менше ніж {MaxSurnameLength} символів!";
+        = $"Last name must be shorter than {MaxSurnameLength} characters!";
 
     public static readonly string MinSurnameLengthErrorMessage
-        = $"Прізвище повинне бути більше ніж {MinSurnameLength} символів!";
+        = $"Last name must be longer than {MinSurnameLength} characters!";
 
     public static readonly string EmailRequiredErrorMessage
-        = "Email обов'язковий!";
+        = "Email is required!";
 
     public static readonly string MaxEmailLengthErrorMessage
-        = $"Email повинний бути менше ніж {MaxEmailLength} символів!";
+        = $"Email must be shorter than {MaxEmailLength} characters!";
 
     public static readonly string MinEmailLengthErrorMessage
-        = $"Email повинний бути більше ніж {MinEmailLength} символів!";
+        = $"Email must be longer than {MinEmailLength} characters!";
 
     public static readonly string UserNameRequiredErrorMessage
-        = "Ім'я користувача обов'язкове!";
+        = "Username is required!";
 
     public static readonly string MaxUserNameErrorMessage
-        = $"Ім'я користувача повинне бути менше ніж {MaxUserNameLength} символів!";
+        = $"Username must be shorter than {MaxUserNameLength} characters!";
 
     public static readonly string MinUserNameErrorMessage
-        = $"Ім'я користувача повинне бути більше ніж {MinUserNameLength} символів!";
+        = $"Username must be longer than {MinUserNameLength} characters!";
 
     public static readonly string PasswordRequiredErrorMessage
-        = "Пароль обов'язковий!";
+        = "Password is required!";
 
     public static readonly string PasswordLengthErrorMessage =
-        $"Пароль повинний бути більше ніж {MinPasswordLength} символів!";
+        $"Password must be longer than {MinPasswordLength} characters!";
 
     public static readonly string PasswordUppercaseLetterErrorMessage =
-        "Пароль повинен містити хоч одну велику літеру!";
+        "Password must contain at least one uppercase letter!";
 
     public static readonly string PasswordDigitErrorMessage =
-        "Пароль повинен містити хоч одну цифру!";
+        "Password must contain at least one digit!";
 
     public static readonly string PasswordSpecialCharacterErrorMessage =
-        "Пароль має містити спецсимволи!";
+        "Password must contain special characters!";
 
     public static readonly string UserCreationError
-        = "Такий користувач уже існує!";
+        = "A user with this information already exists!";
 
     public static readonly string UserLogInError
-        = "Не правильний пароль або логін!";
+        = "Incorrect login or password!";
 
     public static readonly string UserLogOutError
-        = "Невалідний токен!";
+        = "Invalid token!";
 
     public static readonly string UserNotFound
-        = "Користувач не знайдений!";
+        = "User not found!";
 
     public static readonly string DbSaveError
-        = "Помилка збереження бази даних!";
+        = "Database save error!";
 
     public static readonly string DataNotFound
-        = "Дані не знайдено!";
+        = "Data not found!";
 }

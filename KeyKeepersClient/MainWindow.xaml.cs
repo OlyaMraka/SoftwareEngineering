@@ -945,8 +945,7 @@ public partial class MainWindow : Window
             }
             else
             {
-                var errorWindow = new ErrorWindow($"Category not found.");
-                errorWindow.Owner = this;
+                var errorWindow = new ErrorWindow(result.Errors.First().Message);
                 errorWindow.ShowDialog();
             }
         }

@@ -6,23 +6,23 @@ public static class CommunityConstants
     public static readonly int MinNameLenght = 3;
 
     public static readonly string OwnerIdRequiredError
-        = "Потрібно вказати Id власника спільноти!";
+        = "Owner ID is required!";
 
     public static readonly string CommunityNameRequiredError
-        = "Ім'я спільноти обов'язкове!";
+        = "Community name is required!";
 
     public static readonly string MaxNameLenghtError
-        = $"Назва спільноти не повинна перевищувати {MaxNameLenght} символів";
+        = $"Community name must not exceed {MaxNameLenght} characters.";
 
     public static readonly string MinNameLenghtError
-        = $"Назва повинна перевищувати {MinNameLenght} символів!";
+        = $"Community name must be longer than {MinNameLenght} characters!";
 
     public static readonly string AlreadyExistsError
-        = "У вас вже існує категорія з даним ім'ям!";
+        = "A community with this name already exists!";
 
     public static readonly string DbSaveError
-        = "Помилка збереження бази даних!";
+        = "Database save error!";
 
     public static readonly string CommunityNotFoundError
-        = "Спільнота не знайдена!";
+        = "Community not found!";
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:KeyKeepersClient"
         mc:Ignorable="d"
        Title="Error"
-        Height="250"
+        SizeToContent="Height"
         Width="400"
         WindowStartupLocation="CenterOwner"
         WindowStyle="None"

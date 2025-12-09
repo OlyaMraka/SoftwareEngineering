@@ -9,6 +9,7 @@ public partial class MessageWindow : Window
     {
         InitializeComponent();
         MessageTextBlock.Text = message;
+        WindowStartupLocation = WindowStartupLocation.CenterScreen;
     }
 
     private void TitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

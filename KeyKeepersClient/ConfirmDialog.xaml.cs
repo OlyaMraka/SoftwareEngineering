@@ -8,6 +8,7 @@ namespace KeyKeepersClient
         {
             InitializeComponent();
             MessageText.Text = message;
+            WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void YesButton_Click(object sender, RoutedEventArgs e)

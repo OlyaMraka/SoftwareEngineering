@@ -8,32 +8,32 @@ public static class PasswordConstants
     public static readonly int MaxLoginLenght = 50;
 
     public static readonly string SaveDataBaseError
-        = "Помилка збереження даних!";
+        = "Error saving data!";
 
     public static readonly string MinAppNameLenghtError
-        = $"Мінімальна довжина назви додатку {MinAppNameLenght} символів!";
+        = $"Minimum application name length is {MinAppNameLenght} characters!";
 
     public static readonly string MaxAppNameLenghtError
-        = $"Максимальна довжина назви додатку {MaxAppNameLenght} символів!";
+        = $"Maximum application name length is {MaxAppNameLenght} characters!";
 
     public static readonly string MaxPasswordLenghtError
-        = $"Максимальна довжина паролю {MaxPasswordLenght} символів!";
+        = $"Maximum password length is {MaxPasswordLenght} characters!";
 
     public static readonly string MaxLoginLenghtError
-        = $"Максимальна довжина логіну {MaxLoginLenght} символів!";
+        = $"Maximum login length is {MaxLoginLenght} characters!";
 
     public static readonly string PasswordRequiredError
-        = "Пароль обов'язковай!";
+        = "Password is required!";
 
     public static readonly string LoginRequiredError
-        = "Логін обов'язковий!";
+        = "Login is required!";
 
     public static readonly string AppNameRequiredError
-        = "Ім'я додатку обов'язкове!";
+        = "Application name is required!";
 
     public static readonly string AlreadyExistsError
-        = "У вас уже існує запис з таким додатком і логіном!";
+        = "You already have a record with this application and login!";
 
     public static readonly string NotFoundError
-        = "Такого запису не знайдено!";
+        = "Record not found!";
 }
